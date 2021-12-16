@@ -28,8 +28,20 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Chat(),
-      // This trailing comma makes auto-formatting nicer for build methods.
+      body: Center(
+          child: InkWell(
+        child: Container(
+          width: 100,
+          height: 50,
+          color: Colors.lightBlue,
+          child: Center(child: Text("ระบบแชทบอท")),
+        ),
+        onTap: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Chat()));
+        },
+        // This trailing comma makes auto-formatting nicer for build methods.
+      )),
     );
   }
 }
