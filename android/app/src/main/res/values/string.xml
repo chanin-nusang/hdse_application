@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HDSE Authentication</string>
+    <string name="facebook_app_id">1081660832593465</string>
+    <string name="fb_login_protocol_scheme">fb1081660832593465</string>
+    <string name="facebook_client_token">a181bf00de42d622350c8ec483a9ea31</string>
+</resources>

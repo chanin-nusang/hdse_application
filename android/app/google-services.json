@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "127803033838",
+    "project_id": "hdse-project",
+    "storage_bucket": "hdse-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127803033838:android:c743b35a5c373ea4aa0bff",
+        "android_client_info": {
+          "package_name": "coe.project.hdse"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "127803033838-dfkilc5n0qqo1p5alsasd1uj99t1vj5k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6VM720c5baqApMY2yL7TsGn834fGHozk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "127803033838-dfkilc5n0qqo1p5alsasd1uj99t1vj5k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
