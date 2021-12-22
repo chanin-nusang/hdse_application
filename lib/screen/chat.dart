@@ -88,7 +88,7 @@ class _ChatState extends State<Chat> {
     //TODO Dialogflow Code
     ChatMessage message = ChatMessage(
       text: textSplited,
-      name: "You",
+      name: "คุณ",
       type: true,
     );
 
@@ -103,7 +103,7 @@ class _ChatState extends State<Chat> {
     if (fulfillmentText != null) {
       ChatMessage botMessage = ChatMessage(
         text: fulfillmentText,
-        name: "Bot",
+        name: "น้องบอท",
         type: false,
       );
 
@@ -199,39 +199,57 @@ class _ChatState extends State<Chat> {
           itemBuilder: (_, int index) => _messages[index],
           itemCount: _messages.length,
         )),
-        Divider(height: 1.0),
-        Container(
-            decoration: BoxDecoration(color: Theme.of(context).cardColor),
-            child: IconTheme(
-              data: IconThemeData(color: Theme.of(context).accentColor),
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  children: <Widget>[
-                    Flexible(
-                      child: TextField(
-                        controller: _textController,
-                        onSubmitted: handleSubmitted,
-                        decoration: InputDecoration.collapsed(
-                            hintText: "Send a message"),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 4.0),
-                      child: IconButton(
-                        icon: Icon(Icons.send),
-                        onPressed: () => handleSubmitted(_textController.text),
-                      ),
-                    ),
-                    IconButton(
-                      iconSize: 30.0,
-                      icon: Icon(_isRecording ? Icons.mic_off : Icons.mic),
-                      onPressed: _isRecording ? stopStream : handleStream,
+        // Divider(height: 1.0),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+              margin: EdgeInsets.only(left: 10, top: 0, right: 10, bottom: 0),
+              height: 50,
+              decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 3,
+                      blurRadius: 7,
+                      offset: Offset(0, 0), // changes position of shadow
                     ),
                   ],
+                  borderRadius: BorderRadius.circular(50),
+                  color: Theme.of(context).cardColor),
+              child: IconTheme(
+                data: IconThemeData(color: Theme.of(context).accentColor),
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Row(
+                    children: <Widget>[
+                      Flexible(
+                        child: TextField(
+                          controller: _textController,
+                          onSubmitted: handleSubmitted,
+                          decoration: InputDecoration.collapsed(
+                              hintText: "พิมพ์ข้อความ..."),
+                        ),
+                      ),
+                      _textController.text.length != 0
+                          ? Container(
+                              margin: EdgeInsets.symmetric(horizontal: 4.0),
+                              child: IconButton(
+                                icon: Icon(Icons.send),
+                                onPressed: () =>
+                                    handleSubmitted(_textController.text),
+                              ),
+                            )
+                          : Container()
+                      // IconButton(
+                      //   iconSize: 30.0,
+                      //   icon: Icon(_isRecording ? Icons.mic_off : Icons.mic),
+                      //   onPressed: _isRecording ? stopStream : handleStream,
+                      // ),
+                    ],
+                  ),
                 ),
-              ),
-            )),
+              )),
+        ),
       ]),
     );
   }

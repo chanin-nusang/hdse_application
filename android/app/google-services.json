@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "127803033838-a47mo51sf4i7c44ju07gl4iniri6lqdo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "coe.project.hdse",
+            "certificate_hash": "aeb2508a227d248d149681d242bf5b11a4bdc952"
+          }
+        },
+        {
+          "client_id": "127803033838-i42ine8hui3p5mefevg98fh4gqu5q41p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "coe.project.hdse",
+            "certificate_hash": "6235ab943b854dcec3f0914dee56f246fa312c00"
+          }
+        },
+        {
           "client_id": "127803033838-dfkilc5n0qqo1p5alsasd1uj99t1vj5k.apps.googleusercontent.com",
           "client_type": 3
         }

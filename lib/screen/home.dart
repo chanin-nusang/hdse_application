@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:hdse_application/screen/chat.dart';
 import 'package:hdse_application/screen/login.dart';
 
@@ -26,7 +27,14 @@ class _HomeState extends State<Home> {
     });
   }
 
-  void signOut(BuildContext context) {
+  void signOut(BuildContext context) async {
+    // final AccessToken? accessToken = await FacebookAuth.instance.accessToken;
+    // if (accessToken != null) {
+    //   await FacebookAuth.instance.logOut();
+    //   setState(() {
+    //               _userData = null;
+    //             });
+    // }
     _auth
         .signOut()
         .then((value) => Navigator.pushAndRemoveUntil(
