@@ -2,10 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:flutter_line_sdk/flutter_line_sdk.dart' as LineAuth;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hdse_application/screen/ResetPassword.dart';
 import 'package:hdse_application/screen/home.dart';
 import 'package:hdse_application/screen/signup.dart';
+import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
+import 'dart:io' show Platform;
+import 'dart:convert';
+import 'package:flutter/services.dart';
 
 class Login extends StatefulWidget {
   Login({Key? key}) : super(key: key);
@@ -20,10 +26,19 @@ class _LoginState extends State<Login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   Map? _userData;
+  var logger = Logger();
+
   @override
   void initState() {
+    lineSDKInit();
     checkAuth(context);
     super.initState();
+  }
+
+  void lineSDKInit() async {
+    await LineAuth.LineSDK.instance.setup("1656749651").then((_) {
+      print("LineSDK is Prepared");
+    });
   }
 
   Future checkAuth(BuildContext context) async {
@@ -48,8 +63,9 @@ class _LoginState extends State<Login> {
   // keytool -exportcert -alias androiddebugkey -keystore "C:\Users\Chanin\.android\debug.keystore" | C:\OpenSSL\bin\openssl sha1 -binary | C:\OpenSSL\bin\openssl base64
   // keytool -exportcert -list -v \ -alias upload -keystore C:\Users\Chanin\hdse-keystore.jks
   // gen certificate fingerprint
-  // keytool -list -v -alias <your-key-name> -keystore <path-to-production-keystore>
+  // keytool -list -v -alias upload -keystore C:\Users\Chanin\hdse-keystore.jks
   // keytool -list -v -alias androiddebugkey -keystore C:\Users\Chanin\.android\debug.keystore
+
   signIn() async {
     await _auth
         .signInWithEmailAndPassword(
@@ -59,94 +75,150 @@ class _LoginState extends State<Login> {
       print("signed in ${_auth.currentUser?.email ?? ""}");
       checkAuth(context);
     }).catchError((e) {
+      print(e);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(e.toString(), style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.red,
       ));
     });
+  }
+
+  void startLineLogin() async {
+    try {
+      final result = await LineAuth.LineSDK.instance
+          .login(scopes: ["profile", "email", "openid"]);
+      print(result.toString());
+      var accesstoken = await getAccessToken();
+      var displayname = result.userProfile!.displayName;
+      var statusmessage = result.userProfile!.statusMessage;
+      var imgUrl = result.userProfile!.pictureUrl;
+      var userId = result.userProfile!.userId;
+
+      print("AccessToken> " + accesstoken);
+      print("DisplayName> " + displayname);
+      print("StatusMessage> " + statusmessage!);
+      print("ProfileURL> " + imgUrl!);
+      print("userId> " + userId);
+    } catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(e.toString(), style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.red,
+      ));
+    }
+  }
+
+  Future getAccessToken() async {
+    try {
+      final result = await LineAuth.LineSDK.instance.currentAccessToken;
+      return result!.value;
+    } catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(e.toString(), style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.red,
+      ));
+    }
   }
 
   Future signInWithGoogle() async {
-    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser!.authentication;
-
-    final AuthCredential credential = GoogleAuthProvider.credential(
-        idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
-    await _auth
-        .signInWithCredential(credential)
-        .then((value) => checkAuth(context))
-        .catchError((e) {
+    try {
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser!.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+          idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
+      await _auth.signInWithCredential(credential);
+      checkAuth(context);
+    } catch (e) {
+      print(e);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(e.toString(), style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.red,
       ));
-    });
+    }
   }
 
   Future signInWithFacebook(BuildContext context) async {
-    // try {
-    final LoginResult result = await FacebookAuth.instance.login();
-    if (result.status == LoginStatus.success) {
-      print("result.status == LoginStatus.success");
-      // Create a credential from the access token
-      final OAuthCredential credential =
-          FacebookAuthProvider.credential(result.accessToken!.token);
-      // Once signed in, return the UserCredential
-      await _auth.signInWithCredential(credential);
-      checkAuth(context);
+    try {
+      final LoginResult result = await FacebookAuth.instance.login();
+      if (result.status == LoginStatus.success) {
+        print("result.status == LoginStatus.success");
+        final OAuthCredential credential =
+            FacebookAuthProvider.credential(result.accessToken!.token);
+        await _auth.signInWithCredential(credential);
+        checkAuth(context);
+      }
+    } catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(e.toString(), style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.red,
+      ));
     }
-    // return null;
-
-    // final result =
-    //     await FacebookAuth.i.login(permissions: ["public_profile", "email"]);
-
-    // // if (result.status == LoginStatus.success) {
-    // final userData = await FacebookAuth.i.getUserData(
-    //     // fields: "email,name",
-    //     );
-    // await _auth.signInWithCredential(
-    //     FacebookAuthProvider.credential(result.accessToken!.token));
-    // // _userData = null;
-    // print("signed in ${_auth.currentUser?.email ?? ""}");
-    // checkAuth(context);
-    // setState(() {
-    //   _userData = userData;
-    // });
-    // }
-
-    // // Trigger the sign-in flow
-    // final LoginResult loginResult = await FacebookAuth.instance.login();
-
-    // // Create a credential from the access token
-    // final OAuthCredential facebookAuthCredential =
-    //     FacebookAuthProvider.credential(loginResult.accessToken!.token);
-    // await _auth.signInWithCredential(
-    //     FacebookAuthProvider.credential(result.accessToken!.token));
-
-    // } catch (e) {
-    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    //     content: Text(e.toString(), style: TextStyle(color: Colors.white)),
-    //     backgroundColor: Colors.red,
-    //   ));
-    // }
   }
 
-  // signIn() {
-  //   // _auth
-  //   //     .signInWithEmailAndPassword(
-  //   //         email: emailController.text.trim(),
-  //   //         password: passwordController.text.trim())
-  //   signInAuth().then((user) {
+  dynamic tryParseJwt(String token) {
+    if (token == null) return null;
+    final parts = token.split('.');
+    if (parts.length != 3) {
+      return null;
+    }
+    final payload = parts[1];
+    var normalized = base64Url.normalize(payload);
+    var resp = utf8.decode(base64Url.decode(normalized));
+    final payloadMap = json.decode(resp);
+    if (payloadMap is! Map<String, dynamic>) {
+      return null;
+    }
+    return payloadMap;
+  }
 
-  //   }).catchError((error) {
-  //     print(error);
-  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //       content: Text(error.message, style: TextStyle(color: Colors.white)),
-  //       backgroundColor: Colors.red,
-  //     ));
-  //   });
-  // }
+  Future signInWithLine() async {
+    final lineLoginResult = await LineAuth.LineSDK.instance
+        .login(scopes: ["profile", "email", "openid"]);
+    logger.i(lineLoginResult.accessToken.data["id_token"]);
+    var jwtDecode;
+    if (!Platform.isAndroid || Platform.isIOS) {
+      throw PlatformException(
+          code: "PLATFORM_NOT_SUPPORT",
+          details: "We are currently supported IOS and Android only");
+    }
+    if (Platform.isIOS) {
+      jwtDecode = tryParseJwt(lineLoginResult.accessToken.data["id_token"]);
+    }
+    if (Platform.isAndroid) {
+      jwtDecode = tryParseJwt(lineLoginResult.accessToken.data["id_token"]);
+    }
+    if (jwtDecode["email"] == null) {
+      throw new PlatformException(
+          code: "NO_EMAIL_PROVIDED",
+          details: "The user doesn't grant the permission to get the email");
+    }
+    String accessToken = lineLoginResult.accessToken.data["access_token"];
+    String displayName = jwtDecode["name"];
+    String userId = jwtDecode["sub"];
+    String profileImage = jwtDecode["picture"] ??
+        "https://firebasestorage.googleapis.com/v0/b/flutter-firebase-d754b.appspot.com/o/avatar-human-male-profile-user-icon-518358.png?alt=media&token=44f84be1-ae20-4b47-aed3-0e67cda10897";
+    String email = jwtDecode["email"];
+    String channelId = "1656749651";
+    Map<String, dynamic> reqBody = {
+      "accessToken": accessToken,
+      "displayName": displayName,
+      "userId": userId,
+      "profileImage": profileImage,
+      "channelId": channelId,
+      "email": email
+    };
+    print(reqBody);
+    var firebaseToken = (await http.post(
+            Uri.parse(
+                "https://asia-east2-hdse-application.cloudfunctions.net/FirebaseAuth_generateToken"),
+            body: reqBody))
+        .body;
+    await _auth.signInWithCustomToken(firebaseToken);
+    checkAuth(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -175,6 +247,7 @@ class _LoginState extends State<Login> {
                       buildButtonSignIn(),
                       buildLine("ยังไม่มีบัญชีใช่ไหม?"),
                       buildButtonFacebook(context),
+                      buildButtonLine(),
                       buildButtonGoogle(context),
                       buildButtonRegister(),
                       buildLine("หากไม่สามารถเข้าสู่ระบบได้"),
@@ -285,7 +358,7 @@ class _LoginState extends State<Login> {
                 style: TextStyle(fontSize: 18, color: Colors.white)),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                color: Colors.blue[400]),
+                color: Colors.blue[600]),
             margin: EdgeInsets.only(top: 12),
             padding: EdgeInsets.all(12)),
         onTap: () => signInWithFacebook(context));
@@ -297,11 +370,26 @@ class _LoginState extends State<Login> {
             constraints: BoxConstraints.expand(height: 50),
             child: Text("เข้าใช้งานด้วย Google",
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, color: Colors.grey)),
+                style: TextStyle(fontSize: 18, color: Colors.grey[700])),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16), color: Colors.white),
             margin: EdgeInsets.only(top: 12),
             padding: EdgeInsets.all(12)),
         onTap: () => signInWithGoogle());
+  }
+
+  Widget buildButtonLine() {
+    return InkWell(
+        child: Container(
+            constraints: BoxConstraints.expand(height: 50),
+            child: Text("เข้าใช้งานด้วย Line",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 18, color: Colors.white)),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: Colors.green[400]),
+            margin: EdgeInsets.only(top: 12),
+            padding: EdgeInsets.all(12)),
+        onTap: () => signInWithLine());
   }
 }
