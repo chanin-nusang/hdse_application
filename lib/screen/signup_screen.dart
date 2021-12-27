@@ -40,7 +40,7 @@ class _SignupScreenState extends State<SignupScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text("ลงทะเบียนเข้าใช้งาน",
-              style: TextStyle(color: Colors.white)),
+              style: TextStyle(color: Colors.black)),
         ),
         body: Container(
             color: Colors.green[50],
@@ -71,7 +71,7 @@ class _SignupScreenState extends State<SignupScreen> {
           constraints: BoxConstraints.expand(height: 50),
           child: Text("ลงทะเบียน",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18, color: Colors.white)),
+              style: TextStyle(fontSize: 18, color: Colors.black)),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               color: Colors.green[200]),

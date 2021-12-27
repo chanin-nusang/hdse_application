@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hdse_application/screen/chatbot_screen.dart';
 import 'package:hdse_application/screen/home_screen.dart';
+import 'package:hdse_application/screen/loading_screen.dart';
 import 'package:hdse_application/screen/login_screen.dart';
 
 final Map<int, Color> _green200Map = {
@@ -27,7 +28,8 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'HDSE',
       theme: ThemeData(primarySwatch: _green200Swatch),
-      home: LoginScreen(), // Home(title: 'บริการข้อมูลสุขภาพสำหรับผู้สูงอายุ'),
+      home:
+          LoadingScreen(), // Home(title: 'บริการข้อมูลสุขภาพสำหรับผู้สูงอายุ'),
     );
   }
 }

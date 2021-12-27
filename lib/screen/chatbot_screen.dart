@@ -13,8 +13,11 @@
 // limitations under the License.
 
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sound_stream/sound_stream.dart';
 import 'package:dialogflow_grpc/dialogflow_grpc.dart';
@@ -73,12 +76,32 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
         '${(await rootBundle.loadString('assets/credentials.json'))}');
     // Create a DialogflowGrpc Instance
     dialogflow = DialogflowGrpcV2Beta1.viaServiceAccount(serviceAccount);
+    firstSubmmit();
   }
 
   void stopStream() async {
     await _recorder.stop();
     await _audioStreamSubscription?.cancel();
     await _audioStream?.close();
+  }
+
+  void firstSubmmit() async {
+    DetectIntentResponse? data =
+        await dialogflow?.detectIntent("สวัสดี", 'en-US');
+
+    var fulfillmentText = data?.queryResult.fulfillmentText.split("/n");
+
+    if (fulfillmentText != null) {
+      ChatMessage botMessage = ChatMessage(
+        text: fulfillmentText,
+        name: "น้องบอท",
+        type: false,
+      );
+
+      setState(() {
+        _messages.insert(0, botMessage);
+      });
+    }
   }
 
   void handleSubmitted(text) async {
@@ -230,7 +253,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                               hintText: "พิมพ์ข้อความ..."),
                         ),
                       ),
-                      _textController.text.length != 0
+                      _textController.text.isEmpty
                           ? Container(
                               margin: EdgeInsets.symmetric(horizontal: 4.0),
                               child: IconButton(
@@ -265,13 +288,21 @@ class ChatMessage extends StatelessWidget {
   final List<String>? text;
   final String? name;
   final bool? type;
-
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   List<Widget> otherMessage(context) {
     print("Text in otherMessage : ${text ?? "null"}");
     return <Widget>[
       new Container(
         margin: const EdgeInsets.only(right: 16.0),
-        child: CircleAvatar(child: new Text('B')),
+        child: CircleAvatar(
+          foregroundImage: Image.asset(
+            'assets/images/bot.png',
+            width: 15,
+            height: 15,
+            fit: BoxFit.fill,
+          ).image,
+          backgroundColor: Colors.green[200],
+        ),
       ),
       new Expanded(
         child: Column(
@@ -321,10 +352,11 @@ class ChatMessage extends StatelessWidget {
       Container(
         margin: const EdgeInsets.only(left: 16.0),
         child: CircleAvatar(
-            child: Text(
-          this.name![0],
-          style: TextStyle(fontWeight: FontWeight.bold),
-        )),
+          radius: 20,
+          backgroundImage: _auth.currentUser?.photoURL == null
+              ? Image.asset('assets/images/avatar.png').image
+              : CachedNetworkImageProvider(_auth.currentUser!.photoURL!),
+        ),
       ),
     ];
   }

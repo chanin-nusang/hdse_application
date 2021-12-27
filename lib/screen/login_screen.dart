@@ -1,13 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hdse_application/components/signin_button.dart';
 import 'package:hdse_application/screen/reset_password_screen.dart';
 import 'package:hdse_application/screen/signup_screen.dart';
-import 'package:flutter_line_sdk/flutter_line_sdk.dart' as LineAuth;
 import 'package:hdse_application/services/check_auth.dart';
 import 'package:hdse_application/services/signin_service/signin_with_facebook.dart';
 import 'package:hdse_application/services/signin_service/signin_with_google.dart';
 import 'package:hdse_application/services/signin_service/signin_with_line.dart';
+import 'package:hdse_application/services/signin_service/signin_with_password.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -21,35 +22,14 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   Map? _userData;
+  final String facebookIcon = 'assets/icons/facebooklogo.svg';
+  final String lineIcon = 'assets/icons/linelogo.svg';
+  final String googleIcon = 'assets/icons/googlelogo.svg';
 
   @override
   void initState() {
     lineSDKInit();
-    checkAuth(context);
     super.initState();
-  }
-
-  void lineSDKInit() async {
-    await LineAuth.LineSDK.instance.setup("1656749651").then((_) {
-      print("LineSDK is Prepared");
-    });
-  }
-
-  signIn() async {
-    await _auth
-        .signInWithEmailAndPassword(
-            email: emailController.text.trim(),
-            password: passwordController.text.trim())
-        .then((user) {
-      print("signed in ${_auth.currentUser?.email ?? ""}");
-      checkAuth(context);
-    }).catchError((e) {
-      print(e);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(e.toString(), style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.red,
-      ));
-    });
   }
 
   @override
@@ -77,30 +57,60 @@ class _LoginScreenState extends State<LoginScreen> {
                       buildTextFieldEmail(),
                       buildTextFieldPassword(),
                       buildSigninButton(context,
+                          iconWidget: Icon(Icons.login),
                           text: "เข้าสู่ระบบ",
-                          textColor: Colors.white,
+                          textColor: Colors.black,
                           buttonColor: Colors.green[200],
-                          handler: () => signIn()),
+                          handler: () => emailController.text.isEmpty ||
+                                  passwordController.text.isEmpty
+                              ? {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text(
+                                        "อีเมล หรือ รหัสผ่าน ไม่ถูกต้อง",
+                                        style: TextStyle(color: Colors.white)),
+                                    backgroundColor: Colors.red,
+                                  ))
+                                }
+                              : signInWithPassword(context,
+                                  emailController: emailController,
+                                  passwordController: passwordController)),
                       buildLine("ยังไม่มีบัญชีใช่ไหม?"),
                       buildSigninButton(context,
+                          iconWidget: Container(
+                              height: 30,
+                              width: 30,
+                              child: SvgPicture.asset(
+                                  "assets/icons/facebooklogo.svg")),
                           text: "เข้าใช้งานด้วย Facebook",
                           textColor: Colors.white,
                           buttonColor: Colors.blue[600], handler: () {
                         signInWithFacebook(context);
                       }),
                       buildSigninButton(context,
+                          iconWidget: Container(
+                              height: 30,
+                              width: 30,
+                              child: SvgPicture.asset(
+                                  "assets/icons/linelogo.svg")),
                           text: "เข้าใช้งานด้วย Line",
                           textColor: Colors.white,
                           buttonColor: Colors.green[400],
                           handler: () => signInWithLine(context)),
                       buildSigninButton(context,
+                          iconWidget: Container(
+                              height: 30,
+                              width: 30,
+                              child: SvgPicture.asset(
+                                  "assets/icons/googlelogo.svg")),
                           text: "เข้าใช้งานด้วย Google",
-                          textColor: Colors.grey[700],
+                          textColor: Colors.grey[800],
                           buttonColor: Colors.white,
                           handler: () => signInWithGoogle(context)),
                       buildSigninButton(context,
+                          iconWidget: Icon(Icons.person_add),
                           text: "ลงทะเบียน",
-                          textColor: Colors.white,
+                          textColor: Colors.black,
                           buttonColor: Colors.orange[200], handler: () {
                         Navigator.push(
                             context,
@@ -109,6 +119,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       }),
                       buildLine("หากไม่สามารถเข้าสู่ระบบได้"),
                       buildSigninButton(context,
+                          iconWidget: Icon(
+                            Icons.password,
+                            color: Colors.white,
+                          ),
                           text: "ลืมรหัสผ่าน",
                           textColor: Colors.white,
                           buttonColor: Colors.red[300], handler: () {
@@ -120,24 +134,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   )),
             )));
-  }
-
-  Widget buildButtonSignIn() {
-    return InkWell(
-      child: Container(
-          constraints: BoxConstraints.expand(height: 50),
-          child: Text("เข้าสู่ระบบ",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18, color: Colors.white)),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Colors.green[200]),
-          margin: EdgeInsets.only(top: 16),
-          padding: EdgeInsets.all(12)),
-      onTap: () {
-        signIn();
-      },
-    );
   }
 
   Container buildTextFieldEmail() {
@@ -174,87 +170,5 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Text(text, style: TextStyle(color: Colors.black87))),
           Expanded(child: Divider(color: Colors.green[800])),
         ]));
-  }
-
-  Widget buildButtonRegister() {
-    return InkWell(
-        child: Container(
-            constraints: BoxConstraints.expand(height: 50),
-            child: Text("ลงทะเบียน",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, color: Colors.white)),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: Colors.orange[200]),
-            margin: EdgeInsets.only(top: 12),
-            padding: EdgeInsets.all(12)),
-        onTap: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => SignupScreen()));
-        });
-  }
-
-  buildButtonForgotPassword(BuildContext context) {
-    return InkWell(
-        child: Container(
-            constraints: BoxConstraints.expand(height: 50),
-            child: Text("ลืมรหัสผ่าน",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, color: Colors.white)),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: Colors.red[300]),
-            margin: EdgeInsets.only(top: 12),
-            padding: EdgeInsets.all(12)),
-        onTap: () => navigateToResetPasswordPage(context));
-  }
-
-  navigateToResetPasswordPage(BuildContext context) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => ResetPasswordScreen()));
-  }
-
-  Widget buildButtonFacebook(BuildContext context) {
-    return InkWell(
-        child: Container(
-            constraints: BoxConstraints.expand(height: 50),
-            child: Text("เข้าใช้งานด้วย Facebook",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, color: Colors.white)),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: Colors.blue[600]),
-            margin: EdgeInsets.only(top: 12),
-            padding: EdgeInsets.all(12)),
-        onTap: () => signInWithFacebook(context));
-  }
-
-  Widget buildButtonGoogle(BuildContext context) {
-    return InkWell(
-        child: Container(
-            constraints: BoxConstraints.expand(height: 50),
-            child: Text("เข้าใช้งานด้วย Google",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, color: Colors.grey[700])),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16), color: Colors.white),
-            margin: EdgeInsets.only(top: 12),
-            padding: EdgeInsets.all(12)),
-        onTap: () => signInWithGoogle(context));
-  }
-
-  Widget buildButtonLine(BuildContext context) {
-    return InkWell(
-        child: Container(
-            constraints: BoxConstraints.expand(height: 50),
-            child: Text("เข้าใช้งานด้วย Line",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, color: Colors.white)),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: Colors.green[400]),
-            margin: EdgeInsets.only(top: 12),
-            padding: EdgeInsets.all(12)),
-        onTap: () => signInWithLine(context));
   }
 }

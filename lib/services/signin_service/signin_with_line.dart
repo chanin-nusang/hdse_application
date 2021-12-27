@@ -11,6 +11,12 @@ import 'package:http/http.dart' as http;
 var logger = Logger();
 FirebaseAuth _auth = FirebaseAuth.instance;
 
+void lineSDKInit() async {
+  await LineAuth.LineSDK.instance.setup("1656749651").then((_) {
+    print("LineSDK is Prepared");
+  });
+}
+
 dynamic tryParseJwt(String token) {
   if (token == null) return null;
   final parts = token.split('.');

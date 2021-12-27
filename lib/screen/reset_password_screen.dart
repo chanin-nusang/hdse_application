@@ -16,9 +16,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     return Scaffold(
         appBar: AppBar(
           title:
-              Text("ตั้งรหัสผ่านใหม่", style: TextStyle(color: Colors.white)),
+              Text("ตั้งรหัสผ่านใหม่", style: TextStyle(color: Colors.black)),
           iconTheme: IconThemeData(
-            color: Colors.white, //change your color here
+            color: Colors.black, //change your color here
           ),
         ),
         body: Container(
@@ -48,7 +48,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             constraints: BoxConstraints.expand(height: 50),
             child: Text("ตั้งรหัสผ่านใหม่",
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18, color: Colors.white)),
+                style: TextStyle(fontSize: 18, color: Colors.black)),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
                 color: Colors.green[200]),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 Widget buildSigninButton(BuildContext context,
-    {@required String? text,
+    {@required Widget? iconWidget,
+    @required String? text,
     @required Color? textColor,
     @required Color? buttonColor,
     @required VoidCallback? handler}) {
@@ -11,7 +12,7 @@ Widget buildSigninButton(BuildContext context,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Icon(Icons.person),
+              iconWidget!,
               SizedBox(
                 width: 10,
               ),
