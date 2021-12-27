@@ -25,7 +25,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'HDSE',
       theme: ThemeData(primarySwatch: _green200Swatch),
       home: LoginScreen(), // Home(title: 'บริการข้อมูลสุขภาพสำหรับผู้สูงอายุ'),
     );
