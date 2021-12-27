@@ -1,15 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hdse_application/screen/login.dart';
+import 'package:hdse_application/screen/login_screen.dart';
 
-class Signup extends StatefulWidget {
-  const Signup({Key? key}) : super(key: key);
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({Key? key}) : super(key: key);
 
   @override
-  _SignupState createState() => _SignupState();
+  _SignupScreenState createState() => _SignupScreenState();
 }
 
-class _SignupState extends State<Signup> {
+class _SignupScreenState extends State<SignupScreen> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -25,7 +25,7 @@ class _SignupState extends State<Signup> {
         print("Sign up user successful.");
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => Login()),
+            MaterialPageRoute(builder: (context) => LoginScreen()),
             ModalRoute.withName('/'));
       }).catchError((error) {
         print(error.message);

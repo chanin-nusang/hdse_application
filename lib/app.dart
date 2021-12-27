@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hdse_application/screen/chat.dart';
-import 'package:hdse_application/screen/home.dart';
-import 'package:hdse_application/screen/login.dart';
+import 'package:hdse_application/screen/chatbot_screen.dart';
+import 'package:hdse_application/screen/home_screen.dart';
+import 'package:hdse_application/screen/login_screen.dart';
 
 final Map<int, Color> _green200Map = {
   50: Colors.green[50]!,
@@ -17,7 +17,7 @@ final Map<int, Color> _green200Map = {
 };
 
 final MaterialColor _green200Swatch =
-  MaterialColor(Colors.green[200]!.value, _green200Map);
+    MaterialColor(Colors.green[200]!.value, _green200Map);
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
@@ -26,10 +26,8 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: _green200Swatch
-      ),
-      home: Login(), // Home(title: 'บริการข้อมูลสุขภาพสำหรับผู้สูงอายุ'),
+      theme: ThemeData(primarySwatch: _green200Swatch),
+      home: LoginScreen(), // Home(title: 'บริการข้อมูลสุขภาพสำหรับผู้สูงอายุ'),
     );
   }
 }

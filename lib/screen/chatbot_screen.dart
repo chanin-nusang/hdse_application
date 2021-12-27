@@ -23,14 +23,14 @@ import 'package:dialogflow_grpc/generated/google/cloud/dialogflow/v2beta1/sessio
 // TODO import Dialogflow
 DialogflowGrpcV2Beta1? dialogflow;
 
-class Chat extends StatefulWidget {
-  Chat({Key? key}) : super(key: key);
+class ChatbotScreen extends StatefulWidget {
+  ChatbotScreen({Key? key}) : super(key: key);
 
   @override
-  _ChatState createState() => _ChatState();
+  _ChatbotScreenState createState() => _ChatbotScreenState();
 }
 
-class _ChatState extends State<Chat> {
+class _ChatbotScreenState extends State<ChatbotScreen> {
   final List<ChatMessage> _messages = <ChatMessage>[];
   final TextEditingController _textController = TextEditingController();
 

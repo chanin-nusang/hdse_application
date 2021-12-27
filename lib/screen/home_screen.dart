@@ -2,18 +2,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:hdse_application/screen/chat.dart';
-import 'package:hdse_application/screen/login.dart';
+import 'package:hdse_application/screen/chatbot_screen.dart';
+import 'package:hdse_application/screen/login_screen.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key, required this.title, this.user}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key, required this.title, this.user})
+      : super(key: key);
   final String title;
   final User? user;
   @override
-  _HomeState createState() => _HomeState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeScreenState extends State<HomeScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final FacebookAuth facebookAuth = FacebookAuth.instance;
@@ -21,16 +22,16 @@ class _HomeState extends State<Home> {
 
   void signOut(BuildContext context) async {
     List<UserInfo> userInfo = _auth.currentUser!.providerData;
-    if (userInfo[0].providerId == "google.com") {
-      googleSignIn.signOut();
-    }
-    if (userInfo[0].providerId == "facebook.com") {
-      facebookAuth.logOut();
-    }
+    // if (userInfo[0].providerId == "google.com") {
+    //   googleSignIn.signOut();
+    // }
+    // if (userInfo[0].providerId == "facebook.com") {
+    //   facebookAuth.logOut();
+    // }
     _auth.signOut().then((value) {
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => Login()),
+          MaterialPageRoute(builder: (context) => LoginScreen()),
           ModalRoute.withName('/'));
       print("Sign-out with provider = ${userInfo[0].providerId}");
     }).catchError((error) {
@@ -65,8 +66,8 @@ class _HomeState extends State<Home> {
                 child: Center(child: Text("ระบบแชทบอท")),
               ),
               onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Chat()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ChatbotScreen()));
               },
               // This trailing comma makes auto-formatting nicer for build methods.
             ),
