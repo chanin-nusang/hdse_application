@@ -9,13 +9,13 @@ Future checkAuth(BuildContext context) async {
   User? user = await _auth.currentUser;
   if (user != null) {
     print("Already singed-in with");
-    Navigator.pushReplacement(
+    Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
             builder: (context) => HomeScreen(
-                  user: user,
                   title: "ยินดีต้อนรับ",
-                )));
+                )),
+        (Route<dynamic> route) => false);
   } else {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => LoginScreen()));

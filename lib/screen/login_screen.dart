@@ -37,8 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text("บริการข้อมูลสุขภาพสำหรับผู้สูงอายุ",
-              style: TextStyle(color: Colors.black87)),
+          title: Text("เข้าสู่ระบบ", style: TextStyle(color: Colors.black87)),
         ),
         body: Container(
             color: Colors.green[50],

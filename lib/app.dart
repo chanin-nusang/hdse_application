@@ -28,8 +28,9 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'HDSE',
       theme: ThemeData(primarySwatch: _green200Swatch),
-      home:
-          LoadingScreen(), // Home(title: 'บริการข้อมูลสุขภาพสำหรับผู้สูงอายุ'),
+      home: HomeScreen(
+        title: "ยินดีต้อนรับ",
+      ), // Home(title: 'บริการข้อมูลสุขภาพสำหรับผู้สูงอายุ'),
     );
   }
 }
