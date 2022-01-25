@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hdse_application/screen/home_screen.dart';
@@ -16,6 +17,19 @@ Future checkAuth(BuildContext context) async {
                   title: "ยินดีต้อนรับ",
                 )),
         (Route<dynamic> route) => false);
+    try {
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(_auth.currentUser!.uid)
+          .set({
+        "name": _auth.currentUser!.displayName ?? "",
+        "email": _auth.currentUser!.email ?? "",
+        "photoURL": _auth.currentUser!.photoURL ?? "",
+        "phoneNumber": _auth.currentUser!.phoneNumber ?? ""
+      });
+    } catch (e) {
+      print("FirebaseFirestore.instance error : " + e.toString());
+    }
   } else {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => LoginScreen()));

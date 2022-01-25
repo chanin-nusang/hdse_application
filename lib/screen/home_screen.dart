@@ -6,7 +6,9 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hdse_application/screen/chatbot_screen.dart';
 import 'package:hdse_application/screen/login_screen.dart';
+import 'package:hdse_application/services/speech_to_text.dart';
 import 'package:hdse_application/services/webview.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 import 'dart:io';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -22,12 +24,16 @@ class _HomeScreenState extends State<HomeScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final FacebookAuth facebookAuth = FacebookAuth.instance;
+  final SpeechToText speech = SpeechToText();
   TapGestureRecognizer? _loginBenefitsRecognizer;
   TapGestureRecognizer? _privacyPolicyRecognizer;
   TapGestureRecognizer? _termsAndConditionsRecognizer;
+
   @override
   void initState() {
+    SpeechToTextService().initSpeechState();
     user = _auth.currentUser;
+
     if (Platform.isAndroid) WebView.platform = AndroidWebView();
     _loginBenefitsRecognizer = TapGestureRecognizer()
       ..onTap = () {
@@ -252,8 +258,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: InkWell(
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ChatbotScreen()));
+            Navigator.push(
+                context,
+                new MaterialPageRoute(
+                    builder: (context) => new ChatbotScreen()));
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -7,18 +7,20 @@ FirebaseAuth _auth = FirebaseAuth.instance;
 signInWithPassword(BuildContext context,
     {@required TextEditingController? emailController,
     @required TextEditingController? passwordController}) async {
-  await _auth
-      .signInWithEmailAndPassword(
-          email: emailController!.text.trim(),
-          password: passwordController!.text.trim())
-      .then((user) {
-    print("signed in ${_auth.currentUser?.email ?? ""}");
-    checkAuth(context);
-  }).catchError((e) {
-    print(e);
+  try {
+    await _auth
+        .signInWithEmailAndPassword(
+            email: emailController!.text.trim(),
+            password: passwordController!.text.trim())
+        .then((user) {
+      print("signed in ${_auth.currentUser?.email ?? ""}");
+      checkAuth(context);
+    });
+  } catch (e) {
+    print("signInWithPassword error : " + e.toString());
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(e.toString(), style: TextStyle(color: Colors.white)),
       backgroundColor: Colors.red,
     ));
-  });
+  }
 }

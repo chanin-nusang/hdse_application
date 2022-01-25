@@ -32,6 +32,11 @@ class _SignupScreenState extends State<SignupScreen> {
       });
     } else {
       print("Password and Confirm-password is not match.");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("รหัสผ่าน และรหัสผ่านที่ยืนยัน ไม่ตรงกัน",
+            style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.red,
+      ));
     }
   }
 

@@ -70,12 +70,19 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   resetPassword() {
-    String email = emailController.text.trim();
-    _auth.sendPasswordResetEmail(email: email);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text("We send the detail to $email successfully.",
-          style: TextStyle(color: Colors.white)),
-      backgroundColor: Colors.green[300],
-    ));
+    try {
+      String email = emailController.text.trim();
+      _auth.sendPasswordResetEmail(email: email);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+            "ระบบได้ส่งข้อมูลการตั้งรหัสผ่านใหม่ไปยัง $email เรียบร้อยแล้ว.",
+            style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.green[300],
+      ));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(e.toString(), style: TextStyle(color: Colors.white)),
+          backgroundColor: Colors.red));
+    }
   }
 }

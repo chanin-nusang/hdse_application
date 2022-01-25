@@ -3,6 +3,8 @@ import 'package:hdse_application/screen/chatbot_screen.dart';
 import 'package:hdse_application/screen/home_screen.dart';
 import 'package:hdse_application/screen/loading_screen.dart';
 import 'package:hdse_application/screen/login_screen.dart';
+import 'package:hdse_application/services/speech_to_text.dart';
+import 'package:provider/provider.dart';
 
 final Map<int, Color> _green200Map = {
   50: Colors.green[50]!,
