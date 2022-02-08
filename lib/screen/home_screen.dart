@@ -6,6 +6,9 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hdse_application/screen/chatbot_screen.dart';
 import 'package:hdse_application/screen/login_screen.dart';
+import 'package:hdse_application/screen/maps_screen.dart';
+import 'package:hdse_application/screen/places_screen.dart';
+import 'package:hdse_application/screen/search_screen.dart';
 import 'package:hdse_application/services/speech_to_text.dart';
 import 'package:hdse_application/services/webview.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -319,7 +322,12 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius: BorderRadius.circular(24),
         ),
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+                context,
+                new MaterialPageRoute(
+                    builder: (context) => new SearchScreen()));
+          },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
