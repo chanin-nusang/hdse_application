@@ -6,10 +6,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hdse_application/models/geometry.dart';
 import 'package:hdse_application/models/location.dart';
 import 'package:hdse_application/models/place.dart';
+import 'package:hdse_application/models/place_detail.dart';
 import 'package:hdse_application/models/place_search.dart';
-import 'package:hdse_application/services/maps_service.dart/geolocator_service.dart';
-import 'package:hdse_application/services/maps_service.dart/marker_service.dart';
-import 'package:hdse_application/services/maps_service.dart/places_service.dart';
+import 'package:hdse_application/services/maps_service/geolocator_service.dart';
+import 'package:hdse_application/services/maps_service/marker_service.dart';
+import 'package:hdse_application/services/maps_service/places_service.dart';
 
 class ApplicationBloc with ChangeNotifier {
   final geoLocatorService = GeolocatorService();
@@ -19,12 +20,15 @@ class ApplicationBloc with ChangeNotifier {
   //Variables
   Position? currentLocation;
   List<PlaceSearch>? searchResults;
-  StreamController<Place> selectedLocation = StreamController<Place>();
-  StreamController<LatLngBounds> bounds = StreamController<LatLngBounds>();
+  StreamController<Place> selectedLocation =
+      StreamController<Place>.broadcast();
+  StreamController<LatLngBounds> bounds =
+      StreamController<LatLngBounds>.broadcast();
   Place? selectedLocationStatic;
   String? placeType;
-  List<Place>? placeResults;
+  List<Place> placeResults = [];
   List<Marker> markers = List<Marker>.empty();
+  PlaceDetail? placeDetail;
 
   ApplicationBloc() {
     setCurrentLocation();
@@ -73,18 +77,24 @@ class ApplicationBloc with ChangeNotifier {
     }
 
     if (placeType!.isNotEmpty) {
-      var places = await placesService.getPlaces(
+      placeResults = await placesService.getPlaces(
           selectedLocationStatic!.geometry!.location!.lat!,
           selectedLocationStatic!.geometry!.location!.lng!,
           placeType!);
       markers = [];
-      if (places.length > 0) {
-        var newMarker = markerService.createMarkerFromPlace(places[0], false);
-        markers.add(newMarker);
+      if (placeResults.length > 0) {
+        print("places.length > 0");
+        placeResults.forEach((e) {
+          print("places.map");
+          var newMarker = markerService.createMarkerFromPlace(e, false);
+          markers.add(newMarker);
+          print("place add to markers");
+        });
       }
 
       var locationMarker =
           markerService.createMarkerFromPlace(selectedLocationStatic!, true);
+
       markers.add(locationMarker);
 
       var _bounds = markerService.bounds(Set<Marker>.of(markers));
@@ -92,6 +102,15 @@ class ApplicationBloc with ChangeNotifier {
 
       notifyListeners();
     }
+  }
+
+  getPlaceDetailToBloc(String placeID) async {
+    placeDetail = await placesService.getPlaceDetail(placeID);
+    notifyListeners();
+  }
+
+  clearPlaceDetail() {
+    placeDetail = null;
   }
 
   @override

@@ -1,4 +1,6 @@
+import 'package:flutter/services.dart';
 import 'package:hdse_application/models/place.dart';
+import 'package:hdse_application/models/place_detail.dart';
 import 'package:hdse_application/models/place_search.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -32,5 +34,18 @@ class PlacesService {
     var json = convert.jsonDecode(response.body);
     var jsonResults = json['results'] as List;
     return jsonResults.map((place) => Place.fromJson(place)).toList();
+  }
+
+  Future<PlaceDetail> getPlaceDetail(String placeID) async {
+    // var url =
+    //     'https://maps.googleapis.com/maps/api/place/details/json?language=th&fields=address_component,adr_address,business_status,formatted_address,geometry,icon,icon_mask_base_uri,icon_background_color,name,photo,place_id,plus_code,type,url,utc_offset,vicinity,formatted_phone_number,opening_hours,website,rating,review,user_ratings_total&place_id=$placeID&key=$key';
+    // var response = await http.get(Uri.parse(url));
+    // var json = convert.jsonDecode(response.body);
+    final String response =
+        await rootBundle.loadString('assets/json/place_detail_th.json');
+    final json = await convert.jsonDecode(response);
+    //-----***-----
+    var jsonResults = json['result'];
+    return PlaceDetail.fromJson(jsonResults);
   }
 }

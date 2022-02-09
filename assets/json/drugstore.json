@@ -1,0 +1,968 @@
+{
+    "html_attributions": [],
+    "next_page_token": "Aap_uEAtGl85409EujuQ_c1i0G5PieTf3FxL8bsEuLIJdh3cIyJSj2sUxBkdNlL03umidXLgbOlj_tHl6IjKk18YXUEwkKJJHO61roDfiL6-6gHMh2It8SYVkBLtdoloanIiqfb5jnd96_bIOJkWuIhrzA59Xz13g2DhnFZcgF-xQf0ZJnQxnR56zYyjWKWEgr2qoOA85DpFd-VvPo7itWDyBqyxMkdEZH2cH5DtiNU5wDArc3XW4XtNT1pjrMyhRogdrLlBK2yDkh2B6Eiw-C7BeZvvrDgVmPTLsGUO-Dng1rXf8793xhtRkUAlxg1Wccy2akFRxBPtmLItuhGobc0yw4Duhf_dchDx09se2w5r5BggjUjw4l9XvK491rz67QEwLRkiJ6KciPfd7Ucd17HmwZNOnwLkyC20RSU5BzqRwEuANhGfh1ekzPVDyLuHTQ-GPA",
+    "results": [
+        {
+            "business_status": "OPERATIONAL",
+            "formatted_address": "เลขที่ 452 Poonnakan Rd, Kho Hong, Hat Yai District, Songkhla 90110",
+            "geometry": {
+                "location": {
+                    "lat": 7.0017703,
+                    "lng": 100.4998204
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 7.00315162989272,
+                        "lng": 100.5011710798927
+                    },
+                    "southwest": {
+                        "lat": 7.000451970107276,
+                        "lng": 100.4984714201073
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+            "icon_background_color": "#4B96F3",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+            "name": "คลังยาศรีตรัง สาขา 1",
+            "place_id": "ChIJHQk2t14pTTAR6pQy7LVCU_o",
+            "plus_code": {
+                "compound_code": "2F2X+PW Kho Hong, Hat Yai District, Songkhla",
+                "global_code": "6PV22F2X+PW"
+            },
+            "rating": 0,
+            "reference": "ChIJHQk2t14pTTAR6pQy7LVCU_o",
+            "types": [
+                "drugstore",
+                "health",
+                "point_of_interest",
+                "store",
+                "establishment"
+            ],
+            "user_ratings_total": 0
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "formatted_address": "เลขที่ 437 Thumnoonvithi Rd, Tambon Hat Yai, Amphoe Hat Yai, Songkhla 90110",
+            "geometry": {
+                "location": {
+                    "lat": 7.00519,
+                    "lng": 100.4882404
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 7.006508779892721,
+                        "lng": 100.4895885798927
+                    },
+                    "southwest": {
+                        "lat": 7.003809120107277,
+                        "lng": 100.4868889201073
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+            "icon_background_color": "#4B96F3",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+            "name": "ร้าน ขายยาหาดใหญ่ฟาร์มาพลัส",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 1500,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/109843188680361307596\">A Google User</a>"
+                    ],
+                    "photo_reference": "Aap_uEBB4pWyjq6ymNIo927-pHMYWMHZnczuNVqHH5EyzpIfGOiDmLj0oJKqqIrIhxafNziTLzvW4dV2mToN_ladrduDbPyfBmY27gSvUY6PSQsg_s4SknGzm2E3vbNH9B9VKZLVSmlZTTLWc_Uqz3RB6VgrwMA3F24mjdPXo8T-YWkWxXDx",
+                    "width": 1999
+                }
+            ],
+            "place_id": "ChIJh5ZEbFIpTTARvDzVNKogCNo",
+            "plus_code": {
+                "compound_code": "2F4Q+37 Hat Yai, Hat Yai District, Songkhla",
+                "global_code": "6PV22F4Q+37"
+            },
+            "rating": 5,
+            "reference": "ChIJh5ZEbFIpTTARvDzVNKogCNo",
+            "types": [
+                "drugstore",
+                "health",
+                "point_of_interest",
+                "store",
+                "establishment"
+            ],
+            "user_ratings_total": 2
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "formatted_address": "129 Klongrien 2 Soi 2 Rd, Tambon Hat Yai, หาดใหญ่ Songkhla 90110",
+            "geometry": {
+                "location": {
+                    "lat": 7.003146099999999,
+                    "lng": 100.4837724
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 7.004505329892722,
+                        "lng": 100.4851635298927
+                    },
+                    "southwest": {
+                        "lat": 7.001805670107278,
+                        "lng": 100.4824638701073
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+            "icon_background_color": "#4B96F3",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+            "name": "ร้านขายยา ธนิกาฟาร์มาซี",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 1537,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/113616125757954420346\">A Google User</a>"
+                    ],
+                    "photo_reference": "Aap_uEAW040NHu_hIkUoRXcms2tZ2_eVlzJe8f0thLjlgeEDJrc8wghyNY-rn2NXjkao8RaIaXWe7pgdmTP9d7cJT80qUmKryD29CtexAZvfpBjepopD8avqFCAgtqnAcyuichFWDlpZYFURtjS8V36qBxPk1SwH4GVvFP6fEr0WeK-WU3i8",
+                    "width": 2048
+                }
+            ],
+            "place_id": "ChIJx4nc_o4pTTAR6HRZBX-MN8w",
+            "plus_code": {
+                "compound_code": "2F3M+7G Hat Yai, Hat Yai District, Songkhla",
+                "global_code": "6PV22F3M+7G"
+            },
+            "rating": 0,
+            "reference": "ChIJx4nc_o4pTTAR6HRZBX-MN8w",
+            "types": [
+                "drugstore",
+                "health",
+                "point_of_interest",
+                "store",
+                "establishment"
+            ],
+            "user_ratings_total": 0
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "formatted_address": "367 Supasarnrangsan Rd, Tambon Hat Yai, Hat Yai District, Songkhla 90110",
+            "geometry": {
+                "location": {
+                    "lat": 7.009012599999999,
+                    "lng": 100.4834485
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 7.010303829892721,
+                        "lng": 100.4847966298927
+                    },
+                    "southwest": {
+                        "lat": 7.007604170107277,
+                        "lng": 100.4820969701073
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+            "icon_background_color": "#4B96F3",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+            "name": "JK Pharmacy 2",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 471,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/112114190055753479241\">ครูใหญ่ออนไลน์ สุรินทร์ นุ่นแก้ว</a>"
+                    ],
+                    "photo_reference": "Aap_uEBYguOaRJaU1HQiFnrKC6wl_ATfahdURONnuBVD7rY6aRfU1pP50JofeCNpNwGx0Z9_vM9zewzAhwBldZQWd_SEvRdhXHmXoiICv5HmyOVwhIja_bGlTicMFoZ5MW9GyvwZk_dyCotPORUTDi47EZvgfBEo1_eHBCHzw82ycVcYAWcy",
+                    "width": 648
+                }
+            ],
+            "place_id": "ChIJ-fjNkjUpTTARQqpEWs1g_64",
+            "plus_code": {
+                "compound_code": "2F5M+J9 Hat Yai, Hat Yai District, Songkhla",
+                "global_code": "6PV22F5M+J9"
+            },
+            "rating": 5,
+            "reference": "ChIJ-fjNkjUpTTARQqpEWs1g_64",
+            "types": [
+                "drugstore",
+                "health",
+                "point_of_interest",
+                "store",
+                "establishment"
+            ],
+            "user_ratings_total": 1
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "formatted_address": "46 ถนน Thung Sao 2 Alley, Tambon Hat Yai, Hat Yai District, Songkhla 90110",
+            "geometry": {
+                "location": {
+                    "lat": 6.9962895,
+                    "lng": 100.4805556
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 6.997644079892722,
+                        "lng": 100.4819015298927
+                    },
+                    "southwest": {
+                        "lat": 6.994944420107278,
+                        "lng": 100.4792018701073
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+            "icon_background_color": "#4B96F3",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+            "name": "ศูนย์ยาทุ่งเสา ร้านยาหาดใหญ่",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 4032,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/101107505733498114671\">A Google User</a>"
+                    ],
+                    "photo_reference": "Aap_uEC57sfR-JmIFltkcoPNdIYhTwA4FdSy-mxd0AXD7VNMrDysL3K71NpqRh95q3pzY-A6GTSk776bd-45DS3tZQRqXo79z4BuqjJb7YqFuMJyWJ-0s-zaIAnRzPKi5YQqW28_ZcXXqmkWlcFdgYhM7edw5Iqsu8-_2feVzfH_bMOIqU8n",
+                    "width": 3024
+                }
+            ],
+            "place_id": "ChIJFVedjTUoTTARzZoPd8bVFWA",
+            "plus_code": {
+                "compound_code": "XFWJ+G6 Hat Yai, Hat Yai District, Songkhla",
+                "global_code": "6PR2XFWJ+G6"
+            },
+            "rating": 5,
+            "reference": "ChIJFVedjTUoTTARzZoPd8bVFWA",
+            "types": [
+                "drugstore",
+                "health",
+                "point_of_interest",
+                "store",
+                "establishment"
+            ],
+            "user_ratings_total": 4
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "formatted_address": "67 ถ Thung Sao 2 Alley, ต.หาดใหญ่ Hat Yai District, Songkhla 90110",
+            "geometry": {
+                "location": {
+                    "lat": 6.9960799,
+                    "lng": 100.4804867
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 6.997466229892722,
+                        "lng": 100.4818066298927
+                    },
+                    "southwest": {
+                        "lat": 6.994766570107278,
+                        "lng": 100.4791069701073
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+            "icon_background_color": "#4B96F3",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+            "name": "ร้านขายยา",
+            "opening_hours": {
+                "open_now": true
+            },
+            "place_id": "ChIJG4rBCsYpTTARrFK3jFbbTrU",
+            "plus_code": {
+                "compound_code": "XFWJ+C5 Hat Yai, Hat Yai District, Songkhla",
+                "global_code": "6PR2XFWJ+C5"
+            },
+            "rating": 0,
+            "reference": "ChIJG4rBCsYpTTARrFK3jFbbTrU",
+            "types": [
+                "drugstore",
+                "health",
+                "point_of_interest",
+                "store",
+                "establishment"
+            ],
+            "user_ratings_total": 0
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "formatted_address": "48 Supasarnrangsan Rd, Hat Yai, Hat Yai District, Songkhla 90110",
+            "geometry": {
+                "location": {
+                    "lat": 7.008837300000001,
+                    "lng": 100.481576
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 7.010203429892721,
+                        "lng": 100.4829269298927
+                    },
+                    "southwest": {
+                        "lat": 7.007503770107277,
+                        "lng": 100.4802272701073
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+            "icon_background_color": "#4B96F3",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+            "name": "หมอยา โดยนายสมพงษ์ อภิรมย์รักษ์",
+            "opening_hours": {
+                "open_now": true
+            },
+            "place_id": "ChIJV-RUXlIoTTARim6DoZFAqd0",
+            "plus_code": {
+                "compound_code": "2F5J+GJ Hat Yai, Hat Yai District, Songkhla",
+                "global_code": "6PV22F5J+GJ"
+            },
+            "rating": 0,
+            "reference": "ChIJV-RUXlIoTTARim6DoZFAqd0",
+            "types": [
+                "drugstore",
+                "health",
+                "point_of_interest",
+                "store",
+                "establishment"
+            ],
+            "user_ratings_total": 0
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "formatted_address": "60 ถ Thung Sao 2 Alley, Tambon Hat Yai, Amphoe Hat Yai, Songkhla 90110",
+            "geometry": {
+                "location": {
+                    "lat": 6.9960384,
+                    "lng": 100.4802187
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 6.997381029892721,
+                        "lng": 100.4815743798927
+                    },
+                    "southwest": {
+                        "lat": 6.994681370107277,
+                        "lng": 100.4788747201073
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+            "icon_background_color": "#4B96F3",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+            "name": "เภสัชกรมนตรี",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 2647,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/104754757739423469106\">เภสัชกรมนตรี</a>"
+                    ],
+                    "photo_reference": "Aap_uEB_WnDu0fCbl00sGP8h-GzF6g9hsTC1QtdZ8eWSq9i_eYc7KCUC62tcMTZ6ldN-HGiZBGFKDz2w4xOZbf0KrYfWpxssxDGp-lyICVG2DH_io24-oQYpiE_mkD3WKtpE4NiwAaqBGnJV7uCKFiNMQffBbnrrZvh0RM120E6cmCBwANhq",
+                    "width": 1334
+                }
+            ],
+            "place_id": "ChIJY-9NaRQpTTARZcFPVNTE1eU",
+            "plus_code": {
+                "compound_code": "XFWJ+C3 Hat Yai, Hat Yai District, Songkhla",
+                "global_code": "6PR2XFWJ+C3"
+            },
+            "rating": 4,
+            "reference": "ChIJY-9NaRQpTTARZcFPVNTE1eU",
+            "types": [
+                "drugstore",
+                "health",
+                "point_of_interest",
+                "store",
+                "establishment"
+            ],
+            "user_ratings_total": 1
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "formatted_address": "60 ถ Thung Sao 2 Alley, Tambon Hat Yai, Amphoe Hat Yai, Songkhla 90110",
+            "geometry": {
+                "location": {
+                    "lat": 6.996034700000001,
+                    "lng": 100.4802098
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 6.997375229892722,
+                        "lng": 100.4815671798927
+                    },
+                    "southwest": {
+                        "lat": 6.994675570107278,
+                        "lng": 100.4788675201073
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+            "icon_background_color": "#4B96F3",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+            "name": "เภสัชกรมนตรี 3 & CoffeePharm",
+            "opening_hours": {},
+            "place_id": "ChIJr9McERMpTTARLPbMi6zHulk",
+            "plus_code": {
+                "compound_code": "XFWJ+C3 Hat Yai, Hat Yai District, Songkhla",
+                "global_code": "6PR2XFWJ+C3"
+            },
+            "rating": 0,
+            "reference": "ChIJr9McERMpTTARLPbMi6zHulk",
+            "types": [
+                "drugstore",
+                "health",
+                "point_of_interest",
+                "store",
+                "establishment"
+            ],
+            "user_ratings_total": 0
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "formatted_address": "677 Petchkasem Rd, Tambon Kho Hong, Hat Yai District, Songkhla 90110",
+            "geometry": {
+                "location": {
+                    "lat": 7.0198334,
+                    "lng": 100.485388
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 7.020869479892721,
+                        "lng": 100.4869052298927
+                    },
+                    "southwest": {
+                        "lat": 7.018169820107278,
+                        "lng": 100.4842055701073
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/pharmacy-71.png",
+            "icon_background_color": "#F88181",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/pharmacy_pinlet",
+            "name": "Pure Drug Store",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 1704,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/117153900404698922069\">Jane Jnie</a>"
+                    ],
+                    "photo_reference": "Aap_uED7axu92bYtx9JNYatuDaGTWoImDmff2vIot-3dJ9iZluwPqmNXRwH7hBOC5LYOBnzBevHJS5xit5yQGL2ROlyssKyZTEQF6NryUK_LcJ6w6jWse35mjObj9YE_GavgE7yklq0PA5sc6WzyHCxcGOeAgrlYZ_ul3tdSC0QWOqK97FWA",
+                    "width": 2272
+                }
+            ],
+            "place_id": "ChIJcUqbOAApTTARJIernQtb__E",
+            "plus_code": {
+                "compound_code": "2F9P+W5 Kho Hong, Hat Yai District, Songkhla",
+                "global_code": "6PV22F9P+W5"
+            },
+            "rating": 4,
+            "reference": "ChIJcUqbOAApTTARJIernQtb__E",
+            "types": [
+                "pharmacy",
+                "drugstore",
+                "health",
+                "point_of_interest",
+                "store",
+                "establishment"
+            ],
+            "user_ratings_total": 1
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "formatted_address": "7 Homhaun Rd, Tambon Hat Yai, Amphoe Hat Yai, Songkhla 90110",
+            "geometry": {
+                "location": {
+                    "lat": 7.0035911,
+                    "lng": 100.4744476
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 7.004942029892721,
+                        "lng": 100.4758070798927
+                    },
+                    "southwest": {
+                        "lat": 7.002242370107277,
+                        "lng": 100.4731074201073
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+            "icon_background_color": "#4B96F3",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+            "name": "Saengthong Hatyai Pharmacy",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 2880,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/117137273959377170211\">A Google User</a>"
+                    ],
+                    "photo_reference": "Aap_uEC3cwi1_u8uGkrD4td_t1SE1i07mu25ii_FTCEq3C_Pdj3fNoPFwxTJTw3Machf47BdcX5aFYfTYNWrJ-U0U7IALDNzxnDvxHqmkZ-BCxrVxszVhpTHG0DqCkkfmp0P7JBG7ZlmNpRGZagXE3KheK0SkOf0xb9qKeOFyru5QHG_CpxW",
+                    "width": 2160
+                }
+            ],
+            "place_id": "ChIJcROGQU8oTTARFa5cIasH07k",
+            "plus_code": {
+                "compound_code": "2F3F+CQ Hat Yai, Hat Yai District, Songkhla",
+                "global_code": "6PV22F3F+CQ"
+            },
+            "rating": 4.9,
+            "reference": "ChIJcROGQU8oTTARFa5cIasH07k",
+            "types": [
+                "drugstore",
+                "health",
+                "point_of_interest",
+                "store",
+                "establishment"
+            ],
+            "user_ratings_total": 8
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "formatted_address": "4 28 Jiranakorn Rd, Tambon Hat Yai, Hat Yai District, Songkhla 90110",
+            "geometry": {
+                "location": {
+                    "lat": 7.0134589,
+                    "lng": 100.4772201
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 7.014864729892722,
+                        "lng": 100.4785837298927
+                    },
+                    "southwest": {
+                        "lat": 7.012165070107279,
+                        "lng": 100.4758840701073
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+            "icon_background_color": "#4B96F3",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+            "name": "ร้านเชลล์เภสัชกร",
+            "opening_hours": {
+                "open_now": true
+            },
+            "place_id": "ChIJ80BeCQEpTTARtOws1bnxA48",
+            "plus_code": {
+                "compound_code": "2F7G+9V Hat Yai, Hat Yai District, Songkhla",
+                "global_code": "6PV22F7G+9V"
+            },
+            "rating": 0,
+            "reference": "ChIJ80BeCQEpTTARtOws1bnxA48",
+            "types": [
+                "drugstore",
+                "health",
+                "point_of_interest",
+                "store",
+                "establishment"
+            ],
+            "user_ratings_total": 0
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "formatted_address": "29 28 Sripoovanart Rd, Tambon Hat Yai, Hat Yai District, Songkhla 90110",
+            "geometry": {
+                "location": {
+                    "lat": 6.99812,
+                    "lng": 100.4738419
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 6.999429129892722,
+                        "lng": 100.4751968298927
+                    },
+                    "southwest": {
+                        "lat": 6.996729470107279,
+                        "lng": 100.4724971701073
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+            "icon_background_color": "#4B96F3",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+            "name": "เภสัชชุมชน 2 โดย บจก.เภสัชชุมชน ฟาร์มา",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 890,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/111837506522428593961\">เภสัชชุมชน 2 โดยนายวิชัย ประวัติเมือง</a>"
+                    ],
+                    "photo_reference": "Aap_uECYyXj9l-oZNrWUCKet1a11RcCybxBeIrwj5RknxSwQfaYqO_rZfGiLRDBxamYQTQfzxhmkC8hbnF1Ab_RImmTHIUGyWcyma2WAkuOi0NPJ6jY6L8w_mlglg4x0QQVS9s7bgCG0P4EYowOnd4Cw8aFHwtUCMRnB2ehiQTpWE84YnNSu",
+                    "width": 1188
+                }
+            ],
+            "place_id": "ChIJ93MaP0goTTARvAysWt37MEg",
+            "plus_code": {
+                "compound_code": "XFXF+6G Hat Yai, Hat Yai District, Songkhla",
+                "global_code": "6PR2XFXF+6G"
+            },
+            "rating": 5,
+            "reference": "ChIJ93MaP0goTTARvAysWt37MEg",
+            "types": [
+                "drugstore",
+                "health",
+                "point_of_interest",
+                "store",
+                "establishment"
+            ],
+            "user_ratings_total": 1
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "formatted_address": "48/108 Supasarnrangsan Rd, Hat Yai, Hat Yai District, Songkhla 90110",
+            "geometry": {
+                "location": {
+                    "lat": 7.008620199999999,
+                    "lng": 100.4746823
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 7.010027029892721,
+                        "lng": 100.4760275798927
+                    },
+                    "southwest": {
+                        "lat": 7.007327370107277,
+                        "lng": 100.4733279201073
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+            "icon_background_color": "#4B96F3",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+            "name": "ร้านวริดา โอสถ",
+            "place_id": "ChIJzxLfFVAoTTAR13YFsjoVj1U",
+            "plus_code": {
+                "compound_code": "2F5F+CV Hat Yai, Hat Yai District, Songkhla",
+                "global_code": "6PV22F5F+CV"
+            },
+            "rating": 0,
+            "reference": "ChIJzxLfFVAoTTAR13YFsjoVj1U",
+            "types": [
+                "drugstore",
+                "health",
+                "point_of_interest",
+                "store",
+                "establishment"
+            ],
+            "user_ratings_total": 0
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "formatted_address": "33 Klongtoeypatana1 Rd, Kho Hong, Hat Yai District, Songkhla 90110",
+            "geometry": {
+                "location": {
+                    "lat": 7.0253082,
+                    "lng": 100.4869104
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 7.026655429892722,
+                        "lng": 100.4882930298927
+                    },
+                    "southwest": {
+                        "lat": 7.023955770107278,
+                        "lng": 100.4855933701073
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+            "icon_background_color": "#4B96F3",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+            "name": "ร้านห้องยาคลองเตย หาดใหญ่",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 1365,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/103252264917239233451\">ร้านห้องยาคลองเตย</a>"
+                    ],
+                    "photo_reference": "Aap_uEAbV1rm7VeWyAYTPF0_Sk6zh1zu4kDF97PssCQ2ihmq-GpGSZ6nBR6dkpVxZ4I1Ww3AsQ7DDoa3g4qVjJQL1rUaS0oc_7RrpbVi3tKXqtPw5dj1yZu_Lc7jwgUOeNmwJozodOYunN9JuKaJxoSAmcBR4Dg6FQdA_YV9BBA4CcZ9rqzJ",
+                    "width": 2048
+                }
+            ],
+            "place_id": "ChIJWaeZTwIpTTARV-LJT00PGDs",
+            "plus_code": {
+                "compound_code": "2FGP+4Q Kho Hong, Hat Yai District, Songkhla",
+                "global_code": "6PV22FGP+4Q"
+            },
+            "rating": 0,
+            "reference": "ChIJWaeZTwIpTTARV-LJT00PGDs",
+            "types": [
+                "drugstore",
+                "health",
+                "point_of_interest",
+                "store",
+                "establishment"
+            ],
+            "user_ratings_total": 0
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "formatted_address": "20/1 Niphat Phakdi Alley, Tambon Hat Yai, Hat Yai District, Songkhla 90110",
+            "geometry": {
+                "location": {
+                    "lat": 6.996161799999999,
+                    "lng": 100.4722198
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 6.997527379892722,
+                        "lng": 100.4736091798927
+                    },
+                    "southwest": {
+                        "lat": 6.994827720107278,
+                        "lng": 100.4709095201073
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+            "icon_background_color": "#4B96F3",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+            "name": "PRANG PHAMACY",
+            "opening_hours": {},
+            "place_id": "ChIJnRZjY9spTTARzahaXqd47mk",
+            "plus_code": {
+                "compound_code": "XFWC+FV Hat Yai, Hat Yai District, Songkhla",
+                "global_code": "6PR2XFWC+FV"
+            },
+            "rating": 0,
+            "reference": "ChIJnRZjY9spTTARzahaXqd47mk",
+            "types": [
+                "drugstore",
+                "health",
+                "point_of_interest",
+                "store",
+                "establishment"
+            ],
+            "user_ratings_total": 0
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "formatted_address": "140 Niphat Phakdi Alley, Tambon Hat Yai, Hat Yai District, Songkhla 90110",
+            "geometry": {
+                "location": {
+                    "lat": 6.9938499,
+                    "lng": 100.4726772
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 6.995200479892722,
+                        "lng": 100.4740441298927
+                    },
+                    "southwest": {
+                        "lat": 6.992500820107278,
+                        "lng": 100.4713444701073
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+            "icon_background_color": "#4B96F3",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+            "name": "ฟาร์ม่าเฮ้าส์ หาดใหญ่",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 400,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/114832259400237275505\">A Google User</a>"
+                    ],
+                    "photo_reference": "Aap_uEAa76qswWMf2LhgTBvK6W9f_MloIrmfwhjl2BUW-tdES3J0We6lsG9VIv1md3wd120D5maoi6LI1o3n2adPZIdjEPI7TBuIYgHaKApnjS9EY6EMF2lh7cid-Pb06zQAsFnx3kRUE8sfTt51QUrfZSUbCFCJXgg0lrVN7sPikZV5i6xo",
+                    "width": 600
+                }
+            ],
+            "place_id": "ChIJj2ehMmopTTARMwhOeODVFHY",
+            "plus_code": {
+                "compound_code": "XFVF+G3 Hat Yai, Hat Yai District, Songkhla",
+                "global_code": "6PR2XFVF+G3"
+            },
+            "rating": 5,
+            "reference": "ChIJj2ehMmopTTARMwhOeODVFHY",
+            "types": [
+                "drugstore",
+                "health",
+                "point_of_interest",
+                "store",
+                "establishment"
+            ],
+            "user_ratings_total": 2
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "formatted_address": "251 1 Petchkasem Rd, Tambon Hat Yai, Hat Yai District, Songkhla 90110",
+            "geometry": {
+                "location": {
+                    "lat": 7.0107993,
+                    "lng": 100.469997
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 7.012139529892722,
+                        "lng": 100.4713803798927
+                    },
+                    "southwest": {
+                        "lat": 7.009439870107278,
+                        "lng": 100.4686807201073
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+            "icon_background_color": "#4B96F3",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+            "name": "ร้าน เจริญสุขเภสัช",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 2988,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/108352157271701095890\">ร้าน เจริญสุขเภสัช</a>"
+                    ],
+                    "photo_reference": "Aap_uEDUAvjVp-MxLWgZ4B_k1T-uaWYM2j535WK93PPHko33SINT6GN1mK9LYB6Aiu6MTzRWSb83MEMNUbCgoQgNkIDQp27g7Ydlns6PrhSwtr7hrNmeD3miJwHdII7AbjUeITzlCShl0tggMcraSDxysrVfJEwIbhSNA_V9TdLu95hKzdPN",
+                    "width": 5312
+                }
+            ],
+            "place_id": "ChIJyT5OhmjPTDARqGc7d8r9f-M",
+            "plus_code": {
+                "compound_code": "2F69+8X Hat Yai, Hat Yai District, Songkhla",
+                "global_code": "6PV22F69+8X"
+            },
+            "rating": 5,
+            "reference": "ChIJyT5OhmjPTDARqGc7d8r9f-M",
+            "types": [
+                "drugstore",
+                "health",
+                "point_of_interest",
+                "store",
+                "establishment"
+            ],
+            "user_ratings_total": 1
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "formatted_address": "61 Cheumrat Uthit Rd, Tambon Hat Yai, Hat Yai District, Songkhla 90110",
+            "geometry": {
+                "location": {
+                    "lat": 7.0107019,
+                    "lng": 100.469137
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 7.012080779892721,
+                        "lng": 100.4704879798927
+                    },
+                    "southwest": {
+                        "lat": 7.009381120107277,
+                        "lng": 100.4677883201073
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+            "icon_background_color": "#4B96F3",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+            "name": "ร้านขายยาหาดใหญ่ by hatyai P.K. Drug Center",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 3000,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/117122264013625876987\">Suppanut Tangpongsirikul</a>"
+                    ],
+                    "photo_reference": "Aap_uEBux_o0d9ZkQL85lu5QdvfuJ0DYQkt6NSuUJlbNOXgBJM5CTQ2e7XHGzRiKpb6tlwC3NSa6GI4ZhE_vYVnlQHFOArnDFnCqt6SsyzgZpJ6F_zi_Lu-ssYjdrn40yJQBGOGjgP2PubAk4Gfjb4Mc1eImfOGmYeYtk_Zz1UGcC291oGoH",
+                    "width": 4000
+                }
+            ],
+            "place_id": "ChIJTxUPTGcpTTARNpVihL1wNVo",
+            "plus_code": {
+                "compound_code": "2F69+7M Hat Yai, Hat Yai District, Songkhla",
+                "global_code": "6PV22F69+7M"
+            },
+            "rating": 0,
+            "reference": "ChIJTxUPTGcpTTARNpVihL1wNVo",
+            "types": [
+                "drugstore",
+                "health",
+                "point_of_interest",
+                "store",
+                "establishment"
+            ],
+            "user_ratings_total": 0
+        },
+        {
+            "business_status": "OPERATIONAL",
+            "formatted_address": "101 ตลาดสดพลาซ่า 104 Montri 1 Rd, Hat Yai, Hat Yai District, Songkhla 90110",
+            "geometry": {
+                "location": {
+                    "lat": 7.011144799999999,
+                    "lng": 100.4692035
+                },
+                "viewport": {
+                    "northeast": {
+                        "lat": 7.012560629892722,
+                        "lng": 100.4705539298927
+                    },
+                    "southwest": {
+                        "lat": 7.009860970107278,
+                        "lng": 100.4678542701073
+                    }
+                }
+            },
+            "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+            "icon_background_color": "#4B96F3",
+            "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+            "name": "(Rattanapharmacy Drug Store) รัตนฟาร์มาซี",
+            "opening_hours": {
+                "open_now": true
+            },
+            "photos": [
+                {
+                    "height": 2304,
+                    "html_attributions": [
+                        "<a href=\"https://maps.google.com/maps/contrib/105953463618250222422\">Chaiyos Rattanapraphat</a>"
+                    ],
+                    "photo_reference": "Aap_uEAp53lz48jddqQcRfdqwOFkRPubMsl4JMjUVFCwS83Czgk-1eiUqOT9eCGQbRZbhmMXVq2kPCiLAvR-bvrUmYh9XSdOloMtiKHrPZMFkr2FomcF_QIVWB4xc0bdjsFAUBD-XE9ar_LVnMyYM2bbqTaZVKMhjs4-_LcWlVhWila0BEjh",
+                    "width": 4096
+                }
+            ],
+            "place_id": "ChIJRR-tllsoTTARKxSvMTwaWfc",
+            "plus_code": {
+                "compound_code": "2F69+FM Hat Yai, Hat Yai District, Songkhla",
+                "global_code": "6PV22F69+FM"
+            },
+            "rating": 5,
+            "reference": "ChIJRR-tllsoTTARKxSvMTwaWfc",
+            "types": [
+                "drugstore",
+                "health",
+                "point_of_interest",
+                "store",
+                "establishment"
+            ],
+            "user_ratings_total": 1
+        }
+    ],
+    "status": "OK"
+}

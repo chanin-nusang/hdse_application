@@ -1,0 +1,273 @@
+{
+    "html_attributions": [],
+    "result": {
+        "address_components": [
+            {
+                "long_name": "29",
+                "short_name": "29",
+                "types": [
+                    "subpremise"
+                ]
+            },
+            {
+                "long_name": "28",
+                "short_name": "28",
+                "types": [
+                    "street_number"
+                ]
+            },
+            {
+                "long_name": "ถนน ศรีภูวนารถ",
+                "short_name": "ถนน ศรีภูวนารถ",
+                "types": [
+                    "route"
+                ]
+            },
+            {
+                "long_name": "ตำบล หาดใหญ่",
+                "short_name": "ตำบล หาดใหญ่",
+                "types": [
+                    "sublocality_level_1",
+                    "sublocality",
+                    "political"
+                ]
+            },
+            {
+                "long_name": "อำเภอหาดใหญ่",
+                "short_name": "อ.หาดใหญ่",
+                "types": [
+                    "administrative_area_level_2",
+                    "political"
+                ]
+            },
+            {
+                "long_name": "สงขลา",
+                "short_name": "จ.สงขลา",
+                "types": [
+                    "administrative_area_level_1",
+                    "political"
+                ]
+            },
+            {
+                "long_name": "ประเทศไทย",
+                "short_name": "TH",
+                "types": [
+                    "country",
+                    "political"
+                ]
+            },
+            {
+                "long_name": "90110",
+                "short_name": "90110",
+                "types": [
+                    "postal_code"
+                ]
+            }
+        ],
+        "adr_address": "29 <span class=\"street-address\">28 ถนน ศรีภูวนารถ</span> <span class=\"extended-address\">ตำบล หาดใหญ่</span> <span class=\"locality\">อำเภอหาดใหญ่</span> <span class=\"region\">สงขลา</span> <span class=\"postal-code\">90110</span> <span class=\"country-name\">ประเทศไทย</span>",
+        "business_status": "OPERATIONAL",
+        "formatted_address": "29 28 ถนน ศรีภูวนารถ ตำบล หาดใหญ่ อำเภอหาดใหญ่ สงขลา 90110 ประเทศไทย",
+        "formatted_phone_number": "074 237 518",
+        "geometry": {
+            "location": {
+                "lat": 6.99812,
+                "lng": 100.4738419
+            },
+            "viewport": {
+                "northeast": {
+                    "lat": 6.999428280291503,
+                    "lng": 100.4751959802915
+                },
+                "southwest": {
+                    "lat": 6.996730319708498,
+                    "lng": 100.4724980197085
+                }
+            }
+        },
+        "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+        "icon_background_color": "#4B96F3",
+        "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+        "name": "เภสัชชุมชน 2 โดย บจก.เภสัชชุมชน ฟาร์มา",
+        "opening_hours": {
+            "open_now": true,
+            "periods": [
+                {
+                    "close": {
+                        "day": 0,
+                        "time": "2330"
+                    },
+                    "open": {
+                        "day": 0,
+                        "time": "1400"
+                    }
+                },
+                {
+                    "close": {
+                        "day": 1,
+                        "time": "2330"
+                    },
+                    "open": {
+                        "day": 1,
+                        "time": "0800"
+                    }
+                },
+                {
+                    "close": {
+                        "day": 2,
+                        "time": "2330"
+                    },
+                    "open": {
+                        "day": 2,
+                        "time": "0800"
+                    }
+                },
+                {
+                    "close": {
+                        "day": 3,
+                        "time": "2330"
+                    },
+                    "open": {
+                        "day": 3,
+                        "time": "0800"
+                    }
+                },
+                {
+                    "close": {
+                        "day": 4,
+                        "time": "2330"
+                    },
+                    "open": {
+                        "day": 4,
+                        "time": "0800"
+                    }
+                },
+                {
+                    "close": {
+                        "day": 5,
+                        "time": "2330"
+                    },
+                    "open": {
+                        "day": 5,
+                        "time": "0800"
+                    }
+                },
+                {
+                    "close": {
+                        "day": 6,
+                        "time": "2330"
+                    },
+                    "open": {
+                        "day": 6,
+                        "time": "0800"
+                    }
+                }
+            ],
+            "weekday_text": [
+                "วันจันทร์: 8:00–23:30",
+                "วันอังคาร: 8:00–23:30",
+                "วันพุธ: 8:00–23:30",
+                "วันพฤหัสบดี: 8:00–23:30",
+                "วันศุกร์: 8:00–23:30",
+                "วันเสาร์: 8:00–23:30",
+                "วันอาทิตย์: 14:00–23:30"
+            ]
+        },
+        "photos": [
+            {
+                "height": 4608,
+                "html_attributions": [
+                    "<a href=\"https://maps.google.com/maps/contrib/105126159746067766485\">Sigree Bin Mamak</a>"
+                ],
+                "photo_reference": "Aap_uEDDa93Sgkg2Hl7nTUIVVoZFH5f4VTf71K30SznccJKCW1VyHDFf4hluUtI87O0ODgx4ypjfK5AMvdKPShL4fFGNvhsdgZGwTOsAgdAZmIn_JOfGprZGII0n47ExR25oZyrXtnoWaVia9Od-E1ky5pwUzlBE52AOwuZMbUkgJKJQDuMF",
+                "width": 2592
+            },
+            {
+                "height": 608,
+                "html_attributions": [
+                    "<a href=\"https://maps.google.com/maps/contrib/111837506522428593961\">เภสัชชุมชน 2 โดย บจก.เภสัชชุมชน ฟาร์มา</a>"
+                ],
+                "photo_reference": "Aap_uECo4_LR1RgwyJybSpr0IJneV2QIAB1AkQnlzmIbgpBRIt6iA50MLiXZZGuvqJOEHci65XcfPQRyDsxht8spocqCm027c-sUTh1A6bYh_75fgwtPW01qmf18CVupL8fP7uEqAuujh_w64b6Pgj6emPNNRPqVSBiq6GhhVNU6y7df2uVU",
+                "width": 1080
+            },
+            {
+                "height": 890,
+                "html_attributions": [
+                    "<a href=\"https://maps.google.com/maps/contrib/111837506522428593961\">เภสัชชุมชน 2 โดย บจก.เภสัชชุมชน ฟาร์มา</a>"
+                ],
+                "photo_reference": "Aap_uED01OKY2K-o8--8LA6oLnHZFP1GsPc6LDXKp_Cg52L-RBv-eCk5TcFlLRcjLji58knx85BVAo_8KoDlrvu5Orscel7AvrC9NwNZokRwrAJ5OKpvjPdEMIFSBfoPyR7ZFRPdVaCOp_tK4h5RewMRdiSxTLCuTcHGmKsTq-RfkgARHQc1",
+                "width": 1188
+            },
+            {
+                "height": 890,
+                "html_attributions": [
+                    "<a href=\"https://maps.google.com/maps/contrib/111837506522428593961\">เภสัชชุมชน 2 โดย บจก.เภสัชชุมชน ฟาร์มา</a>"
+                ],
+                "photo_reference": "Aap_uECeF7Z__MDwsRYt6l5uxzsgyl4Sf5vE6jOw6NHVmb72hXgI383EUD39XB99Up274EKexhmVW_TQ6KZhT58tmb0DTODErT1sTsSezX9zP7dfLo1HFeig6LsbHS9ubXVnkXYqCnw9sdOSf-spJTKUHozM-kLqg5JCa6E4u2dAfIYKdoZ9",
+                "width": 1188
+            },
+            {
+                "height": 890,
+                "html_attributions": [
+                    "<a href=\"https://maps.google.com/maps/contrib/111837506522428593961\">เภสัชชุมชน 2 โดย บจก.เภสัชชุมชน ฟาร์มา</a>"
+                ],
+                "photo_reference": "Aap_uEDZz5pT1g-CpH8ms3mHvnQO6iJkYBUQhge_5rrZ89EzTl80ZkuWR794iMLSwMMwqGilSWdtYYf8F8kOx4Q1B2evVkY8lvVvwzjadipRsnioX3-Se3pLEHmhynOagrF3zfjJgIaiVGjihqmHk3C83ro-KvIgFzvG877dZkz59rS_qcPR",
+                "width": 1188
+            },
+            {
+                "height": 890,
+                "html_attributions": [
+                    "<a href=\"https://maps.google.com/maps/contrib/111837506522428593961\">เภสัชชุมชน 2 โดย บจก.เภสัชชุมชน ฟาร์มา</a>"
+                ],
+                "photo_reference": "Aap_uEDPbzhRlMqMCczMEdAa798NSKFmS1bGlFYKlKlYJHF7a5BdGyCftgPk_-gpgo9LgtqEGCLvFRc7Ow_VbqWMZbyTjk_RMiNPYxuvmINXITYIwHHW0Oaal-cqLgRIurOE_SfgSShls1GcSwLx-bIu7aCbQHLsJEXWFwlsP2jGS6u8bt5m",
+                "width": 1188
+            },
+            {
+                "height": 3264,
+                "html_attributions": [
+                    "<a href=\"https://maps.google.com/maps/contrib/103837938945456382573\">Michael Lee</a>"
+                ],
+                "photo_reference": "Aap_uEAi6v7KHpNWjaidqnbMMKJpDIwurYQ1HNkfBLbsCjIOzVfmhKmqgySc1HmDX1fZAyz2lwKgjtlxa1mCMMv0Y2C9gJJD2zGYUzFQ1-ZCibJ-Nmwh0KclLb1Y2Xv_JtueyLmxCkS8jShVekG8vamTQf_B2UMhb2C_-sTb5P4ehI3GdScU",
+                "width": 2448
+            },
+            {
+                "height": 890,
+                "html_attributions": [
+                    "<a href=\"https://maps.google.com/maps/contrib/111837506522428593961\">เภสัชชุมชน 2 โดย บจก.เภสัชชุมชน ฟาร์มา</a>"
+                ],
+                "photo_reference": "Aap_uEC6tvBM1vQ3iFjxn4txNE46d5_hSBqpQyz7JxjEWsadsO7BgnKc97KOwstyHt7kMMa1TrNYKlklvA9SzK3PtxZXb7zBMu3OF8kEB-ooFmK8OF4I1VPgZOoHRbU6lu_HW9l3Co4vN4rw2lkg_A54UtmXPmLcra0vSJV_BjzF1l5YxQ1X",
+                "width": 1188
+            }
+        ],
+        "place_id": "ChIJ93MaP0goTTARvAysWt37MEg",
+        "plus_code": {
+            "compound_code": "XFXF+6G เทศบาลนครหาดใหญ่ อำเภอหาดใหญ่ สงขลา ประเทศไทย",
+            "global_code": "6PR2XFXF+6G"
+        },
+        "rating": 5,
+        "reviews": [
+            {
+                "author_name": "Michael Lee",
+                "author_url": "https://www.google.com/maps/contrib/103837938945456382573/reviews",
+                "language": "th",
+                "profile_photo_url": "https://lh3.googleusercontent.com/a-/AOh14Gim4iqg3SQNH9ehlxoP_NpNMk1k1bWcI09ABh22DXM=s128-c0x00000000-cc-rp-mo-ba4",
+                "rating": 5,
+                "relative_time_description": "3 ปีที่แล้ว",
+                "text": "โปรเภสัชกรจนถึงกลางดึก",
+                "time": 1528994845
+            }
+        ],
+        "types": [
+            "drugstore",
+            "health",
+            "point_of_interest",
+            "store",
+            "establishment"
+        ],
+        "url": "https://maps.google.com/?cid=5201934497740491964",
+        "user_ratings_total": 1,
+        "utc_offset": 420,
+        "vicinity": "29 28 ถนน ศรีภูวนารถ อำเภอหาดใหญ่",
+        "website": "http://diy-pharma.com/"
+    },
+    "status": "OK"
+}
