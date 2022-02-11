@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hdse_application/screen/chatbot_screen.dart';
 import 'package:hdse_application/screen/home_screen.dart';
 import 'package:hdse_application/screen/loading_screen.dart';
@@ -29,7 +30,9 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'HDSE',
-      theme: ThemeData(primarySwatch: _green200Swatch),
+      theme: ThemeData(
+          textTheme: GoogleFonts.sarabunTextTheme(Theme.of(context).textTheme),
+          primarySwatch: _green200Swatch),
       home: HomeScreen(
         title: "ยินดีต้อนรับ",
       ), // Home(title: 'บริการข้อมูลสุขภาพสำหรับผู้สูงอายุ'),

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hdse_application/models/place_detail.dart';
@@ -16,6 +17,8 @@ import 'package:hdse_application/services/webview.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'dart:io';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:backdrop/backdrop.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title}) : super(key: key);
@@ -33,9 +36,13 @@ class _HomeScreenState extends State<HomeScreen> {
   TapGestureRecognizer? _loginBenefitsRecognizer;
   TapGestureRecognizer? _privacyPolicyRecognizer;
   TapGestureRecognizer? _termsAndConditionsRecognizer;
-
+  String timeFormatter = DateFormat.H().format(DateTime.now());
+  int? timeInt = 0;
+  String? textTime = "สวัสดี";
+  bool isBackLayerConcealed = true;
   @override
   void initState() {
+    setTextTime();
     SpeechToTextService().initSpeechState();
     user = _auth.currentUser;
 
@@ -66,6 +73,25 @@ class _HomeScreenState extends State<HomeScreen> {
                     )));
       };
     super.initState();
+  }
+
+  setTextTime() {
+    print("Time now : " + timeFormatter);
+    timeInt = int.parse(timeFormatter);
+    if (timeInt! > 5 && timeInt! <= 9) {
+      textTime = "สวัสดีตอนเช้า";
+    } else if (timeInt! > 9 && timeInt! <= 11) {
+      textTime = "สวัสดีตอนสาย";
+    } else if (timeInt! > 11 && timeInt! <= 13) {
+      textTime = "สวัสดีตอนเที่ยง";
+    } else if (timeInt! > 13 && timeInt! <= 15) {
+      textTime = "สวัสดีตอนบ่าย";
+    } else if (timeInt! > 15 && timeInt! <= 18) {
+      textTime = "สวัสดีตอนเย็น";
+    } else if (timeInt! > 18 && timeInt! <= 22) {
+      textTime = "สวัสดีตอนค่ำ";
+    } else
+      textTime = "สวัสดี";
   }
 
   void signOut(BuildContext context) async {
@@ -150,52 +176,117 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: [
-          user != null
-              ? IconButton(
-                  icon: Icon(Icons.exit_to_app),
-                  color: Colors.black,
-                  onPressed: () {
-                    signOut(context);
-                  })
-              : SizedBox()
+    return BackdropScaffold(
+      stickyFrontLayer: true,
+
+      appBar: BackdropAppBar(
+        automaticallyImplyLeading: false,
+        title: Text("ยินดีต้อนรับ",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            )),
+        actions: <Widget>[
+          BackdropToggleButton(
+            color: Colors.black,
+          )
         ],
       ),
-      body: Container(
-          child: ListView(
-        padding: EdgeInsets.all(16),
-        children: [
-          user != null ? userCard(user) : notLoggedInCard(),
-          SizedBox(
-            height: 20,
-          ),
-          buildImageCardChatbot(),
-          buildImageCardHealthService()
-        ],
-      )
-          // Center(
-          //   child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          //     Text("สวัสดี", style: TextStyle(fontSize: 26)),
-          //     Text(widget.user?.email ?? "", style: TextStyle(fontSize: 16)),
-          //     InkWell(
-          //       child: Container(
-          //         width: 100,
-          //         height: 50,
-          //         color: Colors.green[200],
-          //         child: Center(child: Text("ระบบแชทบอท")),
-          //       ),
-          //       onTap: () {
-          //         Navigator.push(context,
-          //             MaterialPageRoute(builder: (context) => ChatbotScreen()));
-          //       },
-          //       // This trailing comma makes auto-formatting nicer for build methods.
-          //     ),
-          //   ]),
-          // ),
-          ),
+      // appBar: AppBar(
+      //   title: Text(widget.title),
+      //   actions: [
+      //     user != null
+      //         ? IconButton(
+      //             icon: Icon(Icons.exit_to_app),
+      //             color: Colors.black,
+      //             onPressed: () {
+      //               signOut(context);
+      //             })
+      //         : SizedBox()
+      //   ],
+      // ),
+      backLayer: Center(
+        child: Text("Back Layer"),
+      ),
+      frontLayer: Container(
+        color: Colors.green[200]!,
+        child: SafeArea(
+          child: Container(
+              color: Colors.green[200]!,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 0),
+                child: Column(
+                  children: [
+                    // Container(
+                    //   alignment: Alignment.centerLeft,
+                    //   padding: const EdgeInsets.only(
+                    //       left: 15, right: 15, top: 10, bottom: 0),
+                    //   child: Text(
+                    //     "ยินดีต้อนรับ",
+                    //     style: TextStyle(
+                    //       fontSize: 20,
+                    //       fontWeight: FontWeight.bold,
+                    //     ),
+                    //   ),
+                    // ),
+
+                    Container(
+                      padding: const EdgeInsets.only(
+                          left: 15, right: 15, top: 0, bottom: 20),
+                      child: user != null ? userCard(user) : notLoggedInCard(),
+                    ),
+                    Expanded(
+                      child: PhysicalShape(
+                          clipper: const ShapeBorderClipper(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(25.0),
+                                topRight: Radius.circular(25.0),
+                              ),
+                            ),
+                          ),
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                buildImageCardChatbot(),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                buildImageCardHealthService()
+                              ],
+                            ),
+                          )),
+                    )
+                  ],
+                ),
+              )
+              // Center(
+              //   child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+              //     Text("สวัสดี", style: TextStyle(fontSize: 26)),
+              //     Text(widget.user?.email ?? "", style: TextStyle(fontSize: 16)),
+              //     InkWell(
+              //       child: Container(
+              //         width: 100,
+              //         height: 50,
+              //         color: Colors.green[200],
+              //         child: Center(child: Text("ระบบแชทบอท")),
+              //       ),
+              //       onTap: () {
+              //         Navigator.push(context,
+              //             MaterialPageRoute(builder: (context) => ChatbotScreen()));
+              //       },
+              //       // This trailing comma makes auto-formatting nicer for build methods.
+              //     ),
+              //   ]),
+              // ),
+              ),
+        ),
+      ),
     );
   }
 
@@ -204,13 +295,17 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
             flex: 2,
             child: ElevatedButton(
+                style: ElevatedButton.styleFrom(primary: Colors.white),
                 onPressed: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => LoginScreen()));
                 },
                 child: Text(
                   "เข้าสู่ระบบ",
-                  style: TextStyle(fontSize: 17),
+                  style: TextStyle(
+                      fontSize: 17,
+                      color: Colors.green[400],
+                      fontWeight: FontWeight.bold),
                 )),
           ),
           SizedBox(
@@ -228,30 +323,51 @@ class _HomeScreenState extends State<HomeScreen> {
                         recognizer: _loginBenefitsRecognizer,
                         text: 'เพิ่มเติม',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.green))
+                            fontWeight: FontWeight.bold, color: Colors.white))
                   ])))
         ],
       );
 
   Widget userCard(User? userData) => Row(
         children: [
-          CircleAvatar(
-            radius: 40,
-            backgroundImage: userData?.photoURL == null
-                ? Image.asset('assets/images/avatar.png').image
-                : CachedNetworkImageProvider(userData!.photoURL!),
+          Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.green[100]!,
+                width: 4.0,
+              ),
+            ),
+            child: CircleAvatar(
+              radius: 40,
+              backgroundImage: userData?.photoURL == null
+                  ? Image.asset('assets/images/avatar.png').image
+                  : CachedNetworkImageProvider(userData!.photoURL!),
+            ),
           ),
           SizedBox(
-            width: 20,
+            width: 15,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("สวัสดีตอนเช้า", style: TextStyle(fontSize: 22)),
-              Text("คุณ ${userData?.displayName ?? ""}",
-                  style: TextStyle(fontSize: 16)),
-              Text(userData?.email ?? "", style: TextStyle(fontSize: 16)),
-            ],
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.green[100],
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  )),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15, bottom: 10, top: 5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(textTime!, style: TextStyle(fontSize: 22)),
+                    Text("คุณ ${userData?.displayName ?? ""}",
+                        style: TextStyle(fontSize: 16)),
+                    Text(userData?.email ?? "", style: TextStyle(fontSize: 16)),
+                  ],
+                ),
+              ),
+            ),
           )
         ],
       );
