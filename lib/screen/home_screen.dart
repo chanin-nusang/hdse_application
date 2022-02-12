@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hdse_application/components/image_card.dart';
 import 'package:hdse_application/models/place_detail.dart';
 import 'package:hdse_application/screen/chatbot_screen.dart';
 import 'package:hdse_application/screen/login_screen.dart';
@@ -178,7 +179,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return BackdropScaffold(
       stickyFrontLayer: true,
-
       appBar: BackdropAppBar(
         automaticallyImplyLeading: false,
         title: Text("ยินดีต้อนรับ",
@@ -192,22 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      // appBar: AppBar(
-      //   title: Text(widget.title),
-      //   actions: [
-      //     user != null
-      //         ? IconButton(
-      //             icon: Icon(Icons.exit_to_app),
-      //             color: Colors.black,
-      //             onPressed: () {
-      //               signOut(context);
-      //             })
-      //         : SizedBox()
-      //   ],
-      // ),
-      backLayer: Center(
-        child: Text("Back Layer"),
-      ),
+      backLayer: setting(),
       frontLayer: Container(
         color: Colors.green[200]!,
         child: SafeArea(
@@ -217,19 +202,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.only(top: 0),
                 child: Column(
                   children: [
-                    // Container(
-                    //   alignment: Alignment.centerLeft,
-                    //   padding: const EdgeInsets.only(
-                    //       left: 15, right: 15, top: 10, bottom: 0),
-                    //   child: Text(
-                    //     "ยินดีต้อนรับ",
-                    //     style: TextStyle(
-                    //       fontSize: 20,
-                    //       fontWeight: FontWeight.bold,
-                    //     ),
-                    //   ),
-                    // ),
-
                     Container(
                       padding: const EdgeInsets.only(
                           left: 15, right: 15, top: 0, bottom: 20),
@@ -253,38 +225,41 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                buildImageCardChatbot(),
+                                buildImageCard(context,
+                                    handler: () => Navigator.push(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                new ChatbotScreen())),
+                                    imageURL:
+                                        'https://firebasestorage.googleapis.com/v0/b/hdse-application.appspot.com/o/cdc-UrcuFgKfSS4-unsplash.jpg?alt=media&token=c106982f-fc65-47c3-b5cf-6d1746f6a413',
+                                    title: 'ปรึกษาปัญหาสุขภาพ',
+                                    subTitle:
+                                        "ปรึกษาปัญหาสุขภาพ ด้วยระบบแชทบอท"),
                                 SizedBox(
                                   height: 10,
                                 ),
-                                buildImageCardHealthService()
+                                buildImageCard(context, handler: () {
+                                  Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) =>
+                                              new PlaceDetailScreen(
+                                                placeID: "test",
+                                              )));
+                                },
+                                    imageURL:
+                                        "https://firebasestorage.googleapis.com/v0/b/hdse-application.appspot.com/o/vlad-sargu-ItphH2lGzuI-unsplash.jpg?alt=media&token=66023587-af61-4d74-889e-72b409672c33",
+                                    title: 'สถานที่ให้บริการด้านสุขภาพ',
+                                    subTitle:
+                                        'ค้นหา สถานที่ให้บริการด้านสุขภาพ'),
                               ],
                             ),
                           )),
                     )
                   ],
                 ),
-              )
-              // Center(
-              //   child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-              //     Text("สวัสดี", style: TextStyle(fontSize: 26)),
-              //     Text(widget.user?.email ?? "", style: TextStyle(fontSize: 16)),
-              //     InkWell(
-              //       child: Container(
-              //         width: 100,
-              //         height: 50,
-              //         color: Colors.green[200],
-              //         child: Center(child: Text("ระบบแชทบอท")),
-              //       ),
-              //       onTap: () {
-              //         Navigator.push(context,
-              //             MaterialPageRoute(builder: (context) => ChatbotScreen()));
-              //       },
-              //       // This trailing comma makes auto-formatting nicer for build methods.
-              //     ),
-              //   ]),
-              // ),
-              ),
+              )),
         ),
       ),
     );
@@ -372,129 +347,46 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       );
 
-  Widget buildImageCardChatbot() => Card(
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-                context,
-                new MaterialPageRoute(
-                    builder: (context) => new ChatbotScreen()));
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                alignment: Alignment.center,
+  Widget setting() {
+    return Center(
+      child: user != null
+          ? ElevatedButton(
+              style: ElevatedButton.styleFrom(primary: Colors.white),
+              onPressed: () {
+                signOut(context);
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Ink.image(
-                    image: CachedNetworkImageProvider(
-                        'https://firebasestorage.googleapis.com/v0/b/hdse-application.appspot.com/o/cdc-UrcuFgKfSS4-unsplash.jpg?alt=media&token=c106982f-fc65-47c3-b5cf-6d1746f6a413'),
-                    // NetworkImage(
-                    //   'https://firebasestorage.googleapis.com/v0/b/hdse-application.appspot.com/o/cdc-UrcuFgKfSS4-unsplash.jpg?alt=media&token=c106982f-fc65-47c3-b5cf-6d1746f6a413',
-                    // ),
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.4), BlendMode.srcOver),
-                    height: 150,
-                    fit: BoxFit.cover,
+                  Icon(
+                    Icons.exit_to_app,
+                    color: Colors.green[400],
+                  ),
+                  SizedBox(
+                    width: 5,
                   ),
                   Text(
-                    'ปรึกษาปัญหาสุขภาพ',
+                    "ออกจากระบบ",
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 24,
-                    ),
-                  ),
+                        fontSize: 17,
+                        color: Colors.green[400],
+                        fontWeight: FontWeight.bold),
+                  )
                 ],
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: [Colors.yellow[100]!, Colors.green[100]!])),
-                    child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        "ปรึกษาปัญหาสุขภาพ ด้วยระบบแชทบอท",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      );
-
-  Widget buildImageCardHealthService() => Card(
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
-        child: InkWell(
-          onTap: () {
-            Navigator.push(
-                context,
-                new MaterialPageRoute(
-                    builder: (context) => new PlaceDetailScreen(
-                          placeID: "test",
-                        )));
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Ink.image(
-                    image: CachedNetworkImageProvider(
-                        "https://firebasestorage.googleapis.com/v0/b/hdse-application.appspot.com/o/vlad-sargu-ItphH2lGzuI-unsplash.jpg?alt=media&token=66023587-af61-4d74-889e-72b409672c33"),
-                    // NetworkImage(
-                    //   'https://firebasestorage.googleapis.com/v0/b/hdse-application.appspot.com/o/vlad-sargu-ItphH2lGzuI-unsplash.jpg?alt=media&token=66023587-af61-4d74-889e-72b409672c33',
-                    // ),
-                    colorFilter: ColorFilter.mode(
-                        Colors.black.withOpacity(0.4), BlendMode.srcOver),
-                    height: 150,
-                    fit: BoxFit.cover,
-                  ),
-                  Text(
-                    'สถานที่ให้บริการด้านสุขภาพ',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 24,
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: [Colors.yellow[100]!, Colors.green[100]!])),
-                    child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        "ค้นหา สถานที่ให้บริการด้านสุขภาพ",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      );
+              ))
+          : ElevatedButton(
+              style: ElevatedButton.styleFrom(primary: Colors.white),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()));
+              },
+              child: Text(
+                "เข้าสู่ระบบ",
+                style: TextStyle(
+                    fontSize: 17,
+                    color: Colors.green[400],
+                    fontWeight: FontWeight.bold),
+              )),
+    );
+  }
 }
