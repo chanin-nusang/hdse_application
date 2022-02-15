@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hdse_application/blocs/application_bloc.dart';
 import 'package:hdse_application/models/place.dart';
@@ -64,160 +65,243 @@ class _SearchScreenState extends State<SearchScreen> {
             ? Center(
                 child: CircularProgressIndicator(),
               )
-            : ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: _locationController,
-                      textCapitalization: TextCapitalization.words,
-                      decoration: InputDecoration(
-                        hintText: 'Search by City',
-                        suffixIcon: Icon(Icons.search),
-                      ),
-                      onChanged: (value) => applicationBloc.searchPlaces(value),
-                      onTap: () => applicationBloc.clearSelectedLocation(),
-                    ),
-                  ),
-                  Stack(
-                    children: [
-                      Container(
-                        height: 300.0,
-                        child: GoogleMap(
-                          mapType: MapType.normal,
-                          myLocationEnabled: true,
-                          initialCameraPosition: CameraPosition(
-                            target: LatLng(
-                                applicationBloc.currentLocation!.latitude,
-                                applicationBloc.currentLocation!.longitude),
-                            zoom: 14,
+            : Container(
+                child: ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 18.0, right: 18, top: 18, bottom: 5),
+                      child: Container(
+                        height: 50,
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10.0),
+                            )),
+                        child: TextField(
+                          controller: _locationController,
+                          textCapitalization: TextCapitalization.words,
+                          decoration: InputDecoration(
+                            hintText: 'ค้นหาโดยเมือง',
+                            suffixIcon: Icon(Icons.search),
                           ),
-                          onMapCreated: (GoogleMapController controller) {
-                            _mapController.complete(controller);
-                          },
-                          markers: Set<Marker>.of(applicationBloc.markers),
+                          onChanged: (value) =>
+                              applicationBloc.searchPlaces(value),
+                          onTap: () => applicationBloc.clearSelectedLocation(),
                         ),
                       ),
-                      if (applicationBloc.searchResults != null &&
-                          applicationBloc.searchResults!.length != 0)
-                        Container(
-                            height: 300.0,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(.6),
-                                backgroundBlendMode: BlendMode.darken)),
-                      if (applicationBloc.searchResults != null)
+                    ),
+                    Stack(
+                      children: [
                         Container(
                           height: 300.0,
-                          child: ListView.builder(
-                              itemCount: applicationBloc.searchResults!.length,
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                  title: Text(
-                                    applicationBloc
-                                        .searchResults![index].description!,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  onTap: () {
-                                    applicationBloc.setSelectedLocation(
-                                        applicationBloc
-                                            .searchResults![index].placeId!);
-                                  },
-                                );
-                              }),
-                        ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Text('Find Nearest',
-                            style: TextStyle(
-                                fontSize: 25.0, fontWeight: FontWeight.bold)),
-                        if (applicationBloc.placeResults.length > 0)
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.all(16.0),
-                              primary: Colors.blue,
-                              textStyle: const TextStyle(fontSize: 20),
+                          child: GoogleMap(
+                            mapType: MapType.normal,
+                            myLocationEnabled: true,
+                            initialCameraPosition: CameraPosition(
+                              target: LatLng(
+                                  applicationBloc.currentLocation!.latitude,
+                                  applicationBloc.currentLocation!.longitude),
+                              zoom: 14,
                             ),
-                            onPressed: () => Navigator.push(
-                                context,
-                                new MaterialPageRoute(
-                                    builder: (context) => new PlacesScreen(
-                                          title: typeSelected,
-                                        ))),
-                            child: const Text('แสดงทั้งหมด'),
+                            onMapCreated: (GoogleMapController controller) {
+                              _mapController.complete(controller);
+                            },
+                            markers: Set<Marker>.of(applicationBloc.markers),
+                          ),
+                        ),
+                        if (applicationBloc.searchResults != null &&
+                            applicationBloc.searchResults!.length != 0)
+                          Container(
+                              height: 300.0,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(.6),
+                                  backgroundBlendMode: BlendMode.darken)),
+                        if (applicationBloc.searchResults != null)
+                          Container(
+                            height: 300.0,
+                            child: ListView.builder(
+                                itemCount:
+                                    applicationBloc.searchResults!.length,
+                                itemBuilder: (context, index) {
+                                  return ListTile(
+                                    title: Text(
+                                      applicationBloc
+                                          .searchResults![index].description!,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    onTap: () {
+                                      applicationBloc.setSelectedLocation(
+                                          applicationBloc
+                                              .searchResults![index].placeId!);
+                                    },
+                                  );
+                                }),
                           ),
                       ],
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Wrap(
-                      spacing: 8.0,
-                      children: [
-                        FilterChip(
-                          label: Text('Drugstore'),
-                          onSelected: (val) {
-                            typeSelected = 'Drugstore';
-                            applicationBloc.togglePlaceType('drugstore', val);
-                          },
-                          selected: applicationBloc.placeType == 'drugstore',
-                          selectedColor: Colors.blue,
-                        ),
-                        FilterChip(
-                            label: Text('Hospital'),
-                            onSelected: (val) {
-                              typeSelected = 'Hospital';
-                              applicationBloc.togglePlaceType('hospital', val);
-                            },
-                            selected: applicationBloc.placeType == 'hospital',
-                            selectedColor: Colors.blue),
-                        FilterChip(
-                            label: Text('Pharmacy'),
-                            onSelected: (val) {
-                              typeSelected = 'Pharmacy';
-                              applicationBloc.togglePlaceType('pharmacy', val);
-                            },
-                            selected: applicationBloc.placeType == 'pharmacy',
-                            selectedColor: Colors.blue),
-                        FilterChip(
-                            label: Text('Insurance Agency'),
-                            onSelected: (val) {
-                              typeSelected = 'Insurance Agency';
-                              applicationBloc.togglePlaceType(
-                                  'insurance_agency', val);
-                            },
-                            selected:
-                                applicationBloc.placeType == 'insurance_agency',
-                            selectedColor: Colors.blue),
-                        FilterChip(
-                            label: Text('Physiotherapist'),
-                            onSelected: (val) {
-                              typeSelected = 'Physiotherapist';
-                              applicationBloc.togglePlaceType(
-                                  'physiotherapist', val);
-                            },
-                            selected:
-                                applicationBloc.placeType == 'physiotherapist',
-                            selectedColor: Colors.blue),
-                        FilterChip(
-                            label: Text('Park'),
-                            onSelected: (val) {
-                              typeSelected = 'Park';
-                              applicationBloc.togglePlaceType('park', val);
-                            },
-                            selected: applicationBloc.placeType == 'park',
-                            selectedColor: Colors.blue),
-                      ],
+                    SizedBox(
+                      height: 5.0,
                     ),
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 18.0, right: 18, top: 18, bottom: 18),
+                      child: Container(
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10.0),
+                              )),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('ค้นหาบริเวณใกล้เคียง',
+                                        style: TextStyle(
+                                            fontSize: 22.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.green[600])),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Wrap(
+                                  spacing: 8.0,
+                                  children: [
+                                    FilterChip(
+                                      label: Text('ร้านขายยา'),
+                                      onSelected: (val) {
+                                        typeSelected = 'ร้านขายยา';
+                                        applicationBloc.togglePlaceType(
+                                            'drugstore', val);
+                                      },
+                                      selected: applicationBloc.placeType ==
+                                          'drugstore',
+                                      selectedColor: Colors.green[300],
+                                    ),
+                                    FilterChip(
+                                        label: Text('โรงพยาบาล'),
+                                        onSelected: (val) {
+                                          typeSelected = 'โรงพยาบาล';
+                                          applicationBloc.togglePlaceType(
+                                              'hospital', val);
+                                        },
+                                        selected: applicationBloc.placeType ==
+                                            'hospital',
+                                        selectedColor: Colors.green[300]),
+                                    FilterChip(
+                                        label: Text('เภสัชกรรม'),
+                                        onSelected: (val) {
+                                          typeSelected = 'เภสัชกรรม';
+                                          applicationBloc.togglePlaceType(
+                                              'pharmacy', val);
+                                        },
+                                        selected: applicationBloc.placeType ==
+                                            'pharmacy',
+                                        selectedColor: Colors.green[300]),
+                                    FilterChip(
+                                        label: Text('ตัวแทนประกันภัย'),
+                                        onSelected: (val) {
+                                          typeSelected = 'ตัวแทนประกันภัย';
+                                          applicationBloc.togglePlaceType(
+                                              'insurance_agency', val);
+                                        },
+                                        selected: applicationBloc.placeType ==
+                                            'insurance_agency',
+                                        selectedColor: Colors.green[300]),
+                                    FilterChip(
+                                        label: Text('กายภาพบำบัด'),
+                                        onSelected: (val) {
+                                          typeSelected = 'กายภาพบำบัด';
+                                          applicationBloc.togglePlaceType(
+                                              'physiotherapist', val);
+                                        },
+                                        selected: applicationBloc.placeType ==
+                                            'physiotherapist',
+                                        selectedColor: Colors.green[300]),
+                                    FilterChip(
+                                        label: Text('สวนสาธารณะ'),
+                                        onSelected: (val) {
+                                          typeSelected = 'สวนสาธารณะ';
+                                          applicationBloc.togglePlaceType(
+                                              'park', val);
+                                        },
+                                        selected:
+                                            applicationBloc.placeType == 'park',
+                                        selectedColor: Colors.green[300]),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5.0,
+                              ),
+                              if (applicationBloc.placeResults.length > 0)
+                                Container(
+                                  height: 30,
+                                  width: 120,
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                        padding: MaterialStateProperty.resolveWith<EdgeInsetsGeometry>(
+                                            (Set<MaterialState> states) =>
+                                                EdgeInsets.all(0)),
+                                        foregroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Colors.white),
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Colors.white),
+                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(20.0),
+                                                side: BorderSide(color: Colors.green)))),
+                                    onPressed: () => Navigator.push(
+                                        context,
+                                        new MaterialPageRoute(
+                                            builder: (context) =>
+                                                new PlacesScreen(
+                                                  title: typeSelected,
+                                                ))),
+                                    child: Text(
+                                      'แสดงทั้งหมด',
+                                      style: GoogleFonts.sarabun(
+                                          textStyle: TextStyle(
+                                              color: Colors.green,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold)),
+                                    ),
+                                    // TextButton(
+                                    //   style: TextButton.styleFrom(
+                                    //       padding: EdgeInsets.zero,
+                                    //       minimumSize: Size(50, 30),
+                                    //       alignment: Alignment.centerLeft),
+                                    //   onPressed: () => Navigator.push(
+                                    //       context,
+                                    //       new MaterialPageRoute(
+                                    //           builder: (context) => new PlacesScreen(
+                                    //                 title: typeSelected,
+                                    //               ))),
+                                    //   child: Text(
+                                    //     'แสดงทั้งหมด',
+                                    //     style: GoogleFonts.sarabun(
+                                    //         textStyle: TextStyle(
+                                    //             color: Colors.blue, fontSize: 15)),
+                                    //   ),
+                                    // ),
+                                  ),
+                                ),
+                            ],
+                          )),
+                    ),
+                  ],
+                ),
               ));
   }
 

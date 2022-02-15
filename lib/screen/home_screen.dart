@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +11,7 @@ import 'package:hdse_application/models/place_detail.dart';
 import 'package:hdse_application/screen/chatbot_screen.dart';
 import 'package:hdse_application/screen/login_screen.dart';
 import 'package:hdse_application/screen/maps_screen.dart';
-import 'package:hdse_application/screen/place_detail_screen.dart';
+import 'package:hdse_application/screen/place_detail/place_detail_screen.dart';
 import 'package:hdse_application/screen/places_screen.dart';
 import 'package:hdse_application/screen/search_screen.dart';
 import 'package:hdse_application/services/speech_to_text.dart';
@@ -175,6 +176,64 @@ class _HomeScreenState extends State<HomeScreen> {
         });
   }
 
+  _showImage(BuildContext context) {
+    Navigator.of(context).push(PageRouteBuilder(
+        opaque: false,
+        pageBuilder: (_, __, ___) {
+          return Scaffold(
+            backgroundColor: Colors.black.withOpacity(0.8),
+            body: Center(
+              child: Hero(
+                  tag: 'profile-image-tag',
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                          flex: 4,
+                          child: ListView(
+                            children: [
+                              Image(
+                                  image: CachedNetworkImageProvider(
+                                      user!.photoURL!)),
+                            ],
+                          )),
+                      Flexible(
+                        flex: 3,
+                        child: ElevatedButton(
+                            style:
+                                ElevatedButton.styleFrom(primary: Colors.white),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.close,
+                                  color: Colors.red,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  "ปิด",
+                                  style: TextStyle(
+                                      fontSize: 17,
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            )),
+                      ),
+                    ],
+                  )),
+            ),
+          );
+        }));
+  }
+
   @override
   Widget build(BuildContext context) {
     return BackdropScaffold(
@@ -244,9 +303,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                       context,
                                       new MaterialPageRoute(
                                           builder: (context) =>
-                                              new PlaceDetailScreen(
-                                                placeID: "test",
-                                              )));
+                                              // new PlaceDetailScreen(
+                                              //   placeID: "test",
+                                              // )
+                                              new SearchScreen()));
                                 },
                                     imageURL:
                                         "https://firebasestorage.googleapis.com/v0/b/hdse-application.appspot.com/o/vlad-sargu-ItphH2lGzuI-unsplash.jpg?alt=media&token=66023587-af61-4d74-889e-72b409672c33",
@@ -305,19 +365,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget userCard(User? userData) => Row(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: Colors.green[100]!,
-                width: 4.0,
+          GestureDetector(
+            onTap: () {
+              if (userData?.photoURL != null) _showImage(context);
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.green[100]!,
+                  width: 4.0,
+                ),
               ),
-            ),
-            child: CircleAvatar(
-              radius: 40,
-              backgroundImage: userData?.photoURL == null
-                  ? Image.asset('assets/images/avatar.png').image
-                  : CachedNetworkImageProvider(userData!.photoURL!),
+              child: Hero(
+                tag: 'profile-image-tag',
+                child: CircleAvatar(
+                  radius: 40,
+                  backgroundImage: userData?.photoURL == null
+                      ? Image.asset('assets/images/avatar.png').image
+                      : CachedNetworkImageProvider(userData!.photoURL!),
+                ),
+              ),
             ),
           ),
           SizedBox(

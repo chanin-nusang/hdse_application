@@ -21,6 +21,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hdse_application/screen/home_screen.dart';
 import 'package:hdse_application/services/speech_to_text.dart';
 import 'package:hdse_application/services/webview.dart';
@@ -33,6 +34,7 @@ import 'package:dialogflow_grpc/dialogflow_grpc.dart';
 import 'package:dialogflow_grpc/generated/google/cloud/dialogflow/v2beta1/session.pb.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:animate_icons/animate_icons.dart';
 
 // TODO import Dialogflow
 DialogflowGrpcV2Beta1? dialogflow;
@@ -43,7 +45,8 @@ class ChatbotScreen extends StatefulWidget {
   _ChatbotScreenState createState() => _ChatbotScreenState();
 }
 
-class _ChatbotScreenState extends State<ChatbotScreen> {
+class _ChatbotScreenState extends State<ChatbotScreen>
+    with SingleTickerProviderStateMixin {
   final List<ChatMessage> _messages = <ChatMessage>[];
   final TextEditingController _textController = TextEditingController();
   List<String> word = [
@@ -75,6 +78,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   double minSoundLevel = 50000;
   double maxSoundLevel = 0;
   double level = 0.0;
+  AnimateIconController? animateController;
   // TODO DialogflowGrpc class instance
   List<LocaleName> _localeNames = [];
   String? suggestLink;
@@ -85,6 +89,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     _speech = stt.SpeechToText();
     word.shuffle();
     initPlugin();
+    animateController = AnimateIconController();
   }
 
   @override
@@ -366,6 +371,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
               _speech!.isListening == false) {
             setState(() {
               _isRecording = false;
+              animateController!.animateToStart();
               Provider.of<SpeechToTextService>(context, listen: false)
                   .setIsRecordingToFalse();
               level = 0.0;
@@ -383,6 +389,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
       setState(() {
         _speechText = 'กำลังฟัง...';
         _isRecording = false;
+        animateController!.animateToStart();
         Provider.of<SpeechToTextService>(context, listen: false)
             .setIsRecordingToFalse();
         level = 0.0;
@@ -532,13 +539,38 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                         child: FloatingActionButton(
                           backgroundColor:
                               speech.isRecording ? Colors.green : Colors.white,
-                          child: Icon(
-                            speech.isRecording ? Icons.mic_off : Icons.mic,
-                            size: 30,
-                            color: speech.isRecording
-                                ? Colors.white
-                                : Colors.green,
+                          child: AnimateIcons(
+                            startIcon: Icons.mic_off,
+                            endIcon: Icons.mic,
+
+                            controller: animateController!,
+                            // add this tooltip for the start icon
+                            startTooltip: 'Icons.add_circle',
+                            // add this tooltip for the end icon
+                            endTooltip: 'Icons.add_circle_outline',
+                            size: 30.0,
+                            onStartIconPress: () {
+                              print("Clicked on Add Icon");
+                              _listen();
+                              return true;
+                            },
+                            onEndIconPress: () {
+                              print("Clicked on Close Icon");
+                              _listen();
+                              return true;
+                            },
+                            duration: Duration(milliseconds: 250),
+                            startIconColor: Colors.green,
+                            endIconColor: Colors.white,
+                            clockwise: false,
                           ),
+                          // Icon(
+                          //   speech.isRecording ? Icons.mic_off : Icons.mic,
+                          //   size: 30,
+                          //   color: speech.isRecording
+                          //       ? Colors.white
+                          //       : Colors.green,
+                          // ),
                           onPressed: _listen,
                         ),
                       ),
@@ -590,8 +622,10 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                                                   .showSnackBar(SnackBar(
                                                 content: Text(
                                                     "กรุณาป้อนข้อความ หรือ เลือกคำแนะนำ",
-                                                    style: TextStyle(
-                                                        color: Colors.white)),
+                                                    style: GoogleFonts.sarabun(
+                                                        textStyle: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 18))),
                                                 backgroundColor: Colors.red,
                                               ));
                                             } else {

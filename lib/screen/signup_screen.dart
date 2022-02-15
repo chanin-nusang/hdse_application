@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hdse_application/screen/login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -34,7 +35,8 @@ class _SignupScreenState extends State<SignupScreen> {
       print("Password and Confirm-password is not match.");
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("รหัสผ่าน และรหัสผ่านที่ยืนยัน ไม่ตรงกัน",
-            style: TextStyle(color: Colors.white)),
+            style: GoogleFonts.sarabun(
+                textStyle: TextStyle(color: Colors.white, fontSize: 18))),
         backgroundColor: Colors.red,
       ));
     }

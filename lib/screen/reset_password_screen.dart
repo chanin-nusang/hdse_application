@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({Key? key}) : super(key: key);
@@ -76,12 +77,15 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
             "ระบบได้ส่งข้อมูลการตั้งรหัสผ่านใหม่ไปยัง $email เรียบร้อยแล้ว.",
-            style: TextStyle(color: Colors.white)),
+            style: GoogleFonts.sarabun(
+                textStyle: TextStyle(color: Colors.white, fontSize: 18))),
         backgroundColor: Colors.green[300],
       ));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(e.toString(), style: TextStyle(color: Colors.white)),
+          content: Text(e.toString(),
+              style: GoogleFonts.sarabun(
+                  textStyle: TextStyle(color: Colors.white, fontSize: 18))),
           backgroundColor: Colors.red));
     }
   }

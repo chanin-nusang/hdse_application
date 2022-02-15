@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hdse_application/components/signin_button.dart';
 import 'package:hdse_application/screen/reset_password_screen.dart';
 import 'package:hdse_application/screen/signup_screen.dart';
@@ -67,7 +68,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                       .showSnackBar(SnackBar(
                                     content: Text(
                                         "อีเมล หรือ รหัสผ่าน ไม่ถูกต้อง",
-                                        style: TextStyle(color: Colors.white)),
+                                        style: GoogleFonts.sarabun(
+                                            textStyle: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18))),
                                     backgroundColor: Colors.red,
                                   ))
                                 }
