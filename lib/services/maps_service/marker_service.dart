@@ -4,7 +4,7 @@ import 'package:hdse_application/models/place.dart';
 class MarkerService {
   LatLngBounds bounds(Set<Marker> markers) {
     return createBounds(markers.map((m) => m.position).toList());
-  }
+  } //0809642696
 
   LatLngBounds createBounds(List<LatLng> positions) {
     final southwestLat = positions.map((p) => p.latitude).reduce(

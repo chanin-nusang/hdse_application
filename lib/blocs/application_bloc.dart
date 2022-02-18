@@ -18,6 +18,7 @@ class ApplicationBloc with ChangeNotifier {
   final markerService = MarkerService();
 
   //Variables
+  Completer<GoogleMapController> mapController = Completer();
   Position? currentLocation;
   List<PlaceSearch>? searchResults;
   StreamController<Place> selectedLocation =
@@ -29,11 +30,16 @@ class ApplicationBloc with ChangeNotifier {
   List<Place> placeResults = [];
   List<Marker> markers = List<Marker>.empty();
   PlaceDetail? placeDetail;
+  bool? isTogglePlaceType = false;
 
   ApplicationBloc() {
     setCurrentLocation();
     print(
         "selectedLocation.isClosed = " + selectedLocation.isClosed.toString());
+  }
+  setIsTogglePlaceTypeToTrue() {
+    isTogglePlaceType = true;
+    notifyListeners();
   }
 
   setCurrentLocation() async {
@@ -48,16 +54,43 @@ class ApplicationBloc with ChangeNotifier {
     notifyListeners();
   }
 
+  goToMyLocation() async {
+    setCurrentLocation();
+    final GoogleMapController controller = await mapController.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(
+        target: LatLng(currentLocation!.latitude, currentLocation!.longitude),
+        zoom: 14,
+      ),
+    ));
+    notifyListeners();
+  }
+
   searchPlaces(String searchTerm) async {
     searchResults = await placesService.getAutocomplete(searchTerm);
     notifyListeners();
   }
 
   setSelectedLocation(String placeId) async {
+    searchResults = null;
+    notifyListeners();
     var sLocation = await placesService.getPlace(placeId);
-    selectedLocation.add(sLocation);
+    // selectedLocation.add(sLocation);
     selectedLocationStatic = sLocation;
-    searchResults = List<PlaceSearch>.empty();
+
+    // var newMarker =
+    //     markerService.createMarkerFromPlace(selectedLocationStatic!, false);
+    // var _bounds = markerService.bounds(Set<Marker>.of([newMarker]));
+    // bounds.add(_bounds);
+
+    final GoogleMapController controller = await mapController.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(
+        target: LatLng(selectedLocationStatic!.geometry!.location!.lat!,
+            selectedLocationStatic!.geometry!.location!.lng!),
+        zoom: 14,
+      ),
+    ));
     notifyListeners();
   }
 
@@ -70,6 +103,8 @@ class ApplicationBloc with ChangeNotifier {
   }
 
   togglePlaceType(String value, bool selected) async {
+    // isTogglePlaceType = true;
+    print('isTogglePlaceType = true;');
     if (selected) {
       placeType = value;
     } else {
@@ -99,7 +134,8 @@ class ApplicationBloc with ChangeNotifier {
 
       var _bounds = markerService.bounds(Set<Marker>.of(markers));
       bounds.add(_bounds);
-
+      isTogglePlaceType = false;
+      print('isTogglePlaceType = false;');
       notifyListeners();
     }
   }
@@ -113,13 +149,26 @@ class ApplicationBloc with ChangeNotifier {
     placeDetail = null;
   }
 
+  clearPlaceBoundsAndPlaceType() {
+    placeType = null;
+    markers = [];
+    notifyListeners();
+    // bounds = StreamController<LatLngBounds>.broadcast();
+  }
+
+  clearPlaceBoundsAndPlaceTypeWithoutNotityListeners() {
+    placeType = null;
+    markers = [];
+  }
+
   @override
   void dispose() {
     print("applicationBloc.dispose");
-    selectedLocation.close();
+    // selectedLocation.close();
+    placeType = null;
     print(
         "selectedLocation.isClosed = " + selectedLocation.isClosed.toString());
-    bounds.close();
+    // bounds.close();
     super.dispose();
   }
 }

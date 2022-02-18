@@ -8,10 +8,9 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MaterialApp(
-      home: MultiProvider(providers: [
+  runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (context) => ApplicationBloc()),
     ChangeNotifierProvider<SpeechToTextService>(
         create: (context) => SpeechToTextService())
-  ], child: App())));
+  ], child: MaterialApp(home: App())));
 }
