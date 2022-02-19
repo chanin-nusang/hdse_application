@@ -309,11 +309,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Navigator.push(
                                       context,
                                       new MaterialPageRoute(
-                                          builder: (context) =>
-                                              // new PlaceDetailScreen(
-                                              //   placeID: "test",
-                                              // )
-                                              new SearchScreen()));
+                                        builder: (context) =>
+
+                                            // new SearchScreen()
+                                            new PlaceDetailScreen(
+                                          placeID: "test",
+                                        ),
+                                      ));
                                 },
                                     imageURL:
                                         "https://firebasestorage.googleapis.com/v0/b/hdse-application.appspot.com/o/vlad-sargu-ItphH2lGzuI-unsplash.jpg?alt=media&token=66023587-af61-4d74-889e-72b409672c33",

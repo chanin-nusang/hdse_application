@@ -1,6 +1,9 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hdse_application/models/geometry.dart';
@@ -31,6 +34,8 @@ class ApplicationBloc with ChangeNotifier {
   List<Marker> markers = List<Marker>.empty();
   PlaceDetail? placeDetail;
   bool? isTogglePlaceType = false;
+  List<ImageProvider> photos = [];
+  List<String> photosPath = [];
 
   ApplicationBloc() {
     setCurrentLocation();
@@ -142,11 +147,19 @@ class ApplicationBloc with ChangeNotifier {
 
   getPlaceDetailToBloc(String placeID) async {
     placeDetail = await placesService.getPlaceDetail(placeID);
+    if (placeDetail!.photoReferance != null)
+      placeDetail!.photoReferance!.forEach((element) async {
+        var url = await placesService.getPlacePhotos(element);
+        photos.add(CachedNetworkImageProvider(url));
+        var file = await DefaultCacheManager().getSingleFile(url);
+        photosPath.add(file.path);
+      });
     notifyListeners();
   }
 
   clearPlaceDetail() {
     placeDetail = null;
+    photos = [];
   }
 
   clearPlaceBoundsAndPlaceType() {
@@ -166,6 +179,7 @@ class ApplicationBloc with ChangeNotifier {
     print("applicationBloc.dispose");
     // selectedLocation.close();
     placeType = null;
+
     print(
         "selectedLocation.isClosed = " + selectedLocation.isClosed.toString());
     // bounds.close();

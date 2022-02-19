@@ -227,15 +227,24 @@ class _SearchScreenState extends State<SearchScreen> {
                             if (applicationBloc.searchResults != null &&
                                 applicationBloc.searchResults!.length != 0)
                               Container(
-                                  height: 300.0,
+                                  height: 330.0,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
                                       color: Colors.black.withOpacity(.6),
                                       backgroundBlendMode: BlendMode.darken)),
                             if (applicationBloc.searchResults != null)
                               Container(
-                                height: 300.0,
-                                child: ListView.builder(
+                                height: 330.0,
+                                child: ListView.separated(
+                                    separatorBuilder:
+                                        (BuildContext context, int index) =>
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 15, right: 15),
+                                              child: Divider(
+                                                color: Colors.white,
+                                              ),
+                                            ),
                                     itemCount:
                                         applicationBloc.searchResults!.length,
                                     itemBuilder: (context, index) {

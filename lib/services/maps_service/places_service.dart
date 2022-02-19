@@ -1,3 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+
 import 'package:flutter/services.dart';
 import 'package:hdse_application/models/place.dart';
 import 'package:hdse_application/models/place_detail.dart';
@@ -47,5 +50,11 @@ class PlacesService {
     //-----***-----
     var jsonResults = json['result'];
     return PlaceDetail.fromJson(jsonResults);
+  }
+
+  Future<String> getPlacePhotos(String photoReferance) async {
+    var url =
+        'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=$photoReferance&key=$key';
+    return url;
   }
 }
