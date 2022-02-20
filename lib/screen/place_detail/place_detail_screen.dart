@@ -1,3 +1,4 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
@@ -124,12 +125,56 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
               ));
       });
     else
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('ไม่ได้รับสิทธิ์ในการอนุญาตให้บันทึกรูปภาพ',
-            style: GoogleFonts.sarabun(
-                textStyle: TextStyle(color: Colors.white, fontSize: 18))),
-        backgroundColor: Colors.red,
-      ));
+      _showStorageDeniedDialog();
+    // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //   content: Text('ไม่ได้รับสิทธิ์ในการอนุญาตให้บันทึกรูปภาพ',
+    //       style: GoogleFonts.sarabun(
+    //           textStyle: TextStyle(color: Colors.white, fontSize: 18))),
+    //   backgroundColor: Colors.red,
+    // ));
+  }
+
+  _showStorageDeniedDialog() {
+    showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            contentPadding: EdgeInsets.fromLTRB(25.0, 15.0, 25.0, 15.0),
+            scrollable: true,
+            content: Column(
+              children: [
+                Icon(
+                  Icons.file_download_off_outlined,
+                  size: 40,
+                  color: Colors.red[200],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'ไม่ได้รับสิทธิ์ในการอนุญาตให้บันทึกรูปภาพ กดปุ่ม เปิดการตั้งค่า ที่เมนู "สิทธิ์" มองหา "ไฟล์และสื่อ" แล้วเลือก "อนุญาตเข้าถึงสื่อเท่านั้น"',
+                  style: TextStyle(fontSize: 15),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                        onPressed: () async {
+                          await AppSettings.openAppSettings();
+                        },
+                        child: Text(
+                          "เปิดการตั้งค่า",
+                          style: TextStyle(fontSize: 17),
+                        )),
+                  ],
+                ),
+              ],
+            ),
+          );
+        });
   }
 
   _showImage(BuildContext context) {

@@ -14,6 +14,7 @@
 
 import 'dart:async';
 import 'dart:math';
+import 'package:app_settings/app_settings.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dialogflow_grpc/generated/google/protobuf/api.pb.dart';
@@ -82,6 +83,7 @@ class _ChatbotScreenState extends State<ChatbotScreen>
   // TODO DialogflowGrpc class instance
   List<LocaleName> _localeNames = [];
   String? suggestLink;
+
   @override
   void initState() {
     super.initState();
@@ -97,6 +99,72 @@ class _ChatbotScreenState extends State<ChatbotScreen>
     _recorderStatus?.cancel();
     _audioStreamSubscription?.cancel();
     super.dispose();
+  }
+
+  checkMicrophonePermission() async {
+    var microphoneStatus = await Permission.microphone.status;
+    if (microphoneStatus.isDenied) {
+      await Permission.location.request();
+      microphoneStatus = await Permission.microphone.status;
+      if (microphoneStatus.isDenied) {
+        animateController!.animateToStart();
+        _showMicrophonePermissionDeniedDialog();
+      } else {
+        if (!_speech!.isAvailable) {
+          SpeechToTextService().initSpeechState().then((value) => _listen());
+        } else
+          _listen();
+      }
+    } else {
+      if (!_speech!.isAvailable) {
+        SpeechToTextService().initSpeechState().then((value) => _listen());
+        _listen();
+      } else
+        _listen();
+    }
+  }
+
+  _showMicrophonePermissionDeniedDialog() {
+    showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            contentPadding: EdgeInsets.fromLTRB(25.0, 15.0, 25.0, 15.0),
+            scrollable: true,
+            content: Column(
+              children: [
+                Icon(
+                  Icons.mic_off_outlined,
+                  size: 40,
+                  color: Colors.red[200],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'ไม่ได้รับสิทธิ์ให้เข้าถึงไมโครโฟน กดปุ่ม เปิดการตั้งค่า ที่เมนู "สิทธิ์" มองหา "ไมโครโฟน" แล้วเลือก "อนุญาตขณะมีการใช้แอปเท่านั้น"',
+                  style: TextStyle(fontSize: 15),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                        onPressed: () async {
+                          await AppSettings.openAppSettings();
+                        },
+                        child: Text(
+                          "เปิดการตั้งค่า",
+                          style: TextStyle(fontSize: 17),
+                        )),
+                  ],
+                ),
+              ],
+            ),
+          );
+        });
   }
 
   void setIsRecording() {
@@ -338,48 +406,52 @@ class _ChatbotScreenState extends State<ChatbotScreen>
       //   onError: (val) => print('onError: $val'),
       // );
       // if (available) {
-      setState(() {
-        _isRecording = true;
-        Provider.of<SpeechToTextService>(context, listen: false)
-            .setIsRecordingToTrue();
-      });
-      // _localeNames = await _speech!.locales();
-      // print("_localeNames : " + _localeNames.toString());
-      print("2. _isRecording : $_isRecording");
-      _speech!.listen(
-        localeId: "th_TH",
-        onSoundLevelChange: (level) {
-          soundLevelListener(level);
-        },
-        onResult: (val) => setState(() {
-          _speechText = val.recognizedWords;
-          print("checkkkk: " +
-              Provider.of<SpeechToTextService>(context, listen: false)
-                  .isRecording
-                  .toString());
-          print("onResult _speechText : $_speechText");
-          print("onResult val.recognizedWords : " + val.recognizedWords);
-          // print('onResult available : $available');
-          if (val.hasConfidenceRating && val.confidence > 0) {
-            _confidence = val.confidence;
-          }
-          print("_speech!.isListening : " + _speech!.isListening.toString());
-          if (
-              // Provider.of<SpeechToTextService>(context, listen: false)
-              //           .isRecording ==
-              //       false
-              _speech!.isListening == false) {
-            setState(() {
-              _isRecording = false;
-              animateController!.animateToStart();
-              Provider.of<SpeechToTextService>(context, listen: false)
-                  .setIsRecordingToFalse();
-              level = 0.0;
-              handleSubmitted(_speechText);
-            });
-          }
-        }),
-      );
+
+      if (_speech!.isAvailable) {
+        setState(() {
+          _isRecording = true;
+          Provider.of<SpeechToTextService>(context, listen: false)
+              .setIsRecordingToTrue();
+        });
+        // _localeNames = await _speech!.locales();
+        // print("_localeNames : " + _localeNames.toString());
+        print("2. _isRecording : $_isRecording");
+        _speech!.listen(
+          localeId: "th_TH",
+          onSoundLevelChange: (level) {
+            soundLevelListener(level);
+          },
+          onResult: (val) => setState(() {
+            _speechText = val.recognizedWords;
+            print("checkkkk: " +
+                Provider.of<SpeechToTextService>(context, listen: false)
+                    .isRecording
+                    .toString());
+            print("onResult _speechText : $_speechText");
+            print("onResult val.recognizedWords : " + val.recognizedWords);
+            // print('onResult available : $available');
+            if (val.hasConfidenceRating && val.confidence > 0) {
+              _confidence = val.confidence;
+            }
+            print("_speech!.isListening : " + _speech!.isListening.toString());
+            if (
+                // Provider.of<SpeechToTextService>(context, listen: false)
+                //           .isRecording ==
+                //       false
+                _speech!.isListening == false) {
+              setState(() {
+                _isRecording = false;
+                animateController!.animateToStart();
+                Provider.of<SpeechToTextService>(context, listen: false)
+                    .setIsRecordingToFalse();
+                level = 0.0;
+                handleSubmitted(_speechText);
+              });
+            }
+          }),
+        );
+      }
+
       // .then((value) => setState(() {
       //       _isRecording = false;
       //       print("_isRecording : false");
@@ -395,7 +467,7 @@ class _ChatbotScreenState extends State<ChatbotScreen>
         level = 0.0;
       });
       print("3. _isRecording : ${_isRecording}");
-      _speech!.stop();
+      if (_speech!.isAvailable) _speech!.stop();
     }
   }
 
@@ -551,12 +623,12 @@ class _ChatbotScreenState extends State<ChatbotScreen>
                             size: 30.0,
                             onStartIconPress: () {
                               print("Clicked on Add Icon");
-                              _listen();
+                              checkMicrophonePermission();
                               return true;
                             },
                             onEndIconPress: () {
                               print("Clicked on Close Icon");
-                              _listen();
+                              checkMicrophonePermission();
                               return true;
                             },
                             duration: Duration(milliseconds: 250),
@@ -571,7 +643,7 @@ class _ChatbotScreenState extends State<ChatbotScreen>
                           //       ? Colors.white
                           //       : Colors.green,
                           // ),
-                          onPressed: _listen,
+                          onPressed: checkMicrophonePermission,
                         ),
                       ),
                     ),

@@ -25,6 +25,7 @@ import 'dart:io';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:backdrop/backdrop.dart';
+import 'package:app_settings/app_settings.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title}) : super(key: key);
@@ -103,12 +104,13 @@ class _HomeScreenState extends State<HomeScreen> {
       await Permission.location.request();
       locationStatus = await Permission.location.status;
       if (locationStatus.isDenied)
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('ไม่ได้รับสิทธิ์ให้เข้าถึงตำแหน่งปัจจุบันของคุณ',
-              style: GoogleFonts.sarabun(
-                  textStyle: TextStyle(color: Colors.white, fontSize: 18))),
-          backgroundColor: Colors.red,
-        ));
+        _showLocationPermissionDeniedDialog();
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //   content: Text('ไม่ได้รับสิทธิ์ให้เข้าถึงตำแหน่งปัจจุบันของคุณ',
+      //       style: GoogleFonts.sarabun(
+      //           textStyle: TextStyle(color: Colors.white, fontSize: 18))),
+      //   backgroundColor: Colors.red,
+      // ));
       else
         Navigator.push(
             context,
@@ -197,7 +199,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     text: TextSpan(
                         text:
                             "เพื่อเก็บข้อมูลการสนทนากับแชทบอท และข้อมูลประวัติการค้นหาสถานที่ให้บริการด้านสุขภาพ เอาไว้ให้สามารถเรียกดูภายหลังได้ เราจะนำข้อมูลของท่าน เช่น ชื่อ อีเมล ไปใช้อ้างอิงในการเก็บข้อมูลการใช้งานแอปพลิเคชันของท่าน  ",
-                        style: TextStyle(color: Colors.black),
+                        style: GoogleFonts.sarabun(
+                            textStyle:
+                                TextStyle(color: Colors.black, fontSize: 15)),
                         children: <TextSpan>[
                       TextSpan(
                           text: "ดู", style: TextStyle(color: Colors.black)),
@@ -230,6 +234,49 @@ class _HomeScreenState extends State<HomeScreen> {
                       "เข้าสู่ระบบ / ลงทะเบียน",
                       style: TextStyle(fontSize: 17),
                     )),
+              ],
+            ),
+          );
+        });
+  }
+
+  _showLocationPermissionDeniedDialog() {
+    showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            contentPadding: EdgeInsets.fromLTRB(25.0, 15.0, 25.0, 15.0),
+            scrollable: true,
+            content: Column(
+              children: [
+                Icon(
+                  Icons.wrong_location_outlined,
+                  size: 40,
+                  color: Colors.red[200],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'ไม่ได้รับสิทธิ์ให้เข้าถึงตำแหน่งปัจจุบันของคุณ กดปุ่ม เปิดการตั้งค่า ที่เมนู "สิทธิ์" มองหา "ตำแหน่ง" แล้วเลือก "อนุญาตขณะมีการใช้แอปเท่านั้น"',
+                  style: TextStyle(fontSize: 15),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                        onPressed: () async {
+                          await AppSettings.openAppSettings();
+                        },
+                        child: Text(
+                          "เปิดการตั้งค่า",
+                          style: TextStyle(fontSize: 17),
+                        )),
+                  ],
+                ),
               ],
             ),
           );
@@ -358,9 +405,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                buildImageCard(context, handler: () {
-                                  checkLocationPermission();
-                                },
+                                buildImageCard(context,
+                                    handler: () => checkLocationPermission(),
                                     imageURL:
                                         "https://firebasestorage.googleapis.com/v0/b/hdse-application.appspot.com/o/vlad-sargu-ItphH2lGzuI-unsplash.jpg?alt=media&token=66023587-af61-4d74-889e-72b409672c33",
                                     title: 'สถานที่ให้บริการด้านสุขภาพ',
@@ -405,7 +451,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   text: TextSpan(
                       text:
                           "เข้าสู่ระบบเพื่อประสบการณ์การใช้งานแอปพลิเคชันที่ดีสุด   ",
-                      style: TextStyle(color: Colors.black),
+                      style: GoogleFonts.sarabun(
+                          textStyle:
+                              TextStyle(color: Colors.black, fontSize: 15)),
                       children: <TextSpan>[
                     TextSpan(
                         recognizer: _loginBenefitsRecognizer,
