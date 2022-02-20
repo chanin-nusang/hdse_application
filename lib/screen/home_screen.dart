@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hdse_application/blocs/application_bloc.dart';
 import 'package:hdse_application/components/image_card.dart';
@@ -17,6 +18,7 @@ import 'package:hdse_application/screen/places_screen.dart';
 import 'package:hdse_application/screen/search_screen.dart';
 import 'package:hdse_application/services/speech_to_text.dart';
 import 'package:hdse_application/services/webview.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'dart:io';
@@ -82,6 +84,57 @@ class _HomeScreenState extends State<HomeScreen> {
                     )));
       };
     super.initState();
+  }
+
+  checkLocationPermission() async {
+    // var manageExternalStorageStatus =
+    //     await Permission.manageExternalStorage.status;
+    var locationStatus = await Permission.location.status;
+    // if (manageExternalStorageStatus.isDenied) {
+    //   await Permission.manageExternalStorage.request();
+    //   manageExternalStorageStatus =
+    //       await Permission.manageExternalStorage.status;
+    //   if (manageExternalStorageStatus.isDenied)
+    //     saveImageToGallery(false);
+    //   else
+    //     saveImageToGallery(true);
+    // }
+    if (locationStatus.isDenied) {
+      await Permission.location.request();
+      locationStatus = await Permission.location.status;
+      if (locationStatus.isDenied)
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('ไม่ได้รับสิทธิ์ให้เข้าถึงตำแหน่งปัจจุบันของคุณ',
+              style: GoogleFonts.sarabun(
+                  textStyle: TextStyle(color: Colors.white, fontSize: 18))),
+          backgroundColor: Colors.red,
+        ));
+      else
+        Navigator.push(
+            context,
+            new MaterialPageRoute(
+              builder: (context) =>
+
+                  // new SearchScreen()
+                  new PlaceDetailScreen(
+                placeID: "test",
+              ),
+            ));
+    } else
+      // if (!manageExternalStorageStatus.isDenied) {
+      //     &&
+      //     (!storageStatus.isDenied) {
+      Navigator.push(
+          context,
+          new MaterialPageRoute(
+            builder: (context) =>
+
+                // new SearchScreen()
+                new PlaceDetailScreen(
+              placeID: "test",
+            ),
+          ));
+    // }
   }
 
   setTextTime() {
@@ -306,16 +359,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   height: 10,
                                 ),
                                 buildImageCard(context, handler: () {
-                                  Navigator.push(
-                                      context,
-                                      new MaterialPageRoute(
-                                        builder: (context) =>
-
-                                            // new SearchScreen()
-                                            new PlaceDetailScreen(
-                                          placeID: "test",
-                                        ),
-                                      ));
+                                  checkLocationPermission();
                                 },
                                     imageURL:
                                         "https://firebasestorage.googleapis.com/v0/b/hdse-application.appspot.com/o/vlad-sargu-ItphH2lGzuI-unsplash.jpg?alt=media&token=66023587-af61-4d74-889e-72b409672c33",

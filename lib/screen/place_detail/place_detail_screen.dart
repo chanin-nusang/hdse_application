@@ -8,6 +8,7 @@ import 'package:hdse_application/screen/place_detail/detail_tab.dart';
 import 'package:hdse_application/screen/place_detail/navigate_tab.dart';
 import 'package:hdse_application/screen/place_detail/reviews_tab.dart';
 import 'package:hdse_application/services/webview.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -27,7 +28,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
   var applicationBloc;
   late TabController _tabController;
   int _selectedTabbar = 0;
-  int imageSlideshowIndex = 0;
+  int? imageSlideshowIndex;
   // late final _kTabPages = <Widget>[detailTab(), navigateTab(), reviewsTab()];
   final _kTabs = <Tab>[
     Tab(
@@ -58,6 +59,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
   ];
   @override
   void initState() {
+    imageSlideshowIndex = 0;
     _tabController = TabController(length: 3, vsync: this);
     applicationBloc = Provider.of<ApplicationBloc>(context, listen: false);
     Provider.of<ApplicationBloc>(context, listen: false)
@@ -92,12 +94,12 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
         saveImageToGallery(false);
       else
         saveImageToGallery(true);
-    }
-    if //(!manageExternalStorageStatus.isDenied) {
-        //&&
-        (!storageStatus.isDenied) {
+    } else
+      // if (!manageExternalStorageStatus.isDenied) {
+      //     &&
+      //     (!storageStatus.isDenied) {
       saveImageToGallery(true);
-    }
+    // }
   }
 
   saveImageToGallery(bool isPermission) async {
@@ -123,7 +125,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
       });
     else
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('ไม่ได้รับสิทธิ์ในการอนุญาตให้บันทึกรูปภาพ222',
+        content: Text('ไม่ได้รับสิทธิ์ในการอนุญาตให้บันทึกรูปภาพ',
             style: GoogleFonts.sarabun(
                 textStyle: TextStyle(color: Colors.white, fontSize: 18))),
         backgroundColor: Colors.red,
@@ -131,107 +133,111 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
   }
 
   _showImage(BuildContext context) {
-    Navigator.of(context).push(PageRouteBuilder(
-        opaque: false,
-        pageBuilder: (_, __, ___) {
-          return Scaffold(
-            backgroundColor: Colors.black.withOpacity(0.8),
-            body: Center(
-              child: Hero(
-                  tag: 'place-image-tag',
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 6,
-                        child: ImageSlideshow(
-                          // width: 400,
-                          height: 500,
-                          initialPage: 0,
-                          indicatorColor: Colors.green[400],
-                          indicatorBackgroundColor: Colors.grey[600],
-                          children: applicationBloc.photos
-                              .map<Widget>((element) => Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 200,
-                                    decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            image: element,
-                                            fit: BoxFit.fitWidth)),
-                                  ))
-                              .toList(),
-                          onPageChanged: (value) {
-                            imageSlideshowIndex = value;
-                          },
-                          autoPlayInterval: 0,
-                          isLoop: true,
-                        ),
+    Navigator.push(
+        context,
+        PageTransition(
+            duration: const Duration(milliseconds: 100),
+            reverseDuration: const Duration(milliseconds: 250),
+            type: PageTransitionType.bottomToTop,
+            child: Scaffold(
+              backgroundColor: Colors.black.withOpacity(0.8),
+              body: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      flex: 6,
+                      child: ImageSlideshow(
+                        // width: 400,
+                        height: 500,
+                        initialPage: imageSlideshowIndex!,
+                        indicatorColor: Colors.green[400],
+                        indicatorBackgroundColor: Colors.grey[600],
+                        children: applicationBloc.photos
+                            .map<Widget>((element) => Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 200,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: element,
+                                          fit: BoxFit.fitWidth)),
+                                ))
+                            .toList(),
+                        onPageChanged: (value) {
+                          print("photo : " + value.toString());
+                          imageSlideshowIndex = value;
+                        },
+                        autoPlayInterval: 0,
+                        isLoop: true,
                       ),
-                      Flexible(
-                        flex: 3,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    primary: Colors.white),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(
-                                      Icons.close,
-                                      color: Colors.red,
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      "ปิด",
-                                      style: TextStyle(
-                                          fontSize: 17,
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                )),
-                            ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    primary: Colors.white),
-                                onPressed: () {
-                                  checkStoragePermission();
-                                },
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(
-                                      Icons.save,
-                                      color: Colors.green[400],
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      "บันทึกรูปภาพ",
-                                      style: TextStyle(
-                                          fontSize: 17,
-                                          color: Colors.green[400],
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                )),
-                          ],
-                        ),
+                    ),
+                    Flexible(
+                      flex: 3,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.white),
+                              onPressed: () {
+                                print('imageSlideshowIndex :' +
+                                    imageSlideshowIndex.toString());
+
+                                Navigator.of(context).pop();
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.close,
+                                    color: Colors.red,
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    "ปิด",
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              )),
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  primary: Colors.white),
+                              onPressed: () {
+                                checkStoragePermission();
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.save,
+                                    color: Colors.green[400],
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    "บันทึกรูปภาพ",
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        color: Colors.green[400],
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              )),
+                        ],
                       ),
-                    ],
-                  )),
-            ),
-          );
-        }));
+                    ),
+                  ],
+                ),
+              ),
+            )));
   }
 
   @override
@@ -255,32 +261,32 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                       child: Column(children: [
                         if (provider.photos.isNotEmpty)
                           GestureDetector(
-                            onTap: () => _showImage(context),
-                            child: Hero(
-                              tag: 'place-image-tag',
-                              child: ImageSlideshow(
-                                // width: 400,
-                                height: 200,
-                                initialPage: 0,
-                                indicatorColor: Colors.green[400],
-                                indicatorBackgroundColor: Colors.grey[600],
-                                children: provider.photos
-                                    .map((element) => Container(
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          height: 200,
-                                          decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                  image: element,
-                                                  fit: BoxFit.fitWidth)),
-                                        ))
-                                    .toList(),
-                                onPageChanged: (value) {
-                                  imageSlideshowIndex = value;
-                                },
-                                autoPlayInterval: 0,
-                                isLoop: true,
-                              ),
+                            onTap: () {
+                              _showImage(context);
+                            },
+                            child: ImageSlideshow(
+                              // width: 400,
+                              height: 200,
+                              initialPage: imageSlideshowIndex!,
+                              indicatorColor: Colors.green[400],
+                              indicatorBackgroundColor: Colors.grey[600],
+                              children: provider.photos
+                                  .map((element) => Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        height: 200,
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: element,
+                                                fit: BoxFit.fitWidth)),
+                                      ))
+                                  .toList(),
+                              onPageChanged: (value) {
+                                print("photo : " + value.toString());
+                                imageSlideshowIndex = value;
+                              },
+                              autoPlayInterval: 0,
+                              isLoop: true,
                             ),
                           ),
                         Padding(
@@ -506,7 +512,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                               children: [
                                 TabBar(
                                   onTap: (index) {
-                                    print(index);
+                                    print('TabBar : $index');
                                     setState(() {
                                       _selectedTabbar = index;
                                     });
