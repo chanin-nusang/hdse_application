@@ -131,7 +131,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                         style: GoogleFonts.sarabun(
                                             textStyle: TextStyle(
                                                 color: Colors.grey[700],
-                                                fontSize: 16)),
+                                                fontSize: 16 *
+                                                    MediaQuery.of(context)
+                                                        .textScaleFactor)),
                                         children: <TextSpan>[
                                       TextSpan(
                                           text: selectedLocation!,
@@ -175,8 +177,12 @@ class _SearchScreenState extends State<SearchScreen> {
                                   child: Column(
                                     children: <Widget>[
                                       Container(
-                                        height: 30,
-                                        width: 140,
+                                        height: 30 *
+                                            MediaQuery.of(context)
+                                                .textScaleFactor,
+                                        width: 140 *
+                                            MediaQuery.of(context)
+                                                .textScaleFactor,
                                         child: ElevatedButton(
                                           style: ButtonStyle(
                                             padding: MaterialStateProperty
