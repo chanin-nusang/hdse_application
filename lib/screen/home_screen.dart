@@ -115,12 +115,10 @@ class _HomeScreenState extends State<HomeScreen> {
         Navigator.push(
             context,
             new MaterialPageRoute(
-              builder: (context) =>
-
-                  // new SearchScreen()
-                  new PlaceDetailScreen(
-                placeID: "test",
-              ),
+              builder: (context) => new SearchScreen(
+                  //   new PlaceDetailScreen(
+                  // placeID: "test",
+                  ),
             ));
     } else
       // if (!manageExternalStorageStatus.isDenied) {
@@ -129,12 +127,10 @@ class _HomeScreenState extends State<HomeScreen> {
       Navigator.push(
           context,
           new MaterialPageRoute(
-            builder: (context) =>
-
-                // new SearchScreen()
-                new PlaceDetailScreen(
-              placeID: "test",
-            ),
+            builder: (context) => new SearchScreen(
+                //   new PlaceDetailScreen(
+                // placeID: "test",
+                ),
           ));
     // }
   }

@@ -160,6 +160,8 @@ class ApplicationBloc with ChangeNotifier {
   clearPlaceDetail() {
     placeDetail = null;
     photos = [];
+    photosPath = [];
+    print("clearPlaceDetail");
   }
 
   clearPlaceBoundsAndPlaceType() {

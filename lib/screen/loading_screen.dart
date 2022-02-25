@@ -18,6 +18,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white,
       decoration: BoxDecoration(
           gradient: LinearGradient(
               colors: [Colors.yellow[100]!, Colors.green[100]!])),

@@ -62,7 +62,11 @@ dependencies:
   flutter_cache_manager: ^3.3.0
   image_picker: ^0.8.4+9
   app_settings: ^4.1.1
+  fluttertoast: ^8.0.8
   
+  photo_view: 
+    git: https://github.com/bluefireteam/photo_view.git
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -88,7 +92,7 @@ flutter:
     - assets/credentials.json
     - assets/icons/facebooklogo.svg
     - assets/icons/googlelogo.svg
-    - assets/icons/linelogo.svg
+    - assets/icons/linelogo.png
     - assets/images/bot.png
     - assets/images/avatar.png
     - assets/json/place_detail_th.json

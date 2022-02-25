@@ -56,8 +56,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: <Widget>[
                       buildTextFieldEmail(),
                       buildTextFieldPassword(),
-                      buildSigninButton(context,
-                          iconWidget: Icon(Icons.login),
+                      buildSigninButton(context, Icon(Icons.login),
+                          isRow: true,
+                          height: null,
+                          width: null,
                           text: "เข้าสู่ระบบ",
                           textColor: Colors.black,
                           buttonColor: Colors.green[200],
@@ -79,39 +81,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                   emailController: emailController,
                                   passwordController: passwordController)),
                       buildLine("ยังไม่มีบัญชีใช่ไหม?"),
-                      buildSigninButton(context,
-                          iconWidget: Container(
-                              height: 30,
-                              width: 30,
-                              child: SvgPicture.asset(
-                                  "assets/icons/facebooklogo.svg")),
-                          text: "เข้าใช้งานด้วย Facebook",
-                          textColor: Colors.white,
-                          buttonColor: Colors.blue[600], handler: () {
-                        signInWithFacebook(context);
-                      }),
-                      buildSigninButton(context,
-                          iconWidget: Container(
-                              height: 30,
-                              width: 30,
-                              child: SvgPicture.asset(
-                                  "assets/icons/linelogo.svg")),
-                          text: "เข้าใช้งานด้วย Line",
-                          textColor: Colors.white,
-                          buttonColor: Colors.green[400],
-                          handler: () => signInWithLine(context)),
-                      buildSigninButton(context,
-                          iconWidget: Container(
-                              height: 30,
-                              width: 30,
-                              child: SvgPicture.asset(
-                                  "assets/icons/googlelogo.svg")),
-                          text: "เข้าใช้งานด้วย Google",
-                          textColor: Colors.grey[800],
-                          buttonColor: Colors.white,
-                          handler: () => signInWithGoogle(context)),
-                      buildSigninButton(context,
-                          iconWidget: Icon(Icons.person_add),
+                      buildSigninButton(context, Icon(Icons.person_add),
+                          isRow: true,
+                          height: null,
+                          width: null,
                           text: "ลงทะเบียน",
                           textColor: Colors.black,
                           buttonColor: Colors.orange[200], handler: () {
@@ -120,12 +93,69 @@ class _LoginScreenState extends State<LoginScreen> {
                             MaterialPageRoute(
                                 builder: (context) => SignupScreen()));
                       }),
+                      buildLine("เข้าใช้งานอย่างรวดเร็วโดยไม่ต้องลงทะเบียน"),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          buildSigninButton(
+                              context,
+                              Container(
+                                  height: 30,
+                                  width: 30,
+                                  child: SvgPicture.asset(
+                                      "assets/icons/facebooklogo.svg")),
+                              isRow: false,
+                              height: null,
+                              width: 70,
+                              text: "เฟซบุ๊ก",
+                              textColor: Colors.blue[600],
+                              buttonColor: Colors.white, handler: () {
+                            signInWithFacebook(context);
+                          }),
+                          buildSigninButton(
+                              context,
+                              Container(
+                                  height: 30,
+                                  width: 30,
+                                  child: Image.asset(
+                                    'assets/icons/linelogo.png',
+                                    width: 30,
+                                    height: 30,
+                                    fit: BoxFit.fill,
+                                  )),
+                              isRow: false,
+                              height: null,
+                              width: 70,
+                              text: "ไลน์",
+                              textColor: Colors.green,
+                              buttonColor: Colors.white,
+                              handler: () => signInWithLine(context)),
+                          buildSigninButton(
+                              context,
+                              Container(
+                                  height: 30,
+                                  width: 30,
+                                  child: SvgPicture.asset(
+                                      "assets/icons/googlelogo.svg")),
+                              isRow: false,
+                              height: null,
+                              width: 70,
+                              text: "กูเกิล",
+                              textColor: Colors.grey[800],
+                              buttonColor: Colors.white,
+                              handler: () => signInWithGoogle(context)),
+                        ],
+                      ),
                       buildLine("หากไม่สามารถเข้าสู่ระบบได้"),
-                      buildSigninButton(context,
-                          iconWidget: Icon(
+                      buildSigninButton(
+                          context,
+                          Icon(
                             Icons.password,
                             color: Colors.white,
                           ),
+                          isRow: true,
+                          height: null,
+                          width: null,
                           text: "ลืมรหัสผ่าน",
                           textColor: Colors.white,
                           buttonColor: Colors.red[300], handler: () {

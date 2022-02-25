@@ -36,6 +36,7 @@ dynamic tryParseJwt(String token) {
 Future signInWithLine(BuildContext context) async {
   final lineLoginResult = await LineAuth.LineSDK.instance
       .login(scopes: ["profile", "email", "openid"]);
+  print('lineLoginResult');
   logger.i(lineLoginResult.accessToken.data["id_token"]);
   var jwtDecode;
   if (!Platform.isAndroid || Platform.isIOS) {
@@ -69,7 +70,7 @@ Future signInWithLine(BuildContext context) async {
     "channelId": channelId,
     "email": email
   };
-  print(reqBody);
+  //print(reqBody);
   var firebaseToken = (await http.post(
           Uri.parse(
               "https://asia-east2-hdse-application.cloudfunctions.net/FirebaseAuth_generateToken"),

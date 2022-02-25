@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hdse_application/components/signin_button.dart';
 import 'package:hdse_application/screen/login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -66,26 +67,17 @@ class _SignupScreenState extends State<SignupScreen> {
                       buildTextFieldEmail(),
                       buildTextFieldPassword(),
                       buildTextFieldPasswordConfirm(),
-                      buildButtonSignUp(context)
+                      buildSigninButton(context, null,
+                          isRow: true,
+                          height: null,
+                          width: null,
+                          text: "ลงทะเบียน",
+                          textColor: Colors.black,
+                          buttonColor: Colors.green[200],
+                          handler: () => signUp()),
                     ],
                   )),
             )));
-  }
-
-  Widget buildButtonSignUp(BuildContext context) {
-    return InkWell(
-      child: Container(
-          constraints: BoxConstraints.expand(height: 50),
-          child: Text("ลงทะเบียน",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18, color: Colors.black)),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Colors.green[200]),
-          margin: EdgeInsets.only(top: 16),
-          padding: EdgeInsets.all(12)),
-      onTap: () => signUp(),
-    );
   }
 
   Container buildTextFieldEmail() {

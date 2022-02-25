@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:photo_view/photo_view.dart';
 
 class PlaceDetailScreen extends StatefulWidget {
   const PlaceDetailScreen({Key? key, this.placeID}) : super(key: key);
@@ -30,6 +31,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
   late TabController _tabController;
   int _selectedTabbar = 0;
   int? imageSlideshowIndex;
+
   // late final _kTabPages = <Widget>[detailTab(), navigateTab(), reviewsTab()];
   final _kTabs = <Tab>[
     Tab(
@@ -203,11 +205,14 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                         children: applicationBloc.photos
                             .map<Widget>((element) => Container(
                                   width: MediaQuery.of(context).size.width,
-                                  height: 200,
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          image: element,
-                                          fit: BoxFit.fitWidth)),
+                                  height: 500,
+                                  // decoration: BoxDecoration(
+                                  //     image: DecorationImage(
+                                  //         image: element,
+                                  //         fit: BoxFit.fitWidth))
+                                  child: PhotoView(
+                                    imageProvider: element,
+                                  ),
                                 ))
                             .toList(),
                         onPageChanged: (value) {
@@ -218,8 +223,11 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                         isLoop: true,
                       ),
                     ),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Flexible(
-                      flex: 3,
+                      flex: 2,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -287,332 +295,342 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('รายละเอียดสถานที่'),
-      ),
-      body: Consumer<ApplicationBloc>(
-          builder: (context, provider, Widget? child) {
-        if (provider.placeDetail == null)
-          return Center(child: CircularProgressIndicator());
-        else {
-          var typeString = provider.placeDetail!.types!.join(", ");
-          return NestedScrollView(
-              headerSliverBuilder: (context, value) {
-                return [
-                  SliverToBoxAdapter(
-                    child: Container(
-                      padding: EdgeInsets.all(0),
-                      child: Column(children: [
-                        if (provider.photos.isNotEmpty)
-                          GestureDetector(
-                            onTap: () {
-                              _showImage(context);
-                            },
-                            child: ImageSlideshow(
-                              // width: 400,
-                              height: 200,
-                              initialPage: imageSlideshowIndex!,
-                              indicatorColor: Colors.green[400],
-                              indicatorBackgroundColor: Colors.grey[600],
-                              children: provider.photos
-                                  .map((element) => Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        height: 200,
-                                        decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: element,
-                                                fit: BoxFit.fitWidth)),
-                                      ))
-                                  .toList(),
-                              onPageChanged: (value) {
-                                print("photo : " + value.toString());
-                                imageSlideshowIndex = value;
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: Text('รายละเอียดสถานที่'),
+        ),
+        body: Consumer<ApplicationBloc>(
+            builder: (context, provider, Widget? child) {
+          if (provider.placeDetail == null)
+            return Center(child: CircularProgressIndicator());
+          else {
+            var typeString = provider.placeDetail!.types!.join(", ");
+            return NestedScrollView(
+                headerSliverBuilder: (context, value) {
+                  return [
+                    SliverToBoxAdapter(
+                      child: Container(
+                        padding: EdgeInsets.all(0),
+                        child: Column(children: [
+                          if (provider.photos.isNotEmpty)
+                            GestureDetector(
+                              onTap: () {
+                                _showImage(context);
                               },
-                              autoPlayInterval: 0,
-                              isLoop: true,
+                              child: ImageSlideshow(
+                                // width: 400,
+                                height: 200,
+                                initialPage: imageSlideshowIndex!,
+                                indicatorColor: Colors.green[400],
+                                indicatorBackgroundColor: Colors.grey[600],
+                                children: provider.photos
+                                    .map((element) => Container(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height: 200,
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: element,
+                                                  fit: BoxFit.fitWidth)),
+                                        ))
+                                    .toList(),
+                                onPageChanged: (value) {
+                                  print("photo : " + value.toString());
+                                  imageSlideshowIndex = value;
+                                },
+                                autoPlayInterval: 0,
+                                isLoop: true,
+                              ),
                             ),
-                          ),
-                        Padding(
-                          padding: const EdgeInsets.all(18.0),
-                          child: Container(
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10.0),
-                                )),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  provider.placeDetail!.name ?? '',
-                                  style: TextStyle(fontSize: 22),
-                                  textAlign: TextAlign.center,
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                provider.placeDetail!.openNow != null
-                                    ? (provider.placeDetail!.openNow == true
-                                        ? Text(
-                                            'เปิดอยู่ในขณะนี้',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.green[800],
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          )
-                                        : Text(
-                                            'ปิดอยู่ในขณะนี้',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.red,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ))
-                                    : Container(),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  typeString,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.black38,
+                          Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10.0),
+                                  )),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    provider.placeDetail!.name ?? '',
+                                    style: TextStyle(fontSize: 22),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                Divider(),
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Material(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(22.0)),
-                                        color: Colors.transparent,
-                                        child: InkWell(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(10.0),
-                                          ),
-                                          onTap: () {
-                                            if (provider
-                                                    .placeDetail!.phoneNumber !=
-                                                null)
-                                              launch(
-                                                  "tel://${provider.placeDetail!.phoneNumber}");
-                                          },
-                                          child: Container(
-                                            width: 70,
-                                            child: Column(
-                                              children: [
-                                                Icon(
-                                                  Icons.phone,
-                                                  color: provider.placeDetail!
-                                                              .phoneNumber !=
-                                                          null
-                                                      ? Colors.green[800]
-                                                      : Colors.grey,
-                                                  size: 30,
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Text(
-                                                  "โทรออก",
-                                                  style: TextStyle(
-                                                    fontSize: 17,
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  provider.placeDetail!.openNow != null
+                                      ? (provider.placeDetail!.openNow == true
+                                          ? Text(
+                                              'เปิดอยู่ในขณะนี้',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.green[800],
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            )
+                                          : Text(
+                                              'ปิดอยู่ในขณะนี้',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.red,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ))
+                                      : Container(),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    typeString,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.black38,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  Divider(
+                                    color: Colors.grey,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Material(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(22.0)),
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0),
+                                            ),
+                                            onTap: () {
+                                              if (provider.placeDetail!
+                                                      .phoneNumber !=
+                                                  null)
+                                                launch(
+                                                    "tel://${provider.placeDetail!.phoneNumber}");
+                                            },
+                                            child: Container(
+                                              width: 70,
+                                              child: Column(
+                                                children: [
+                                                  Icon(
+                                                    Icons.phone,
                                                     color: provider.placeDetail!
                                                                 .phoneNumber !=
                                                             null
                                                         ? Colors.green[800]
                                                         : Colors.grey,
+                                                    size: 30,
                                                   ),
-                                                )
-                                              ],
+                                                  SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Text(
+                                                    "โทรออก",
+                                                    style: TextStyle(
+                                                      fontSize: 17,
+                                                      color: provider
+                                                                  .placeDetail!
+                                                                  .phoneNumber !=
+                                                              null
+                                                          ? Colors.green[800]
+                                                          : Colors.grey,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        width: 30,
-                                      ),
-                                      Material(
-                                        color: Colors.transparent,
-                                        child: InkWell(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(10.0),
-                                          ),
-                                          onTap: () {
-                                            if (provider.placeDetail!.website !=
-                                                null) {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          WebViewService(
-                                                            title:
-                                                                'ดูข้อมูลเพิ่มเติม',
-                                                            link: provider
-                                                                .placeDetail!
-                                                                .website
-                                                                .toString(),
-                                                          )));
-                                            }
-                                          },
-                                          child: Container(
-                                            width: 70,
-                                            child: Column(
-                                              children: [
-                                                Icon(
-                                                  Icons.public,
-                                                  color: provider.placeDetail!
-                                                              .website !=
-                                                          null
-                                                      ? Colors.green[800]
-                                                      : Colors.grey,
-                                                  size: 30,
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Text(
-                                                  "เว็บไซต์",
-                                                  style: TextStyle(
-                                                    fontSize: 17,
+                                        SizedBox(
+                                          width: 30,
+                                        ),
+                                        Material(
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0),
+                                            ),
+                                            onTap: () {
+                                              if (provider
+                                                      .placeDetail!.website !=
+                                                  null) {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            WebViewService(
+                                                              title:
+                                                                  'ดูข้อมูลเพิ่มเติม',
+                                                              link: provider
+                                                                  .placeDetail!
+                                                                  .website
+                                                                  .toString(),
+                                                            )));
+                                              }
+                                            },
+                                            child: Container(
+                                              width: 70,
+                                              child: Column(
+                                                children: [
+                                                  Icon(
+                                                    Icons.public,
                                                     color: provider.placeDetail!
                                                                 .website !=
                                                             null
                                                         ? Colors.green[800]
                                                         : Colors.grey,
+                                                    size: 30,
                                                   ),
-                                                )
-                                              ],
+                                                  SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Text(
+                                                    "เว็บไซต์",
+                                                    style: TextStyle(
+                                                      fontSize: 17,
+                                                      color: provider
+                                                                  .placeDetail!
+                                                                  .website !=
+                                                              null
+                                                          ? Colors.green[800]
+                                                          : Colors.grey,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        width: 30,
-                                      ),
-                                      Material(
-                                        color: Colors.transparent,
-                                        child: InkWell(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(10.0),
-                                          ),
-                                          onTap: () {},
-                                          child: Container(
-                                            width: 70,
-                                            child: Column(
-                                              children: [
-                                                Icon(
-                                                  Icons.bookmark_add_outlined,
-                                                  color: Colors.green[800],
-                                                  size: 30,
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Text(
-                                                  "บันทึก",
-                                                  style: TextStyle(
-                                                    fontSize: 17,
+                                        SizedBox(
+                                          width: 30,
+                                        ),
+                                        Material(
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0),
+                                            ),
+                                            onTap: () {},
+                                            child: Container(
+                                              width: 70,
+                                              child: Column(
+                                                children: [
+                                                  Icon(
+                                                    Icons.bookmark_add_outlined,
                                                     color: Colors.green[800],
+                                                    size: 30,
                                                   ),
-                                                )
-                                              ],
+                                                  SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Text(
+                                                    "บันทึก",
+                                                    style: TextStyle(
+                                                      fontSize: 17,
+                                                      color: Colors.green[800],
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 18, right: 18),
-                          child: Container(
-                            // height: 200,
-                            padding: EdgeInsets.only(left: 10, right: 10),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10.0),
-                                topRight: Radius.circular(10.0),
+                                ],
                               ),
                             ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                TabBar(
-                                  onTap: (index) {
-                                    print('TabBar : $index');
-                                    setState(() {
-                                      _selectedTabbar = index;
-                                    });
-                                  },
-                                  labelColor: Colors.green[800],
-                                  unselectedLabelColor: Colors.black54,
-                                  controller: _tabController,
-                                  tabs: _kTabs,
-                                ),
-                                // Builder(builder: (_) {
-                                //   if (_selectedTabbar == 0) {
-                                //     return detailTab();
-                                //   } else if (_selectedTabbar == 1) {
-                                //     return navigateTab();
-                                //   } else {
-                                //     return reviewsTab();
-                                //   }
-                                // }),
-                              ],
-                            ),
                           ),
-                        )
-                      ]),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 18, right: 18),
+                            child: Container(
+                              // height: 200,
+                              padding: EdgeInsets.only(left: 10, right: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10.0),
+                                  topRight: Radius.circular(10.0),
+                                ),
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  TabBar(
+                                    onTap: (index) {
+                                      print('TabBar : $index');
+                                      setState(() {
+                                        _selectedTabbar = index;
+                                      });
+                                    },
+                                    labelColor: Colors.green[800],
+                                    unselectedLabelColor: Colors.black54,
+                                    controller: _tabController,
+                                    tabs: _kTabs,
+                                  ),
+                                  // Builder(builder: (_) {
+                                  //   if (_selectedTabbar == 0) {
+                                  //     return detailTab();
+                                  //   } else if (_selectedTabbar == 1) {
+                                  //     return navigateTab();
+                                  //   } else {
+                                  //     return reviewsTab();
+                                  //   }
+                                  // }),
+                                ],
+                              ),
+                            ),
+                          )
+                        ]),
+                      ),
+                    )
+                  ];
+                },
+                body: Padding(
+                  padding:
+                      const EdgeInsets.only(left: 18.0, right: 18, bottom: 18),
+                  child: Container(
+                    padding: EdgeInsets.only(left: 10, right: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(10.0),
+                        bottomRight: Radius.circular(10.0),
+                      ),
                     ),
-                  )
-                ];
-              },
-              body: Padding(
-                padding:
-                    const EdgeInsets.only(left: 18.0, right: 18, bottom: 18),
-                child: Container(
-                  padding: EdgeInsets.only(left: 10, right: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(10.0),
-                      bottomRight: Radius.circular(10.0),
-                    ),
+                    // fit: FlexFit.loose,
+                    // constraints: BoxConstraints(
+                    //     minHeight: 200, maxHeight: double.infinity),
+                    // height: 100,
+                    child: TabBarView(
+                        physics: NeverScrollableScrollPhysics(),
+                        controller: _tabController,
+                        children: <Widget>[
+                          detailTab(),
+                          navigateTab(),
+                          ReviewsTab()
+                        ]),
                   ),
-                  // fit: FlexFit.loose,
-                  // constraints: BoxConstraints(
-                  //     minHeight: 200, maxHeight: double.infinity),
-                  // height: 100,
-                  child: TabBarView(
-                      physics: NeverScrollableScrollPhysics(),
-                      controller: _tabController,
-                      children: <Widget>[
-                        detailTab(),
-                        navigateTab(),
-                        reviewsTab()
-                      ]),
-                ),
-              ));
-        }
-      }),
+                ));
+          }
+        }),
+      ),
     );
   }
 }
