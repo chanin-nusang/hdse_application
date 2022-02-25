@@ -84,7 +84,6 @@ Widget detailTab() {
                           }
                         },
                         child: Container(
-                          width: 70,
                           child: Row(
                             children: [
                               Icon(

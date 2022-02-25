@@ -10,6 +10,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hdse_application/blocs/application_bloc.dart';
 import 'package:hdse_application/components/image_card.dart';
 import 'package:hdse_application/models/place_detail.dart';
+import 'package:hdse_application/screen/backdrop_menu/menu.dart';
 import 'package:hdse_application/screen/chatbot_screen.dart';
 import 'package:hdse_application/screen/login_screen.dart';
 import 'package:hdse_application/screen/maps_screen.dart';
@@ -115,10 +116,11 @@ class _HomeScreenState extends State<HomeScreen> {
         Navigator.push(
             context,
             new MaterialPageRoute(
-              builder: (context) => new SearchScreen(
-                  //   new PlaceDetailScreen(
-                  // placeID: "test",
-                  ),
+              builder: (context) =>
+                  // new SearchScreen(
+                  new PlaceDetailScreen(
+                placeID: "test",
+              ),
             ));
     } else
       // if (!manageExternalStorageStatus.isDenied) {
@@ -127,10 +129,11 @@ class _HomeScreenState extends State<HomeScreen> {
       Navigator.push(
           context,
           new MaterialPageRoute(
-            builder: (context) => new SearchScreen(
-                //   new PlaceDetailScreen(
-                // placeID: "test",
-                ),
+            builder: (context) =>
+                // new SearchScreen(
+                new PlaceDetailScreen(
+              placeID: "test",
+            ),
           ));
     // }
   }
@@ -152,26 +155,6 @@ class _HomeScreenState extends State<HomeScreen> {
       textTime = "สวัสดีตอนค่ำ";
     } else
       textTime = "สวัสดี";
-  }
-
-  void signOut(BuildContext context) async {
-    List<UserInfo> userInfo = _auth.currentUser!.providerData;
-    // if (userInfo[0].providerId == "google.com") {
-    //   googleSignIn.signOut();
-    // }
-    // if (userInfo[0].providerId == "facebook.com") {
-    //   facebookAuth.logOut();
-    // }
-    _auth.signOut().then((value) {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) => HomeScreen(title: "ยินดีต้อนรับ")),
-          ModalRoute.withName('/'));
-      print("Sign-out with provider = ${userInfo[0].providerId}");
-    }).catchError((error) {
-      print(error);
-    });
   }
 
   _showLoginBenefitsDialog() {
@@ -196,8 +179,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         text:
                             "เพื่อเก็บข้อมูลการสนทนากับแชทบอท และข้อมูลประวัติการค้นหาสถานที่ให้บริการด้านสุขภาพ เอาไว้ให้สามารถเรียกดูภายหลังได้ เราจะนำข้อมูลของท่าน เช่น ชื่อ อีเมล ไปใช้อ้างอิงในการเก็บข้อมูลการใช้งานแอปพลิเคชันของท่าน  ",
                         style: GoogleFonts.sarabun(
-                            textStyle:
-                                TextStyle(color: Colors.black, fontSize: 15)),
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15 *
+                                    MediaQuery.of(context).textScaleFactor)),
                         children: <TextSpan>[
                       TextSpan(
                           text: "ดู", style: TextStyle(color: Colors.black)),
@@ -354,7 +339,7 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      backLayer: setting(),
+      backLayer: menu(context),
       frontLayer: Container(
         color: Colors.green[200]!,
         child: SafeArea(
@@ -448,8 +433,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       text:
                           "เข้าสู่ระบบเพื่อประสบการณ์การใช้งานแอปพลิเคชันที่ดีสุด   ",
                       style: GoogleFonts.sarabun(
-                          textStyle:
-                              TextStyle(color: Colors.black, fontSize: 15)),
+                          textStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize:
+                                  15 * MediaQuery.of(context).textScaleFactor)),
                       children: <TextSpan>[
                     TextSpan(
                         recognizer: _loginBenefitsRecognizer,
@@ -511,47 +498,4 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       );
-
-  Widget setting() {
-    return Center(
-      child: user != null
-          ? ElevatedButton(
-              style: ElevatedButton.styleFrom(primary: Colors.white),
-              onPressed: () {
-                signOut(context);
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.exit_to_app,
-                    color: Colors.green[400],
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    "ออกจากระบบ",
-                    style: TextStyle(
-                        fontSize: 17,
-                        color: Colors.green[400],
-                        fontWeight: FontWeight.bold),
-                  )
-                ],
-              ))
-          : ElevatedButton(
-              style: ElevatedButton.styleFrom(primary: Colors.white),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()));
-              },
-              child: Text(
-                "เข้าสู่ระบบ",
-                style: TextStyle(
-                    fontSize: 17,
-                    color: Colors.green[400],
-                    fontWeight: FontWeight.bold),
-              )),
-    );
-  }
 }

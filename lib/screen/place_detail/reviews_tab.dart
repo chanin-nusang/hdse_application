@@ -370,7 +370,9 @@ class _ReviewsTabState extends State<ReviewsTab> {
                                           style: GoogleFonts.sarabun(
                                               textStyle: TextStyle(
                                                   color: Colors.black,
-                                                  fontSize: 16)),
+                                                  fontSize: 16 *
+                                                      MediaQuery.of(context)
+                                                          .textScaleFactor)),
                                           children: <TextSpan>[
                                         TextSpan(
                                             recognizer: _reviewRecognizer,

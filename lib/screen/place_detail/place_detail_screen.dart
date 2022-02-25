@@ -33,33 +33,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
   int? imageSlideshowIndex;
 
   // late final _kTabPages = <Widget>[detailTab(), navigateTab(), reviewsTab()];
-  final _kTabs = <Tab>[
-    Tab(
-      height: 35,
-      child: Text('รายละเอียด',
-          style: GoogleFonts.sarabun(
-              textStyle: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ))),
-    ),
-    Tab(
-        height: 35,
-        child: Text('นำทาง',
-            style: GoogleFonts.sarabun(
-                textStyle: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            )))),
-    Tab(
-        height: 35,
-        child: Text('คำวิจารณ์',
-            style: GoogleFonts.sarabun(
-                textStyle: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            )))),
-  ];
+  List<Tab> _kTabs = [];
   @override
   void initState() {
     imageSlideshowIndex = 0;
@@ -295,6 +269,33 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
 
   @override
   Widget build(BuildContext context) {
+    _kTabs = <Tab>[
+      Tab(
+        height: 40 * MediaQuery.of(context).textScaleFactor,
+        child: Text('รายละเอียด',
+            style: GoogleFonts.sarabun(
+                textStyle: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ))),
+      ),
+      Tab(
+          height: 40 * MediaQuery.of(context).textScaleFactor,
+          child: Text('นำทาง',
+              style: GoogleFonts.sarabun(
+                  textStyle: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              )))),
+      Tab(
+          height: 40 * MediaQuery.of(context).textScaleFactor,
+          child: Text('คำวิจารณ์',
+              style: GoogleFonts.sarabun(
+                  textStyle: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              )))),
+    ];
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(

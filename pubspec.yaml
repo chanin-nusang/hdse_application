@@ -95,6 +95,7 @@ flutter:
     - assets/icons/linelogo.png
     - assets/images/bot.png
     - assets/images/avatar.png
+    - assets/images/hdse-logo-square.png
     - assets/json/place_detail_th.json
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

@@ -43,129 +43,131 @@ class _LoginScreenState extends State<LoginScreen> {
         body: Container(
             color: Colors.green[50],
             child: Center(
-              child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      gradient: LinearGradient(
-                          colors: [Colors.yellow[100]!, Colors.green[100]!])),
-                  margin: EdgeInsets.all(32),
-                  padding: EdgeInsets.all(24),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      buildTextFieldEmail(),
-                      buildTextFieldPassword(),
-                      buildSigninButton(context, Icon(Icons.login),
-                          isRow: true,
-                          height: null,
-                          width: null,
-                          text: "เข้าสู่ระบบ",
-                          textColor: Colors.black,
-                          buttonColor: Colors.green[200],
-                          handler: () => emailController.text.isEmpty ||
-                                  passwordController.text.isEmpty
-                              ? {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                    content: Text(
-                                        "อีเมล หรือ รหัสผ่าน ไม่ถูกต้อง",
-                                        style: GoogleFonts.sarabun(
-                                            textStyle: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 18))),
-                                    backgroundColor: Colors.red,
-                                  ))
-                                }
-                              : signInWithPassword(context,
-                                  emailController: emailController,
-                                  passwordController: passwordController)),
-                      buildLine("ยังไม่มีบัญชีใช่ไหม?"),
-                      buildSigninButton(context, Icon(Icons.person_add),
-                          isRow: true,
-                          height: null,
-                          width: null,
-                          text: "ลงทะเบียน",
-                          textColor: Colors.black,
-                          buttonColor: Colors.orange[200], handler: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignupScreen()));
-                      }),
-                      buildLine("เข้าใช้งานอย่างรวดเร็วโดยไม่ต้องลงทะเบียน"),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          buildSigninButton(
+              child: SingleChildScrollView(
+                child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        gradient: LinearGradient(
+                            colors: [Colors.yellow[100]!, Colors.green[100]!])),
+                    margin: EdgeInsets.all(32),
+                    padding: EdgeInsets.all(24),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        buildTextFieldEmail(),
+                        buildTextFieldPassword(),
+                        buildSigninButton(context, Icon(Icons.login),
+                            isRow: true,
+                            height: null,
+                            width: null,
+                            text: "เข้าสู่ระบบ",
+                            textColor: Colors.black,
+                            buttonColor: Colors.green[200],
+                            handler: () => emailController.text.isEmpty ||
+                                    passwordController.text.isEmpty
+                                ? {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Text(
+                                          "อีเมล หรือ รหัสผ่าน ไม่ถูกต้อง",
+                                          style: GoogleFonts.sarabun(
+                                              textStyle: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18))),
+                                      backgroundColor: Colors.red,
+                                    ))
+                                  }
+                                : signInWithPassword(context,
+                                    emailController: emailController,
+                                    passwordController: passwordController)),
+                        buildLine("ยังไม่มีบัญชีใช่ไหม?"),
+                        buildSigninButton(context, Icon(Icons.person_add),
+                            isRow: true,
+                            height: null,
+                            width: null,
+                            text: "ลงทะเบียน",
+                            textColor: Colors.black,
+                            buttonColor: Colors.orange[200], handler: () {
+                          Navigator.push(
                               context,
-                              Container(
-                                  height: 30,
-                                  width: 30,
-                                  child: SvgPicture.asset(
-                                      "assets/icons/facebooklogo.svg")),
-                              isRow: false,
-                              height: null,
-                              width: 70,
-                              text: "เฟซบุ๊ก",
-                              textColor: Colors.blue[600],
-                              buttonColor: Colors.white, handler: () {
-                            signInWithFacebook(context);
-                          }),
-                          buildSigninButton(
-                              context,
-                              Container(
-                                  height: 30,
-                                  width: 30,
-                                  child: Image.asset(
-                                    'assets/icons/linelogo.png',
-                                    width: 30,
+                              MaterialPageRoute(
+                                  builder: (context) => SignupScreen()));
+                        }),
+                        buildLine("เข้าใช้งานอย่างรวดเร็วโดยไม่ต้องลงทะเบียน"),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            buildSigninButton(
+                                context,
+                                Container(
                                     height: 30,
-                                    fit: BoxFit.fill,
-                                  )),
-                              isRow: false,
-                              height: null,
-                              width: 70,
-                              text: "ไลน์",
-                              textColor: Colors.green,
-                              buttonColor: Colors.white,
-                              handler: () => signInWithLine(context)),
-                          buildSigninButton(
-                              context,
-                              Container(
-                                  height: 30,
-                                  width: 30,
-                                  child: SvgPicture.asset(
-                                      "assets/icons/googlelogo.svg")),
-                              isRow: false,
-                              height: null,
-                              width: 70,
-                              text: "กูเกิล",
-                              textColor: Colors.grey[800],
-                              buttonColor: Colors.white,
-                              handler: () => signInWithGoogle(context)),
-                        ],
-                      ),
-                      buildLine("หากไม่สามารถเข้าสู่ระบบได้"),
-                      buildSigninButton(
-                          context,
-                          Icon(
-                            Icons.password,
-                            color: Colors.white,
-                          ),
-                          isRow: true,
-                          height: null,
-                          width: null,
-                          text: "ลืมรหัสผ่าน",
-                          textColor: Colors.white,
-                          buttonColor: Colors.red[300], handler: () {
-                        Navigator.push(
+                                    width: 30,
+                                    child: SvgPicture.asset(
+                                        "assets/icons/facebooklogo.svg")),
+                                isRow: false,
+                                height: null,
+                                width: 70,
+                                text: "เฟซบุ๊ก",
+                                textColor: Colors.blue[600],
+                                buttonColor: Colors.white, handler: () {
+                              signInWithFacebook(context);
+                            }),
+                            buildSigninButton(
+                                context,
+                                Container(
+                                    height: 30,
+                                    width: 30,
+                                    child: Image.asset(
+                                      'assets/icons/linelogo.png',
+                                      width: 30,
+                                      height: 30,
+                                      fit: BoxFit.fill,
+                                    )),
+                                isRow: false,
+                                height: null,
+                                width: 70,
+                                text: "ไลน์",
+                                textColor: Colors.green,
+                                buttonColor: Colors.white,
+                                handler: () => signInWithLine(context)),
+                            buildSigninButton(
+                                context,
+                                Container(
+                                    height: 30,
+                                    width: 30,
+                                    child: SvgPicture.asset(
+                                        "assets/icons/googlelogo.svg")),
+                                isRow: false,
+                                height: null,
+                                width: 70,
+                                text: "กูเกิล",
+                                textColor: Colors.grey[800],
+                                buttonColor: Colors.white,
+                                handler: () => signInWithGoogle(context)),
+                          ],
+                        ),
+                        buildLine("หากไม่สามารถเข้าสู่ระบบได้"),
+                        buildSigninButton(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => ResetPasswordScreen()));
-                      })
-                    ],
-                  )),
+                            Icon(
+                              Icons.password,
+                              color: Colors.white,
+                            ),
+                            isRow: true,
+                            height: null,
+                            width: null,
+                            text: "ลืมรหัสผ่าน",
+                            textColor: Colors.white,
+                            buttonColor: Colors.red[300], handler: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ResetPasswordScreen()));
+                        })
+                      ],
+                    )),
+              ),
             )));
   }
 
@@ -198,9 +200,28 @@ class _LoginScreenState extends State<LoginScreen> {
         margin: EdgeInsets.only(top: 16),
         child: Row(children: <Widget>[
           Expanded(child: Divider(color: Colors.green[800])),
-          Padding(
-              padding: EdgeInsets.all(6),
-              child: Text(text, style: TextStyle(color: Colors.black87))),
+          MediaQuery.of(context).textScaleFactor == 1
+              ? Padding(
+                  padding: EdgeInsets.all(6),
+                  child: Text(
+                    text,
+                    style: TextStyle(
+                      color: Colors.black87,
+                    ),
+                    textAlign: TextAlign.center,
+                  ))
+              : Expanded(
+                  flex: 1 * (text.length ~/ 10),
+                  child: Padding(
+                      padding: EdgeInsets.all(6),
+                      child: Text(
+                        text,
+                        style: TextStyle(
+                          color: Colors.black87,
+                        ),
+                        textAlign: TextAlign.center,
+                      )),
+                ),
           Expanded(child: Divider(color: Colors.green[800])),
         ]));
   }
