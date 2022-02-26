@@ -1,10 +1,14 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hdse_application/components/signin_button.dart';
-import 'package:hdse_application/screen/reset_password_screen.dart';
-import 'package:hdse_application/screen/signup_screen.dart';
+import 'package:hdse_application/screen/signin/reset_password_screen.dart';
+import 'package:hdse_application/screen/signin/reset_password_screen.dart';
+import 'package:hdse_application/screen/signin/signup_screen.dart';
 import 'package:hdse_application/services/check_auth.dart';
 import 'package:hdse_application/services/signin_service/signin_with_facebook.dart';
 import 'package:hdse_application/services/signin_service/signin_with_google.dart';
@@ -26,11 +30,22 @@ class _LoginScreenState extends State<LoginScreen> {
   final String facebookIcon = 'assets/icons/facebooklogo.svg';
   final String lineIcon = 'assets/icons/linelogo.svg';
   final String googleIcon = 'assets/icons/googlelogo.svg';
-
+  DocumentSnapshot? snapshot;
   @override
   void initState() {
     lineSDKInit();
+    // getData();
     super.initState();
+  }
+
+  void getData() async {
+    //use a Async-await function to get the data
+    final data = await FirebaseFirestore.instance
+        .collection("messages")
+        .doc('dvoeatqArsUQwH4XBWXP')
+        .get(); //get the data
+    Map<String, dynamic> map = data.data()!;
+    print('snapshot : ' + map['time'].toString());
   }
 
   @override

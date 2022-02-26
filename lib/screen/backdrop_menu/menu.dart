@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hdse_application/screen/backdrop_menu/about_dialog.dart';
+import 'package:hdse_application/screen/chatbot/archived_chat_list_screen.dart';
 import 'package:hdse_application/screen/home_screen.dart';
-import 'package:hdse_application/screen/login_screen.dart';
+import 'package:hdse_application/screen/signin/login_screen.dart';
 import 'package:hdse_application/services/webview.dart';
+import 'package:page_transition/page_transition.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 User? user;
@@ -71,8 +74,26 @@ Widget menu(BuildContext context) {
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(24.0),
                           topRight: Radius.circular(24.0),
-                        ),
-                        onTap: () {}),
+                        ), onTap: () {
+                      if (user != null)
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                              duration: const Duration(milliseconds: 250),
+                              reverseDuration:
+                                  const Duration(milliseconds: 250),
+                              type: PageTransitionType.rightToLeft,
+                              child: new ArchivedChatListScreen()),
+                        );
+                      else
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text("กรุณาลงชื่อเข้าใช้",
+                              style: GoogleFonts.sarabun(
+                                  textStyle: TextStyle(
+                                      color: Colors.white, fontSize: 18))),
+                          backgroundColor: Colors.red,
+                        ));
+                    }),
                     Divider(
                       height: 1,
                     ),

@@ -23,9 +23,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hdse_application/screen/chatbot/archived_chat_list_screen.dart';
 import 'package:hdse_application/screen/home_screen.dart';
-import 'package:hdse_application/services/speech_to_text.dart';
+import 'package:hdse_application/blocs/speech_to_text.dart';
 import 'package:hdse_application/services/webview.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/src/provider.dart';
@@ -48,6 +50,8 @@ class ChatbotScreen extends StatefulWidget {
 
 class _ChatbotScreenState extends State<ChatbotScreen>
     with SingleTickerProviderStateMixin {
+  User? user;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final List<ChatMessage> _messages = <ChatMessage>[];
   final TextEditingController _textController = TextEditingController();
   List<String> word = [
@@ -83,21 +87,25 @@ class _ChatbotScreenState extends State<ChatbotScreen>
   // TODO DialogflowGrpc class instance
   List<LocaleName> _localeNames = [];
   String? suggestLink;
+  var speechToTextBloc;
 
   @override
   void initState() {
     super.initState();
+    user = _auth.currentUser;
     _speechText = 'กำลังฟัง...';
     _speech = stt.SpeechToText();
     word.shuffle();
     initPlugin();
     animateController = AnimateIconController();
+    speechToTextBloc = Provider.of<SpeechToTextService>(context, listen: false);
   }
 
   @override
   void dispose() {
     _recorderStatus?.cancel();
     _audioStreamSubscription?.cancel();
+    speechToTextBloc.clearCurrentMessages();
     super.dispose();
   }
 
@@ -223,7 +231,8 @@ class _ChatbotScreenState extends State<ChatbotScreen>
         name: "น้องบอท",
         type: false,
       );
-
+      if (user != null)
+        speechToTextBloc.storeMessage(data?.queryResult.fulfillmentText, 'bot');
       setState(() {
         _messages.insert(0, botMessage);
         suggestWord = word;
@@ -246,6 +255,8 @@ class _ChatbotScreenState extends State<ChatbotScreen>
       );
 
       if (mounted) {
+        if (user != null) speechToTextBloc.storeMessage(text, user!.uid);
+
         setState(() {
           _messages.insert(0, message);
         });
@@ -296,6 +307,10 @@ class _ChatbotScreenState extends State<ChatbotScreen>
         );
 
         if (mounted) {
+          if (user != null)
+            speechToTextBloc.storeMessage(
+                data?.queryResult.fulfillmentText, 'bot');
+
           setState(() {
             _messages.insert(0, botMessage);
           });
@@ -553,170 +568,262 @@ class _ChatbotScreenState extends State<ChatbotScreen>
     );
   }
 
+  _showAskingMessageStoreDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            contentPadding: EdgeInsets.fromLTRB(25.0, 15.0, 25.0, 15.0),
+            scrollable: true,
+            content: Column(
+              children: [
+                Icon(
+                  Icons.mark_chat_unread_outlined,
+                  size: 40,
+                  color: Colors.green[200],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'ท่านต้องการบันทึกการสนทนาในครั้งนี้ไว้หรือไม่',
+                  style: TextStyle(fontSize: 15),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.white)),
+                        onPressed: () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                          Navigator.pop(context, false);
+                        },
+                        child: Text(
+                          "ออก",
+                          style: TextStyle(fontSize: 17, color: Colors.red),
+                        )),
+                    ElevatedButton(
+                        onPressed: () {
+                          speechToTextBloc.saveMessageToFireStore(context);
+                        },
+                        child: Text(
+                          "บันทึก",
+                          style: TextStyle(fontSize: 17),
+                        )),
+                  ],
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        // leading: new IconButton(
-        //     icon: new Icon(Icons.arrow_back),
-        //     onPressed: () {
-        //       _speech!.cancel();
-        //       Navigator.pop(context, true);
-        //     }),
-        title: Text("แชทบอท"),
-      ),
-      body: Column(children: <Widget>[
-        Flexible(
-            child: ListView.builder(
-          padding: EdgeInsets.all(8.0),
-          reverse: true,
-          itemBuilder: (_, int index) => _messages[index],
-          itemCount: _messages.length,
-        )),
-        // Divider(height: 1.0),
-        suggestWord.isNotEmpty
-            ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: !context.watch<SpeechToTextService>().isRecording
-                    ? suggestWordButton()
-                    : speechTextBox())
-            : Row(),
-        Consumer<SpeechToTextService>(builder: (context, speech, child) {
-          return Column(
-            children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        right: 5, left: 10, top: 10, bottom: 10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          boxShadow: [
-                            BoxShadow(
-                                blurRadius: .26,
-                                spreadRadius: level * 3,
-                                color: Colors.green[300]!.withOpacity(.3))
-                          ]),
-                      height: 50,
-                      width: 50,
-                      margin: EdgeInsets.symmetric(horizontal: 4.0),
-                      child: AvatarGlow(
-                        animate: speech.isRecording,
-                        glowColor: Theme.of(context).primaryColor,
-                        endRadius: 150,
-                        duration: const Duration(milliseconds: 2000),
-                        repeatPauseDuration: const Duration(milliseconds: 100),
-                        repeat: true,
-                        child: FloatingActionButton(
-                          backgroundColor:
-                              speech.isRecording ? Colors.green : Colors.white,
-                          child: AnimateIcons(
-                            startIcon: Icons.mic_off,
-                            endIcon: Icons.mic,
+    return WillPopScope(
+      onWillPop: () {
+        if (speechToTextBloc.currentMessages.length <= 1)
+          Navigator.pop(context, false);
+        else
+          _showAskingMessageStoreDialog(context);
 
-                            controller: animateController!,
-                            // add this tooltip for the start icon
-                            startTooltip: 'Icons.add_circle',
-                            // add this tooltip for the end icon
-                            endTooltip: 'Icons.add_circle_outline',
-                            size: 30.0,
-                            onStartIconPress: () {
-                              print("Clicked on Add Icon");
-                              checkMicrophonePermission();
-                              return true;
-                            },
-                            onEndIconPress: () {
-                              print("Clicked on Close Icon");
-                              checkMicrophonePermission();
-                              return true;
-                            },
-                            duration: Duration(milliseconds: 250),
-                            startIconColor: Colors.green,
-                            endIconColor: Colors.white,
-                            clockwise: false,
+        return Future.value(false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            IconButton(
+                onPressed: () {
+                  if (user != null)
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                          duration: const Duration(milliseconds: 250),
+                          reverseDuration: const Duration(milliseconds: 250),
+                          type: PageTransitionType.rightToLeft,
+                          child: new ArchivedChatListScreen()),
+                    );
+                  else
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("กรุณาลงชื่อเข้าใช้",
+                          style: GoogleFonts.sarabun(
+                              textStyle: TextStyle(
+                                  color: Colors.white, fontSize: 18))),
+                      backgroundColor: Colors.red,
+                    ));
+                },
+                icon: Icon(Icons.chat_rounded))
+          ],
+          // leading: new IconButton(
+          //     icon: new Icon(Icons.arrow_back),
+          //     onPressed: () {
+          //       _speech!.cancel();
+          //       Navigator.pop(context, true);
+          //     }),
+          title: Text("แชทบอท"),
+        ),
+        body: Column(children: <Widget>[
+          Flexible(
+              child: ListView.builder(
+            padding: EdgeInsets.all(8.0),
+            reverse: true,
+            itemBuilder: (_, int index) => _messages[index],
+            itemCount: _messages.length,
+          )),
+          // Divider(height: 1.0),
+          suggestWord.isNotEmpty
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: !context.watch<SpeechToTextService>().isRecording
+                      ? suggestWordButton()
+                      : speechTextBox())
+              : Row(),
+          Consumer<SpeechToTextService>(builder: (context, speech, child) {
+            return Column(
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          right: 5, left: 10, top: 10, bottom: 10),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            boxShadow: [
+                              BoxShadow(
+                                  blurRadius: .26,
+                                  spreadRadius: level * 3,
+                                  color: Colors.green[300]!.withOpacity(.3))
+                            ]),
+                        height: 50,
+                        width: 50,
+                        margin: EdgeInsets.symmetric(horizontal: 4.0),
+                        child: AvatarGlow(
+                          animate: speech.isRecording,
+                          glowColor: Theme.of(context).primaryColor,
+                          endRadius: 150,
+                          duration: const Duration(milliseconds: 2000),
+                          repeatPauseDuration:
+                              const Duration(milliseconds: 100),
+                          repeat: true,
+                          child: FloatingActionButton(
+                            backgroundColor: speech.isRecording
+                                ? Colors.green
+                                : Colors.white,
+                            child: AnimateIcons(
+                              startIcon: Icons.mic_off,
+                              endIcon: Icons.mic,
+
+                              controller: animateController!,
+                              // add this tooltip for the start icon
+                              startTooltip: 'Icons.add_circle',
+                              // add this tooltip for the end icon
+                              endTooltip: 'Icons.add_circle_outline',
+                              size: 30.0,
+                              onStartIconPress: () {
+                                print("Clicked on Add Icon");
+                                checkMicrophonePermission();
+                                return true;
+                              },
+                              onEndIconPress: () {
+                                print("Clicked on Close Icon");
+                                checkMicrophonePermission();
+                                return true;
+                              },
+                              duration: Duration(milliseconds: 250),
+                              startIconColor: Colors.green,
+                              endIconColor: Colors.white,
+                              clockwise: false,
+                            ),
+                            // Icon(
+                            //   speech.isRecording ? Icons.mic_off : Icons.mic,
+                            //   size: 30,
+                            //   color: speech.isRecording
+                            //       ? Colors.white
+                            //       : Colors.green,
+                            // ),
+                            onPressed: checkMicrophonePermission,
                           ),
-                          // Icon(
-                          //   speech.isRecording ? Icons.mic_off : Icons.mic,
-                          //   size: 30,
-                          //   color: speech.isRecording
-                          //       ? Colors.white
-                          //       : Colors.green,
-                          // ),
-                          onPressed: checkMicrophonePermission,
                         ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 0, right: 15, top: 10, bottom: 10),
-                      child: Container(
-                          margin: EdgeInsets.only(
-                              left: 0, top: 0, right: 0, bottom: 0),
-                          decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.2),
-                                  spreadRadius: 3,
-                                  blurRadius: 7,
-                                  offset: Offset(
-                                      0, 0), // changes position of shadow
-                                ),
-                              ],
-                              borderRadius: BorderRadius.circular(50),
-                              color: Theme.of(context).cardColor),
-                          child: IconTheme(
-                            data: IconThemeData(
-                                color: Theme.of(context).accentColor),
-                            child: Container(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Row(
-                                children: <Widget>[
-                                  Flexible(
-                                    child: TextField(
-                                      controller: _textController,
-                                      onSubmitted: handleSubmitted,
-                                      decoration: InputDecoration.collapsed(
-                                          hintText: "พิมพ์ข้อความ..."),
-                                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 0, right: 15, top: 10, bottom: 10),
+                        child: Container(
+                            margin: EdgeInsets.only(
+                                left: 0, top: 0, right: 0, bottom: 0),
+                            decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.2),
+                                    spreadRadius: 3,
+                                    blurRadius: 7,
+                                    offset: Offset(
+                                        0, 0), // changes position of shadow
                                   ),
-                                  Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 4.0),
-                                      child: IconButton(
-                                          icon: Icon(Icons.send),
-                                          onPressed: () {
-                                            if (_textController.text.isEmpty) {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(SnackBar(
-                                                content: Text(
-                                                    "กรุณาป้อนข้อความ หรือ เลือกคำแนะนำ",
-                                                    style: GoogleFonts.sarabun(
-                                                        textStyle: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 18))),
-                                                backgroundColor: Colors.red,
-                                              ));
-                                            } else {
-                                              handleSubmitted(
-                                                  _textController.text);
-                                            }
-                                          }))
                                 ],
+                                borderRadius: BorderRadius.circular(50),
+                                color: Theme.of(context).cardColor),
+                            child: IconTheme(
+                              data: IconThemeData(
+                                  color: Theme.of(context).accentColor),
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Flexible(
+                                      child: TextField(
+                                        controller: _textController,
+                                        onSubmitted: handleSubmitted,
+                                        decoration: InputDecoration.collapsed(
+                                            hintText: "พิมพ์ข้อความ..."),
+                                      ),
+                                    ),
+                                    Container(
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 4.0),
+                                        child: IconButton(
+                                            icon: Icon(Icons.send),
+                                            onPressed: () {
+                                              if (_textController
+                                                  .text.isEmpty) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                  content: Text(
+                                                      "กรุณาป้อนข้อความ หรือ เลือกคำแนะนำ",
+                                                      style: GoogleFonts.sarabun(
+                                                          textStyle: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 18))),
+                                                  backgroundColor: Colors.red,
+                                                ));
+                                              } else {
+                                                handleSubmitted(
+                                                    _textController.text);
+                                              }
+                                            }))
+                                  ],
+                                ),
                               ),
-                            ),
-                          )),
+                            )),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          );
-        })
-      ]),
+                  ],
+                ),
+              ],
+            );
+          })
+        ]),
+      ),
     );
   }
 }

@@ -49,7 +49,7 @@ Widget aboutDialog(BuildContext context) {
             Padding(
               padding: const EdgeInsets.only(left: 15, top: 5),
               child: Text(
-                'ชนินทร์ หนูแสง สาขาวิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยสงขลานครินทร์',
+                'ชนินทร์ หนูแสง สาขาวิชาวิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยสงขลานครินทร์',
               ),
             ),
             SizedBox(

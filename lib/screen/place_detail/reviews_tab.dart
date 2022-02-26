@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hdse_application/blocs/application_bloc.dart';
 import 'package:hdse_application/models/review.dart';
-import 'package:hdse_application/screen/login_screen.dart';
+import 'package:hdse_application/screen/signin/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
