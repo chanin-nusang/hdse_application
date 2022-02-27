@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hdse_application/blocs/speech_to_text.dart';
+import 'package:hdse_application/screen/chatbot/archived_chat_screen.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class ArchivedChatListScreen extends StatefulWidget {
@@ -68,18 +70,21 @@ class _ArchivedChatListScreenState extends State<ArchivedChatListScreen> {
                                       // print('inkwell ontap');
                                       // applicationBloc.getPlaceDetailToBloc(
                                       //     provider.placeResults[index].placeID);
-                                      // Navigator.push(
-                                      //   context,
-                                      //   PageTransition(
-                                      //       duration: const Duration(milliseconds: 250),
-                                      //       reverseDuration:
-                                      //           const Duration(milliseconds: 250),
-                                      //       type: PageTransitionType.rightToLeft,
-                                      //       child: new PlaceDetailScreen(
-                                      //         placeID: provider.placeResults[index].placeID,
-                                      //       )),
-
-                                      // );
+                                      print('chatID : ' +
+                                          provider.chatList[index].chatID!);
+                                      Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            duration: const Duration(
+                                                milliseconds: 250),
+                                            reverseDuration: const Duration(
+                                                milliseconds: 250),
+                                            type:
+                                                PageTransitionType.rightToLeft,
+                                            child: new ArchivedChatScreen(
+                                                chat:
+                                                    provider.chatList[index])),
+                                      );
                                     },
                                     child: AchivedChatListTile(
                                       savedTime:
@@ -115,7 +120,7 @@ class AchivedChatListTile extends StatelessWidget {
                   style: TextStyle(fontSize: 18),
                 ),
                 Text(
-                  'เวลา ${savedTime!.hour.toString().padLeft(2, '0')}.${savedTime!.minute.toString().padLeft(2, '0')} น.  วันที่ ${savedTime!.day}/${savedTime!.month}/${savedTime!.year}',
+                  'วันที่ ${savedTime!.day}/${savedTime!.month}/${savedTime!.year}  เวลา ${savedTime!.hour.toString().padLeft(2, '0')}.${savedTime!.minute.toString().padLeft(2, '0')} น.',
                   style: TextStyle(fontSize: 15, color: Colors.grey[700]),
                 )
               ],

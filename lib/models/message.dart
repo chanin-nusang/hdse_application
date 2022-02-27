@@ -9,8 +9,6 @@ class Message {
     return Message(
         sentAt: json['sentAt'] != null ? json['sentAt'].toDate() : null,
         sentBy: json['sentBy'] != null ? json['sentBy'] : null,
-        messageText: json['formatted_address'] != null
-            ? json['formatted_address']
-            : null);
+        messageText: json['messageText'] != null ? json['messageText'] : null);
   }
 }

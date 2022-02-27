@@ -29,6 +29,12 @@ class SpeechToTextService with ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteChatList(String chatID) {
+    chatList.removeWhere((element) => element.chatID == chatID);
+    if (chatList.length == 0) chatListIsEmpty = true;
+    notifyListeners();
+  }
+
   void clearChatList() {
     chatListIsEmpty = false;
     chatList = [];
@@ -40,7 +46,8 @@ class SpeechToTextService with ChangeNotifier {
         .doc(_auth.currentUser!.uid)
         .get(); //get the data
     var result = data.data()!;
-    if (result['messages'] != null) {
+    var mes = result['messages'] as List;
+    if (result['messages'] != null && mes.length > 0) {
       var chatMap = result['messages'] as List;
       chatList = chatMap.map((chat) => Chat.fromJson(chat)).toList();
     } else

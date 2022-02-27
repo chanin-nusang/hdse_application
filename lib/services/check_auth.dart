@@ -18,15 +18,30 @@ Future checkAuth(BuildContext context) async {
                 )),
         (Route<dynamic> route) => false);
     try {
-      FirebaseFirestore.instance
+      DocumentSnapshot snapShot = await FirebaseFirestore.instance
           .collection("users")
           .doc(_auth.currentUser!.uid)
-          .set({
-        "name": _auth.currentUser!.displayName ?? "",
-        "email": _auth.currentUser!.email ?? "",
-        "photoURL": _auth.currentUser!.photoURL ?? "",
-        "phoneNumber": _auth.currentUser!.phoneNumber ?? ""
-      });
+          .get();
+      if (snapShot.exists)
+        FirebaseFirestore.instance
+            .collection("users")
+            .doc(_auth.currentUser!.uid)
+            .update({
+          "name": _auth.currentUser!.displayName ?? "",
+          "email": _auth.currentUser!.email ?? "",
+          "photoURL": _auth.currentUser!.photoURL ?? "",
+          "phoneNumber": _auth.currentUser!.phoneNumber ?? ""
+        });
+      else
+        FirebaseFirestore.instance
+            .collection("users")
+            .doc(_auth.currentUser!.uid)
+            .set({
+          "name": _auth.currentUser!.displayName ?? "",
+          "email": _auth.currentUser!.email ?? "",
+          "photoURL": _auth.currentUser!.photoURL ?? "",
+          "phoneNumber": _auth.currentUser!.phoneNumber ?? ""
+        });
     } catch (e) {
       print("FirebaseFirestore.instance error : " + e.toString());
     }
