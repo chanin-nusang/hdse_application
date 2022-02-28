@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hdse_application/blocs/application_bloc.dart';
 import 'package:hdse_application/models/place.dart';
-import 'package:hdse_application/screen/place_search/places_screen.dart';
+import 'package:hdse_application/screen/place_search/places_list_screen.dart';
 import 'package:provider/provider.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -468,7 +468,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                             context,
                                             new MaterialPageRoute(
                                                 builder: (context) =>
-                                                    new PlacesScreen(
+                                                    new PlacesListScreen(
                                                       title: typeSelected,
                                                     ))),
                                         child: Text(

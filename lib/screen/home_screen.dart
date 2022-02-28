@@ -16,7 +16,7 @@ import 'package:hdse_application/screen/chatbot/chatbot_screen.dart';
 import 'package:hdse_application/screen/signin/login_screen.dart';
 import 'package:hdse_application/screen/maps_screen.dart';
 import 'package:hdse_application/screen/place_detail/place_detail_screen.dart';
-import 'package:hdse_application/screen/place_search/places_screen.dart';
+import 'package:hdse_application/screen/place_search/places_list_screen.dart';
 import 'package:hdse_application/screen/place_search/search_screen.dart';
 import 'package:hdse_application/blocs/speech_to_text.dart';
 import 'package:hdse_application/services/webview.dart';
@@ -120,7 +120,8 @@ class _HomeScreenState extends State<HomeScreen> {
               builder: (context) =>
                   // new SearchScreen(
                   new PlaceDetailScreen(
-                placeID: "test",
+                placeID: "ChIJ93MaP0goTTARvAysWt37MEg",
+                isSeved: false,
               ),
             ));
     } else
@@ -133,8 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
             builder: (context) =>
                 // new SearchScreen(
                 new PlaceDetailScreen(
-              placeID: "test",
-            ),
+                    placeID: "ChIJ93MaP0goTTARvAysWt37MEg", isSeved: false),
           ));
     // }
   }

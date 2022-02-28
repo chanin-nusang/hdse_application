@@ -5,14 +5,14 @@ import 'package:hdse_application/screen/place_detail/place_detail_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:page_transition/page_transition.dart';
 
-class PlacesScreen extends StatefulWidget {
-  const PlacesScreen({Key? key, this.title}) : super(key: key);
+class PlacesListScreen extends StatefulWidget {
+  const PlacesListScreen({Key? key, this.title}) : super(key: key);
   final String? title;
   @override
-  _PlacesScreenState createState() => _PlacesScreenState();
+  _PlacesListScreenState createState() => _PlacesListScreenState();
 }
 
-class _PlacesScreenState extends State<PlacesScreen> {
+class _PlacesListScreenState extends State<PlacesListScreen> {
   get itemBuilder => null;
   var applicationBloc;
   @override
@@ -59,8 +59,9 @@ class _PlacesScreenState extends State<PlacesScreen> {
                                     const Duration(milliseconds: 250),
                                 type: PageTransitionType.rightToLeft,
                                 child: new PlaceDetailScreen(
-                                  placeID: provider.placeResults[index].placeID,
-                                )),
+                                    placeID:
+                                        provider.placeResults[index].placeID,
+                                    isSeved: false)),
                             // new MaterialPageRoute(
                             //     builder: (context) => new PlaceDetailScreen(
                             //           placeID: provider

@@ -4,8 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hdse_application/blocs/application_bloc.dart';
 import 'package:provider/provider.dart';
 
-Widget detailTab() {
+Widget detailTab(bool isSaved) {
   return Consumer<ApplicationBloc>(builder: (context, provider, Widget? child) {
+    var detail = isSaved ? provider.archivedPlaceDetail : provider.placeDetail;
     return Container(
       padding: EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 20),
       child: ListView(
@@ -22,10 +23,10 @@ Widget detailTab() {
               SizedBox(
                 width: 15,
               ),
-              provider.placeDetail!.address != null
+              detail!.address != null
                   ? Flexible(
                       child: Text(
-                        provider.placeDetail!.address!,
+                        detail.address!,
                         style:
                             TextStyle(fontSize: 20, color: Colors.green[800]),
                       ),
@@ -47,7 +48,7 @@ Widget detailTab() {
           SizedBox(
             height: 5,
           ),
-          provider.placeDetail!.phoneNumber != null
+          detail.phoneNumber != null
               ? Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -57,7 +58,7 @@ Widget detailTab() {
                         SizedBox(
                           width: 15,
                         ),
-                        Text(provider.placeDetail!.phoneNumber!,
+                        Text(detail.phoneNumber!,
                             style: TextStyle(
                               fontSize: 25,
                               color: Colors.green[800],
@@ -71,9 +72,9 @@ Widget detailTab() {
                           Radius.circular(10.0),
                         ),
                         onTap: () {
-                          if (provider.placeDetail!.phoneNumber != null) {
-                            Clipboard.setData(ClipboardData(
-                                text: provider.placeDetail!.phoneNumber));
+                          if (detail.phoneNumber != null) {
+                            Clipboard.setData(
+                                ClipboardData(text: detail.phoneNumber));
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text('คัดลอกหมายเลขโทรศัพท์แล้ว',
                                   style: GoogleFonts.sarabun(
@@ -130,16 +131,15 @@ Widget detailTab() {
           SizedBox(
             height: 5,
           ),
-          provider.placeDetail!.weekdayOpen != null
+          detail.weekdayOpen != null
               ? ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: provider.placeDetail!.weekdayOpen!.length,
+                  itemCount: detail.weekdayOpen!.length,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.only(left: 15),
-                      child: Text(
-                          provider.placeDetail!.weekdayOpen![index] + ' น.',
+                      child: Text(detail.weekdayOpen![index] + ' น.',
                           style: TextStyle(
                             fontSize: 20,
                             color: Colors.green[800],

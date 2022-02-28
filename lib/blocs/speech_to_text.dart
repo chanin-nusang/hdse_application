@@ -40,7 +40,7 @@ class SpeechToTextService with ChangeNotifier {
     chatList = [];
   }
 
-  void getchatList() async {
+  void getChatList() async {
     final data = await FirebaseFirestore.instance
         .collection("users")
         .doc(_auth.currentUser!.uid)

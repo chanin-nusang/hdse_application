@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hdse_application/screen/backdrop_menu/about_dialog.dart';
 import 'package:hdse_application/screen/chatbot/archived_chat_list_screen.dart';
 import 'package:hdse_application/screen/home_screen.dart';
+import 'package:hdse_application/screen/place_search/archived_places_list_screen.dart';
 import 'package:hdse_application/screen/signin/login_screen.dart';
 import 'package:hdse_application/services/webview.dart';
 import 'package:page_transition/page_transition.dart';
@@ -104,8 +105,26 @@ Widget menu(BuildContext context) {
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(25.0),
                           bottomRight: Radius.circular(25.0),
-                        ),
-                        onTap: () {}),
+                        ), onTap: () {
+                      if (user != null)
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                              duration: const Duration(milliseconds: 250),
+                              reverseDuration:
+                                  const Duration(milliseconds: 250),
+                              type: PageTransitionType.rightToLeft,
+                              child: new ArchivedPlacesListScreen()),
+                        );
+                      else
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text("กรุณาลงชื่อเข้าใช้",
+                              style: GoogleFonts.sarabun(
+                                  textStyle: TextStyle(
+                                      color: Colors.white, fontSize: 18))),
+                          backgroundColor: Colors.red,
+                        ));
+                    }),
                   ],
                 )),
             SizedBox(

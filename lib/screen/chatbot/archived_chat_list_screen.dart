@@ -16,7 +16,7 @@ class _ArchivedChatListScreenState extends State<ArchivedChatListScreen> {
   @override
   void initState() {
     speechToTextBloc = Provider.of<SpeechToTextService>(context, listen: false);
-    speechToTextBloc.getchatList();
+    speechToTextBloc.getChatList();
     super.initState();
   }
 

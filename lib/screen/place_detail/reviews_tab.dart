@@ -10,8 +10,8 @@ import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ReviewsTab extends StatefulWidget {
-  const ReviewsTab({Key? key}) : super(key: key);
-
+  const ReviewsTab({Key? key, this.isSaved}) : super(key: key);
+  final bool? isSaved;
   @override
   _ReviewsTabState createState() => _ReviewsTabState();
 }
@@ -294,7 +294,9 @@ class _ReviewsTabState extends State<ReviewsTab> {
   Widget build(BuildContext context) {
     return Consumer<ApplicationBloc>(
         builder: (context, provider, Widget? child) {
-      if (provider.placeDetail!.reviews == null)
+      var detail =
+          widget.isSaved! ? provider.archivedPlaceDetail : provider.placeDetail;
+      if (detail!.reviews == null)
         return Center(
             child: Text(
           'ไม่มีการรีวิวในสถานที่นี้',
@@ -392,10 +394,9 @@ class _ReviewsTabState extends State<ReviewsTab> {
                       padding: EdgeInsets.only(top: 0),
                       physics: BouncingScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: provider.placeDetail!.reviews!.length,
+                      itemCount: detail.reviews!.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return reviewTile(
-                            provider.placeDetail!.reviews![index]);
+                        return reviewTile(detail.reviews![index]);
                       }),
                 ],
               ),

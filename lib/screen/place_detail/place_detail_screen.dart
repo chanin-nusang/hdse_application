@@ -1,4 +1,6 @@
 import 'package:app_settings/app_settings.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
@@ -8,6 +10,7 @@ import 'package:hdse_application/models/place_detail.dart';
 import 'package:hdse_application/screen/place_detail/detail_tab.dart';
 import 'package:hdse_application/screen/place_detail/navigate_tab.dart';
 import 'package:hdse_application/screen/place_detail/reviews_tab.dart';
+import 'package:hdse_application/screen/place_search/archived_places_list_screen.dart';
 import 'package:hdse_application/services/webview.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -18,14 +21,17 @@ import 'package:image_picker/image_picker.dart';
 import 'package:photo_view/photo_view.dart';
 
 class PlaceDetailScreen extends StatefulWidget {
-  const PlaceDetailScreen({Key? key, this.placeID}) : super(key: key);
+  const PlaceDetailScreen({Key? key, this.placeID, this.isSeved})
+      : super(key: key);
   final String? placeID;
+  final bool? isSeved;
   @override
   _PlaceDetailScreenState createState() => _PlaceDetailScreenState();
 }
 
 class _PlaceDetailScreenState extends State<PlaceDetailScreen>
     with SingleTickerProviderStateMixin {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   PlaceDetail? placeDetail;
   var applicationBloc;
   late TabController _tabController;
@@ -39,15 +45,23 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
     imageSlideshowIndex = 0;
     _tabController = TabController(length: 3, vsync: this);
     applicationBloc = Provider.of<ApplicationBloc>(context, listen: false);
-    Provider.of<ApplicationBloc>(context, listen: false)
-        .getPlaceDetailToBloc(widget.placeID!);
+    if (widget.isSeved!) {
+      applicationBloc.getArchivedPlaceDetailToBloc(widget.placeID!);
+    } else {
+      applicationBloc.getPlaceDetailToBloc(widget.placeID!);
+    }
     super.initState();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
-    applicationBloc.clearPlaceDetail();
+    if (widget.isSeved!) {
+      applicationBloc.clearArchivedPlaceDetail();
+    } else {
+      applicationBloc.clearPlaceDetail();
+    }
+
     super.dispose();
   }
 
@@ -80,9 +94,11 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
   }
 
   saveImageToGallery(bool isPermission) async {
+    var photosPath = widget.isSeved!
+        ? applicationBloc.photosPathArchived
+        : applicationBloc.photosPath;
     if (isPermission)
-      GallerySaver.saveImage(applicationBloc.photosPath[imageSlideshowIndex],
-              albumName: "HDSE")
+      GallerySaver.saveImage(photosPath[imageSlideshowIndex], albumName: "HDSE")
           .then((success) {
         success == true
             ? ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -154,6 +170,9 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
   }
 
   _showImage(BuildContext context) {
+    var photos = widget.isSeved!
+        ? applicationBloc.photosArchived
+        : applicationBloc.photos;
     Navigator.push(
         context,
         PageTransition(
@@ -176,7 +195,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                         initialPage: imageSlideshowIndex!,
                         indicatorColor: Colors.green[400],
                         indicatorBackgroundColor: Colors.grey[600],
-                        children: applicationBloc.photos
+                        children: photos
                             .map<Widget>((element) => Container(
                                   width: MediaQuery.of(context).size.width,
                                   height: 500,
@@ -267,6 +286,110 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
             )));
   }
 
+  _showDeletePlaceDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            contentPadding: EdgeInsets.fromLTRB(25.0, 15.0, 25.0, 15.0),
+            scrollable: true,
+            content: Column(
+              children: [
+                Icon(
+                  Icons.delete_forever_outlined,
+                  size: 40,
+                  color: Colors.green[200],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'ยืนยันที่จะลบสถานที่นี้ออกจากรายการที่บันทึกไว้',
+                  style: TextStyle(fontSize: 15),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.white)),
+                        onPressed: () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                        },
+                        child: Text(
+                          "ยกเลิก",
+                          style: TextStyle(fontSize: 17, color: Colors.green),
+                        )),
+                    ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.red)),
+                        onPressed: () async {
+                          try {
+                            // await FirebaseFirestore.instance
+                            //     .collection("places")
+                            //     .doc(widget.placeID)
+                            //     .delete();
+
+                            await FirebaseFirestore.instance
+                                .collection("users")
+                                .doc(_auth.currentUser!.uid)
+                                .update({
+                              'places': FieldValue.arrayRemove([
+                                {
+                                  'name': applicationBloc.archivedPlaceNameList[
+                                      applicationBloc
+                                          .archivedPlaceListIndexSelected],
+                                  'placeID':
+                                      applicationBloc.archivedPlaceIDList[
+                                          applicationBloc
+                                              .archivedPlaceListIndexSelected],
+                                  'savedTime': applicationBloc
+                                          .archivedPlaceSavedTimeList[
+                                      applicationBloc
+                                          .archivedPlaceListIndexSelected]
+                                }
+                              ])
+                            });
+
+                            Navigator.of(context, rootNavigator: true).pop();
+                            Navigator.pop(context, false);
+                            applicationBloc.deleteArchivedPlaceList();
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("ลบสถานที่เรียบร้อยแล้ว",
+                                  style: GoogleFonts.sarabun(
+                                      textStyle: TextStyle(
+                                          color: Colors.white, fontSize: 18))),
+                              backgroundColor: Colors.green,
+                            ));
+                          } catch (e) {
+                            print(e);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                  "ไม่สามารถลบสถานที่นี้ได้ โปรดลองอีกครั้ง",
+                                  style: GoogleFonts.sarabun(
+                                      textStyle: TextStyle(
+                                          color: Colors.white, fontSize: 18))),
+                              backgroundColor: Colors.red,
+                            ));
+                          }
+                        },
+                        child: Text(
+                          "ลบ",
+                          style: TextStyle(fontSize: 17, color: Colors.white),
+                        )),
+                  ],
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     _kTabs = <Tab>[
@@ -301,14 +424,50 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          actions: [
+            widget.isSeved!
+                ? IconButton(
+                    onPressed: () {
+                      _showDeletePlaceDialog(context);
+                    },
+                    icon: Icon(Icons.delete_rounded))
+                : IconButton(
+                    onPressed: () {
+                      if (_auth.currentUser != null)
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                              duration: const Duration(milliseconds: 250),
+                              reverseDuration:
+                                  const Duration(milliseconds: 250),
+                              type: PageTransitionType.rightToLeft,
+                              child: new ArchivedPlacesListScreen()),
+                        );
+                      else
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text("กรุณาลงชื่อเข้าใช้",
+                              style: GoogleFonts.sarabun(
+                                  textStyle: TextStyle(
+                                      color: Colors.white, fontSize: 18))),
+                          backgroundColor: Colors.red,
+                        ));
+                    },
+                    icon: Icon(Icons.bookmarks_rounded))
+          ],
           title: Text('รายละเอียดสถานที่'),
         ),
         body: Consumer<ApplicationBloc>(
             builder: (context, provider, Widget? child) {
-          if (provider.placeDetail == null)
+          var detail = widget.isSeved!
+              ? provider.archivedPlaceDetail
+              : provider.placeDetail;
+          var photos =
+              widget.isSeved! ? provider.photosArchived : provider.photos;
+
+          if (detail == null)
             return Center(child: CircularProgressIndicator());
           else {
-            var typeString = provider.placeDetail!.types!.join(", ");
+            var typeString = detail.types!.join(", ");
             return NestedScrollView(
                 headerSliverBuilder: (context, value) {
                   return [
@@ -316,7 +475,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                       child: Container(
                         padding: EdgeInsets.all(0),
                         child: Column(children: [
-                          if (provider.photos.isNotEmpty)
+                          if (photos.isNotEmpty)
                             GestureDetector(
                               onTap: () {
                                 _showImage(context);
@@ -327,7 +486,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                                 initialPage: imageSlideshowIndex!,
                                 indicatorColor: Colors.green[400],
                                 indicatorBackgroundColor: Colors.grey[600],
-                                children: provider.photos
+                                children: photos
                                     .map((element) => Container(
                                           width:
                                               MediaQuery.of(context).size.width,
@@ -360,15 +519,15 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    provider.placeDetail!.name ?? '',
+                                    detail.name ?? '',
                                     style: TextStyle(fontSize: 22),
                                     textAlign: TextAlign.center,
                                   ),
                                   SizedBox(
                                     height: 5,
                                   ),
-                                  provider.placeDetail!.openNow != null
-                                      ? (provider.placeDetail!.openNow == true
+                                  detail.openNow != null
+                                      ? (detail.openNow == true
                                           ? Text(
                                               'เปิดอยู่ในขณะนี้',
                                               style: TextStyle(
@@ -416,20 +575,17 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                                               Radius.circular(10.0),
                                             ),
                                             onTap: () {
-                                              if (provider.placeDetail!
-                                                      .phoneNumber !=
-                                                  null)
+                                              if (detail.phoneNumber != null)
                                                 launch(
-                                                    "tel://${provider.placeDetail!.phoneNumber}");
+                                                    "tel://${detail.phoneNumber}");
                                             },
                                             child: Container(
-                                              width: 70,
+                                              width: 90,
                                               child: Column(
                                                 children: [
                                                   Icon(
                                                     Icons.phone,
-                                                    color: provider.placeDetail!
-                                                                .phoneNumber !=
+                                                    color: detail.phoneNumber !=
                                                             null
                                                         ? Colors.green[800]
                                                         : Colors.grey,
@@ -442,12 +598,12 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                                                     "โทรออก",
                                                     style: TextStyle(
                                                       fontSize: 17,
-                                                      color: provider
-                                                                  .placeDetail!
-                                                                  .phoneNumber !=
-                                                              null
-                                                          ? Colors.green[800]
-                                                          : Colors.grey,
+                                                      color:
+                                                          detail.phoneNumber !=
+                                                                  null
+                                                              ? Colors
+                                                                  .green[800]
+                                                              : Colors.grey,
                                                     ),
                                                   )
                                                 ],
@@ -456,7 +612,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                                           ),
                                         ),
                                         SizedBox(
-                                          width: 30,
+                                          width: 20,
                                         ),
                                         Material(
                                           color: Colors.transparent,
@@ -465,9 +621,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                                               Radius.circular(10.0),
                                             ),
                                             onTap: () {
-                                              if (provider
-                                                      .placeDetail!.website !=
-                                                  null) {
+                                              if (detail.website != null) {
                                                 Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
@@ -475,24 +629,22 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                                                             WebViewService(
                                                               title:
                                                                   'ดูข้อมูลเพิ่มเติม',
-                                                              link: provider
-                                                                  .placeDetail!
+                                                              link: detail
                                                                   .website
                                                                   .toString(),
                                                             )));
                                               }
                                             },
                                             child: Container(
-                                              width: 70,
+                                              width: 90,
                                               child: Column(
                                                 children: [
                                                   Icon(
                                                     Icons.public,
-                                                    color: provider.placeDetail!
-                                                                .website !=
-                                                            null
-                                                        ? Colors.green[800]
-                                                        : Colors.grey,
+                                                    color:
+                                                        detail.website != null
+                                                            ? Colors.green[800]
+                                                            : Colors.grey,
                                                     size: 30,
                                                   ),
                                                   SizedBox(
@@ -502,9 +654,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                                                     "เว็บไซต์",
                                                     style: TextStyle(
                                                       fontSize: 17,
-                                                      color: provider
-                                                                  .placeDetail!
-                                                                  .website !=
+                                                      color: detail.website !=
                                                               null
                                                           ? Colors.green[800]
                                                           : Colors.grey,
@@ -516,7 +666,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                                           ),
                                         ),
                                         SizedBox(
-                                          width: 30,
+                                          width: 20,
                                         ),
                                         Material(
                                           color: Colors.transparent,
@@ -524,24 +674,42 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                                             borderRadius: BorderRadius.all(
                                               Radius.circular(10.0),
                                             ),
-                                            onTap: () {},
+                                            onTap: () {
+                                              if (provider.isPlaceArchived ==
+                                                  false)
+                                                applicationBloc
+                                                    .savePlaceToFireStore(
+                                                        context);
+                                            },
                                             child: Container(
-                                              width: 70,
+                                              width: 90,
                                               child: Column(
                                                 children: [
                                                   Icon(
-                                                    Icons.bookmark_add_outlined,
-                                                    color: Colors.green[800],
+                                                    provider.isPlaceArchived
+                                                        ? Icons
+                                                            .bookmark_added_outlined
+                                                        : Icons
+                                                            .bookmark_add_outlined,
+                                                    color:
+                                                        provider.isPlaceArchived
+                                                            ? Colors.grey[400]
+                                                            : Colors.green[800],
                                                     size: 30,
                                                   ),
                                                   SizedBox(
                                                     height: 5,
                                                   ),
                                                   Text(
-                                                    "บันทึก",
+                                                    provider.isPlaceArchived
+                                                        ? "บันทึกแล้ว"
+                                                        : "บันทึก",
                                                     style: TextStyle(
                                                       fontSize: 17,
-                                                      color: Colors.green[800],
+                                                      color: provider
+                                                              .isPlaceArchived
+                                                          ? Colors.grey[400]
+                                                          : Colors.green[800],
                                                     ),
                                                   )
                                                 ],
@@ -623,9 +791,9 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                         physics: NeverScrollableScrollPhysics(),
                         controller: _tabController,
                         children: <Widget>[
-                          detailTab(),
-                          navigateTab(),
-                          ReviewsTab()
+                          detailTab(widget.isSeved!),
+                          navigateTab(widget.isSeved!),
+                          ReviewsTab(isSaved: widget.isSeved!)
                         ]),
                   ),
                 ));
