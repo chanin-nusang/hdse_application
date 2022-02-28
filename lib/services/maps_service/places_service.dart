@@ -48,8 +48,17 @@ class PlacesService {
         await rootBundle.loadString('assets/json/place_detail_th.json');
     final json = await convert.jsonDecode(response);
     //-----***-----
+    final String responseFromType =
+        await rootBundle.loadString('assets/json/place_type.json');
+    final jsonFromType = await convert.jsonDecode(responseFromType);
+    var typeEnList = json['result']['types'] as List;
+    var typeEnToTh = typeEnList
+        .map((typeEn) => jsonFromType[typeEn] != null
+            ? jsonFromType[typeEn].toString()
+            : typeEn.toString())
+        .toList();
     var jsonResults = json['result'];
-    return PlaceDetail.fromJson(jsonResults);
+    return PlaceDetail.fromJson(jsonResults, typeEnToTh);
   }
 
   Future<String> getPlacePhotos(String photoReferance) async {

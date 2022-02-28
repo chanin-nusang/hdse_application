@@ -372,7 +372,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                                           ? Text(
                                               'เปิดอยู่ในขณะนี้',
                                               style: TextStyle(
-                                                fontSize: 16,
+                                                fontSize: 17,
                                                 color: Colors.green[800],
                                               ),
                                               textAlign: TextAlign.center,
@@ -380,7 +380,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                                           : Text(
                                               'ปิดอยู่ในขณะนี้',
                                               style: TextStyle(
-                                                fontSize: 16,
+                                                fontSize: 17,
                                                 color: Colors.red,
                                               ),
                                               textAlign: TextAlign.center,
@@ -392,7 +392,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                                   Text(
                                     typeString,
                                     style: TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 16,
                                       color: Colors.black38,
                                     ),
                                     textAlign: TextAlign.center,

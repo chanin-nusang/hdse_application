@@ -33,7 +33,8 @@ class PlaceDetail {
       this.userRatingsTotal,
       this.website});
 
-  factory PlaceDetail.fromJson(Map<String, dynamic> json) {
+  factory PlaceDetail.fromJson(
+      Map<String, dynamic> json, List<String> typeThList) {
     var photosJson = json['photos'] != null ? json['photos'] as List : null;
     var reviewsJson = json['reviews'] != null ? json['reviews'] as List : null;
     var weekdayOpenJson;
@@ -69,9 +70,7 @@ class PlaceDetail {
         reviews: reviewsJson != null
             ? reviewsJson.map((e) => Review.fromJson(e)).toList()
             : null,
-        types: typesJson != null
-            ? typesJson.map((e) => e.toString()).toList()
-            : null,
+        types: typeThList,
         userRatingsTotal: json['user_ratings_total'] != null
             ? json['user_ratings_total']
             : null,
