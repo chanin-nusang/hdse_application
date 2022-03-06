@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hdse_application/blocs/application_bloc.dart';
+import 'package:hdse_application/models/place.dart';
 import 'package:hdse_application/models/place_detail.dart';
 import 'package:hdse_application/screen/place_detail/detail_tab.dart';
 import 'package:hdse_application/screen/place_detail/navigate_tab.dart';
@@ -19,6 +21,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:map_launcher/map_launcher.dart' as mapLauncher;
 
 class PlaceDetailScreen extends StatefulWidget {
   const PlaceDetailScreen({Key? key, this.placeID, this.isSeved})
@@ -43,7 +46,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
   @override
   void initState() {
     imageSlideshowIndex = 0;
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     applicationBloc = Provider.of<ApplicationBloc>(context, listen: false);
     if (widget.isSeved!) {
       applicationBloc.getArchivedPlaceDetailToBloc(widget.placeID!);
@@ -390,6 +393,22 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
         });
   }
 
+  launchGoogleMapsApp(PlaceDetail detail) async {
+    await mapLauncher.MapLauncher.isMapAvailable(mapLauncher.MapType.google)
+        .then((value) async {
+      print('mapLauncher : ' + value.toString());
+      if (value!) {
+        await mapLauncher.MapLauncher.showDirections(
+          mapType: mapLauncher.MapType.google,
+          destination: mapLauncher.Coords(
+              detail.geometry!.location!.lat!, detail.geometry!.location!.lng!),
+          destinationTitle: detail.name!,
+          // description: detail.address,
+        );
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     _kTabs = <Tab>[
@@ -402,14 +421,14 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
               fontWeight: FontWeight.bold,
             ))),
       ),
-      Tab(
-          height: 40 * MediaQuery.of(context).textScaleFactor,
-          child: Text('นำทาง',
-              style: GoogleFonts.sarabun(
-                  textStyle: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              )))),
+      // Tab(
+      //     height: 40 * MediaQuery.of(context).textScaleFactor,
+      //     child: Text('นำทาง',
+      //         style: GoogleFonts.sarabun(
+      //             textStyle: TextStyle(
+      //           fontSize: 16,
+      //           fontWeight: FontWeight.bold,
+      //         )))),
       Tab(
           height: 40 * MediaQuery.of(context).textScaleFactor,
           child: Text('คำวิจารณ์',
@@ -575,12 +594,51 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                                               Radius.circular(10.0),
                                             ),
                                             onTap: () {
+                                              launchGoogleMapsApp(detail);
+                                            },
+                                            child: Container(
+                                              width: 75,
+                                              child: Column(
+                                                children: [
+                                                  Icon(
+                                                    Icons.assistant_direction,
+                                                    color: Colors.green[800],
+                                                    size: 30,
+                                                  ),
+                                                  SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Text(
+                                                    "นำทาง",
+                                                    style: TextStyle(
+                                                      fontSize: 17,
+                                                      color: Colors.green[800],
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Material(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(22.0)),
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0),
+                                            ),
+                                            onTap: () {
                                               if (detail.phoneNumber != null)
                                                 launch(
                                                     "tel://${detail.phoneNumber}");
                                             },
                                             child: Container(
-                                              width: 90,
+                                              width: 75,
                                               child: Column(
                                                 children: [
                                                   Icon(
@@ -612,7 +670,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                                           ),
                                         ),
                                         SizedBox(
-                                          width: 20,
+                                          width: 5,
                                         ),
                                         Material(
                                           color: Colors.transparent,
@@ -636,7 +694,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                                               }
                                             },
                                             child: Container(
-                                              width: 90,
+                                              width: 75,
                                               child: Column(
                                                 children: [
                                                   Icon(
@@ -666,7 +724,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                                           ),
                                         ),
                                         SizedBox(
-                                          width: 20,
+                                          width: 5,
                                         ),
                                         Material(
                                           color: Colors.transparent,
@@ -682,7 +740,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                                                         context);
                                             },
                                             child: Container(
-                                              width: 90,
+                                              width: 75,
                                               child: Column(
                                                 children: [
                                                   Icon(
@@ -693,7 +751,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                                                             .bookmark_add_outlined,
                                                     color:
                                                         provider.isPlaceArchived
-                                                            ? Colors.grey[400]
+                                                            ? Colors.grey
                                                             : Colors.green[800],
                                                     size: 30,
                                                   ),
@@ -708,7 +766,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                                                       fontSize: 17,
                                                       color: provider
                                                               .isPlaceArchived
-                                                          ? Colors.grey[400]
+                                                          ? Colors.grey
                                                           : Colors.green[800],
                                                     ),
                                                   )
@@ -792,7 +850,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                         controller: _tabController,
                         children: <Widget>[
                           detailTab(widget.isSeved!),
-                          navigateTab(widget.isSeved!),
+                          // navigateTab(widget.isSeved!),
                           ReviewsTab(isSaved: widget.isSeved!)
                         ]),
                   ),

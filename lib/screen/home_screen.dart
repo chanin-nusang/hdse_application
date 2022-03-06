@@ -117,12 +117,11 @@ class _HomeScreenState extends State<HomeScreen> {
         Navigator.push(
             context,
             new MaterialPageRoute(
-              builder: (context) =>
-                  // new SearchScreen(
-                  new PlaceDetailScreen(
-                placeID: "ChIJ93MaP0goTTARvAysWt37MEg",
-                isSeved: false,
-              ),
+              builder: (context) => new SearchScreen(
+                  //   new PlaceDetailScreen(
+                  // placeID: "ChIJ93MaP0goTTARvAysWt37MEg",
+                  // isSeved: false,
+                  ),
             ));
     } else
       // if (!manageExternalStorageStatus.isDenied) {
@@ -130,12 +129,10 @@ class _HomeScreenState extends State<HomeScreen> {
       //     (!storageStatus.isDenied) {
       Navigator.push(
           context,
-          new MaterialPageRoute(
-            builder: (context) =>
-                // new SearchScreen(
-                new PlaceDetailScreen(
-                    placeID: "ChIJ93MaP0goTTARvAysWt37MEg", isSeved: false),
-          ));
+          new MaterialPageRoute(builder: (context) => new SearchScreen()
+              // new PlaceDetailScreen(
+              //     placeID: "ChIJ93MaP0goTTARvAysWt37MEg", isSeved: false),
+              ));
     // }
   }
 

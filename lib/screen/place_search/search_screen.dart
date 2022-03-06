@@ -162,8 +162,10 @@ class _SearchScreenState extends State<SearchScreen> {
                                   zoom: 14,
                                 ),
                                 onMapCreated: (GoogleMapController controller) {
-                                  applicationBloc.mapController
-                                      .complete(controller);
+                                  if (!applicationBloc
+                                      .mapController.isCompleted)
+                                    applicationBloc.mapController
+                                        .complete(controller);
                                 },
                                 markers:
                                     Set<Marker>.of(applicationBloc.markers),

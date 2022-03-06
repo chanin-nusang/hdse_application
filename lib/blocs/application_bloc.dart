@@ -367,7 +367,7 @@ class ApplicationBloc with ChangeNotifier {
           ])
         });
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("บันทึกการสนทนาสำเร็จ",
+          content: Text("บันทึกสถานที่สำเร็จ",
               style: GoogleFonts.sarabun(
                   textStyle: TextStyle(color: Colors.white, fontSize: 18))),
           backgroundColor: Colors.green,
