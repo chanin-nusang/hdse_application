@@ -316,7 +316,7 @@ class _ArchivedChatScreenState extends State<ArchivedChatScreen>
                               borderRadius: BorderRadius.circular(24),
                               border: Border.all(color: Colors.green)),
                           child: Text(
-                              'บันทึกเมื่อ วันที่ ${widget.chat!.savedTime!.day}/${widget.chat!.savedTime!.month}/${widget.chat!.savedTime!.year}  เวลา ${widget.chat!.savedTime!.hour.toString().padLeft(2, '0')}.${widget.chat!.savedTime!.minute.toString().padLeft(2, '0')} น.',
+                              'บันทึกเมื่อ วันที่ ${widget.chat!.savedTime!.day}/${widget.chat!.savedTime!.month}/${widget.chat!.savedTime!.year + 543}  เวลา ${widget.chat!.savedTime!.hour.toString().padLeft(2, '0')}.${widget.chat!.savedTime!.minute.toString().padLeft(2, '0')} น.',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: 15, color: Colors.green[700])),

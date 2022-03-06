@@ -20,6 +20,7 @@ import 'package:hdse_application/services/maps_service/geolocator_service.dart';
 import 'package:hdse_application/services/maps_service/marker_service.dart';
 import 'package:hdse_application/services/maps_service/places_service.dart';
 import 'dart:convert' as convert;
+import 'dart:developer' as dev;
 
 class ApplicationBloc with ChangeNotifier {
   final geoLocatorService = GeolocatorService();
@@ -69,6 +70,17 @@ class ApplicationBloc with ChangeNotifier {
     archivedPlaceSavedTimeList = [];
     archivedPlaceNameList = [];
     getArchivedPlaceList();
+    notifyListeners();
+  }
+
+  void deleteReviewInPlaceDetail(int time) {
+    if (placeDetail!.reviews != null)
+      placeDetail!.reviews!.removeWhere((element) => element.time == time);
+    notifyListeners();
+  }
+
+  void addReview(Review review) {
+    placeDetail!.reviews!.add(review);
     notifyListeners();
   }
 
@@ -177,15 +189,29 @@ class ApplicationBloc with ChangeNotifier {
 
   getPlaceDetailToBloc(String placeID) async {
     placeDetail = await placesService.getPlaceDetail(placeID);
-    if (placeDetail!.photoReferance != null)
+    final userReviewList = await FirebaseFirestore.instance
+        .collection("reviews")
+        .doc(placeID)
+        .get();
+    var result = userReviewList.data();
+    if (result != null) {
+      var reviewResults = result['reviews'] as List;
+      if (result['reviews'] != null && reviewResults.length > 0) {
+        var reviewList = reviewResults.map((e) => Review.fromJson(e)).toList();
+        placeDetail!.reviews!.addAll(reviewList);
+      }
+    }
+
+    if (placeDetail!.photoReferance != null) {
       placeDetail!.photoReferance!.forEach((element) async {
         var url = await placesService.getPlacePhotos(element);
         photos.add(CachedNetworkImageProvider(url));
         var file = await DefaultCacheManager().getSingleFile(url);
         photosPath.add(file.path);
       });
-    checkPlaceIDContainArchivedPlaceList(placeID);
+    }
     notifyListeners();
+    // checkPlaceIDContainArchivedPlaceList(placeID);
   }
 
   checkPlaceIDContainArchivedPlaceList(String placeID) async {
@@ -236,11 +262,11 @@ class ApplicationBloc with ChangeNotifier {
       rating: placeMap['rating'],
       reviews: (placeMap['reviews'] as List)
           .map((e) => Review(
-                authorName: e['authorName'],
-                language: e['language'],
-                profilePhotoURL: e['profilePhotoURL'],
+                authorName: e['author_name'],
+                userID: e['author_url'],
+                profilePhotoURL: e['profile_photo_url'],
                 rating: e['rating'],
-                relativeTimeDescription: e['relativeTimeDescription'],
+                // relativeTimeDescription: e['relativeTimeDescription'],
                 text: e['text'],
                 time: e['time'],
               ))
@@ -313,7 +339,7 @@ class ApplicationBloc with ChangeNotifier {
     archivedPlaceNameList = [];
   }
 
-  void savePlaceToFireStore(BuildContext context) async {
+  Future<bool> savePlaceToFireStore(BuildContext context) async {
     if (_auth.currentUser != null) {
       var userID = _auth.currentUser!.uid;
       try {
@@ -340,11 +366,11 @@ class ApplicationBloc with ChangeNotifier {
           'rating': placeDetail!.rating,
           'reviews': FieldValue.arrayUnion(placeDetail!.reviews!
               .map((review) => {
-                    'authorName': review.authorName,
-                    'language': review.language,
-                    'profilePhotoURL': review.profilePhotoURL,
+                    'author_name': review.authorName,
+                    'author_url': review.userID,
+                    'profile_photo_url': review.profilePhotoURL,
                     'rating': review.rating,
-                    'relativeTimeDescription': review.relativeTimeDescription,
+                    // 'relativeTimeDescription': review.relativeTimeDescription,
                     'text': review.text,
                     'time': review.time
                   })
@@ -372,6 +398,7 @@ class ApplicationBloc with ChangeNotifier {
                   textStyle: TextStyle(color: Colors.white, fontSize: 18))),
           backgroundColor: Colors.green,
         ));
+        return true;
       } catch (e) {
         print(e);
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -380,6 +407,7 @@ class ApplicationBloc with ChangeNotifier {
                   textStyle: TextStyle(color: Colors.white, fontSize: 18))),
           backgroundColor: Colors.red,
         ));
+        return false;
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -388,6 +416,7 @@ class ApplicationBloc with ChangeNotifier {
                 textStyle: TextStyle(color: Colors.white, fontSize: 18))),
         backgroundColor: Colors.red,
       ));
+      return false;
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +11,9 @@ import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ReviewsTab extends StatefulWidget {
-  const ReviewsTab({Key? key, this.isSaved}) : super(key: key);
+  const ReviewsTab({Key? key, this.isSaved, this.placeID}) : super(key: key);
   final bool? isSaved;
+  final String? placeID;
   @override
   _ReviewsTabState createState() => _ReviewsTabState();
 }
@@ -23,11 +25,13 @@ class _ReviewsTabState extends State<ReviewsTab> {
   String? secondHalf;
   String? photoURL;
   bool flag = true;
-  String? comment;
+  String? comment = '';
   final FirebaseAuth _auth = FirebaseAuth.instance;
   double _currentSliderRatingValue = 3;
+  var applicationBloc;
   @override
   void initState() {
+    applicationBloc = Provider.of<ApplicationBloc>(context, listen: false);
     _reviewRecognizer = TapGestureRecognizer()
       ..onTap = () {
         Navigator.push(
@@ -101,7 +105,7 @@ class _ReviewsTabState extends State<ReviewsTab> {
                         Text(
                           reviewDate == null
                               ? "ไม่ระบุวันที่"
-                              : "${reviewDate.day}/${reviewDate.month}/${reviewDate.year}",
+                              : "${reviewDate.day}/${reviewDate.month}/${reviewDate.year + 543}",
                           style:
                               TextStyle(fontSize: 15, color: Colors.grey[700]),
                         ),
@@ -132,58 +136,163 @@ class _ReviewsTabState extends State<ReviewsTab> {
         SizedBox(
           height: 10,
         ),
-        Container(
-          padding: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-          child: secondHalf == ""
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    new Text(firstHalf!,
-                        style: TextStyle(fontSize: 17, color: Colors.grey[800]))
-                  ],
-                )
-              : new Column(
-                  children: <Widget>[
-                    Text(
-                      flag ? (firstHalf! + "...") : (firstHalf! + secondHalf!),
-                      style: TextStyle(fontSize: 17, color: Colors.grey[800]),
-                    ),
-                    new InkWell(
-                      child: new Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+        (review.text != null && review.text != '')
+            ? Container(
+                padding:
+                    new EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                child: secondHalf == ""
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          new Text(firstHalf!,
+                              style: TextStyle(
+                                  fontSize: 17, color: Colors.grey[800]))
+                        ],
+                      )
+                    : new Column(
                         children: <Widget>[
                           Text(
-                            flag ? "show more" : "show less",
-                            style: TextStyle(fontSize: 17, color: Colors.green),
+                            flag
+                                ? (firstHalf! + "...")
+                                : (firstHalf! + secondHalf!),
+                            style: TextStyle(
+                                fontSize: 17, color: Colors.grey[800]),
+                          ),
+                          new InkWell(
+                            child: new Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                Text(
+                                  flag ? "ดูเพิ่มเติม" : "ดูน้อยลง",
+                                  style: TextStyle(
+                                      fontSize: 17, color: Colors.green),
+                                ),
+                              ],
+                            ),
+                            onTap: () {
+                              setState(() {
+                                flag = !flag;
+                              });
+                            },
                           ),
                         ],
                       ),
-                      onTap: () {
-                        setState(() {
-                          flag = !flag;
-                        });
-                      },
-                    ),
-                  ],
-                ),
-        ),
-
-        // Row(
-        //   children: [
-        //     widget.userEmail ==
-        //             widget.reviewResults["author_details"]["username"]
-        //         ? IconButton(
-        //             onPressed: () {
-        //               _showDeleteDialog();
-        //             },
-        //             icon: const Icon(Icons.delete),
-        //             color: Colors.white70,
-        //           )
-        //         : Container()
-        //   ],
-        // )
+              )
+            : Container(),
+        (_auth.currentUser != null && widget.isSaved == false)
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  _auth.currentUser!.uid == review.userID
+                      ? IconButton(
+                          onPressed: () {
+                            _showDeleteReviewDialog(context, review);
+                          },
+                          icon: const Icon(Icons.delete),
+                          color: Colors.grey,
+                        )
+                      : Container()
+                ],
+              )
+            : Container()
       ],
     );
+  }
+
+  _showDeleteReviewDialog(BuildContext context, Review review) {
+    showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            contentPadding: EdgeInsets.fromLTRB(25.0, 15.0, 25.0, 15.0),
+            scrollable: true,
+            content: Column(
+              children: [
+                Icon(
+                  Icons.delete_forever_outlined,
+                  size: 40,
+                  color: Colors.green[200],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'ยืนยันที่จะลบคำวิจารณ์ออกจากสถานที่นี้',
+                  style: TextStyle(fontSize: 15),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.white)),
+                        onPressed: () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                        },
+                        child: Text(
+                          "ยกเลิก",
+                          style: TextStyle(fontSize: 17, color: Colors.green),
+                        )),
+                    ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.red)),
+                        onPressed: () async {
+                          try {
+                            await FirebaseFirestore.instance
+                                .collection("reviews")
+                                .doc(widget.placeID)
+                                .update({
+                              'reviews': FieldValue.arrayRemove([
+                                {
+                                  'author_name': review.authorName,
+                                  'author_url': review.userID,
+                                  'profile_photo_url': review.profilePhotoURL,
+                                  'rating': review.rating,
+                                  'text': review.text,
+                                  'time': review.time
+                                }
+                              ])
+                            });
+
+                            Navigator.of(context, rootNavigator: true).pop();
+                            setState(() {
+                              applicationBloc
+                                  .deleteReviewInPlaceDetail(review.time);
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("ลบคำวิจารณ์เรียบร้อยแล้ว",
+                                  style: GoogleFonts.sarabun(
+                                      textStyle: TextStyle(
+                                          color: Colors.white, fontSize: 18))),
+                              backgroundColor: Colors.green,
+                            ));
+                          } catch (e) {
+                            print(e);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                  "ไม่สามารถลบคำวิจารณ์นี้ได้ โปรดลองอีกครั้ง",
+                                  style: GoogleFonts.sarabun(
+                                      textStyle: TextStyle(
+                                          color: Colors.white, fontSize: 18))),
+                              backgroundColor: Colors.red,
+                            ));
+                          }
+                        },
+                        child: Text(
+                          "ลบ",
+                          style: TextStyle(fontSize: 17, color: Colors.white),
+                        )),
+                  ],
+                ),
+              ],
+            ),
+          );
+        });
   }
 
   Widget bottomSheet(BuildContext context) {
@@ -241,7 +350,10 @@ class _ReviewsTabState extends State<ReviewsTab> {
                     Container(
                       height: 30,
                       child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            saveReviewToFirestore(context,
+                                _currentSliderRatingValue.toInt(), comment!);
+                          },
                           child: Text(
                             "ส่ง",
                             style: TextStyle(fontSize: 17),
@@ -288,6 +400,80 @@ class _ReviewsTabState extends State<ReviewsTab> {
         ),
       );
     });
+  }
+
+  saveReviewToFirestore(BuildContext context, int rating, String text) async {
+    try {
+      DocumentSnapshot snapShot = await FirebaseFirestore.instance
+          .collection("reviews")
+          .doc(widget.placeID)
+          .get();
+      print('existssssssssss : ' + snapShot.exists.toString());
+      if (snapShot.exists) {
+        print(snapShot.exists);
+        await FirebaseFirestore.instance
+            .collection("reviews")
+            .doc(widget.placeID)
+            .update({
+          'reviews': FieldValue.arrayUnion([
+            {
+              'author_url': _auth.currentUser!.uid,
+              'author_name': _auth.currentUser!.displayName,
+              'profile_photo_url': _auth.currentUser!.photoURL,
+              'rating': rating,
+              'text': text,
+              'time': DateTime.now().millisecondsSinceEpoch ~/
+                  Duration.millisecondsPerSecond
+            }
+          ])
+        });
+      } else {
+        print(snapShot.exists);
+        await FirebaseFirestore.instance
+            .collection("reviews")
+            .doc(widget.placeID)
+            .set({
+          'reviews': FieldValue.arrayUnion([
+            {
+              'author_url': _auth.currentUser!.uid,
+              'author_name': _auth.currentUser!.displayName,
+              'profile_photo_url': _auth.currentUser!.photoURL,
+              'rating': rating,
+              'text': text,
+              'time': DateTime.now().millisecondsSinceEpoch ~/
+                  Duration.millisecondsPerSecond
+            }
+          ])
+        });
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("ส่งคำวิจารณ์สำเร็จ",
+            style: GoogleFonts.sarabun(
+                textStyle: TextStyle(color: Colors.white, fontSize: 18))),
+        backgroundColor: Colors.green,
+      ));
+      Navigator.pop(context);
+      applicationBloc.addReview(Review(
+          authorName: _auth.currentUser!.displayName,
+          profilePhotoURL: _auth.currentUser!.photoURL,
+          userID: _auth.currentUser!.uid,
+          rating: rating,
+          text: text,
+          time: DateTime.now().millisecondsSinceEpoch ~/
+              Duration.millisecondsPerSecond));
+      comment = '';
+      _commentController.clear();
+    } catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("ไม่สามารถส่งคำวิจารณ์ได้ โปรดลองอีกครั้ง",
+            style: GoogleFonts.sarabun(
+                textStyle: TextStyle(color: Colors.white, fontSize: 18))),
+        backgroundColor: Colors.red,
+      ));
+      Navigator.pop(context);
+    }
   }
 
   @override

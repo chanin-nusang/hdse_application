@@ -49,8 +49,8 @@ class _PlacesListScreenState extends State<PlacesListScreen> {
                         ),
                         onPressed: () {
                           print('inkwell ontap');
-                          applicationBloc.getPlaceDetailToBloc(
-                              provider.placeResults[index].placeID);
+                          // applicationBloc.getPlaceDetailToBloc(
+                          //     provider.placeResults[index].placeID);
                           Navigator.push(
                             context,
                             PageTransition(

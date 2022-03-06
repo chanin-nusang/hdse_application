@@ -40,11 +40,14 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
   late TabController _tabController;
   int _selectedTabbar = 0;
   int? imageSlideshowIndex;
+  bool? isPlaceArchived;
 
   // late final _kTabPages = <Widget>[detailTab(), navigateTab(), reviewsTab()];
   List<Tab> _kTabs = [];
   @override
   void initState() {
+    checkPlaceIDContainArchivedPlaceList(widget.placeID!);
+    isPlaceArchived = widget.isSeved;
     imageSlideshowIndex = 0;
     _tabController = TabController(length: 2, vsync: this);
     applicationBloc = Provider.of<ApplicationBloc>(context, listen: false);
@@ -409,6 +412,33 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
     });
   }
 
+  checkPlaceIDContainArchivedPlaceList(String placeID) async {
+    if (_auth.currentUser != null) {
+      final placeList = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(_auth.currentUser!.uid)
+          .get();
+      var result = placeList.data()!;
+      var pl = result['places'] as List;
+
+      if (result['places'] != null && pl.length > 0) {
+        var pll = pl.map((e) {
+          return e['placeID'].toString();
+        }).toList();
+        if (pll.contains(placeID)) {
+          setState(() {
+            isPlaceArchived = true;
+          });
+        } else {
+          // var success = await applicationBloc.savePlaceToFireStore(context);
+          setState(() {
+            isPlaceArchived = false;
+          });
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     _kTabs = <Tab>[
@@ -732,40 +762,42 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                                             borderRadius: BorderRadius.all(
                                               Radius.circular(10.0),
                                             ),
-                                            onTap: () {
-                                              if (provider.isPlaceArchived ==
-                                                  false)
-                                                applicationBloc
-                                                    .savePlaceToFireStore(
-                                                        context);
+                                            onTap: () async {
+                                              if (!isPlaceArchived!) {
+                                                var success =
+                                                    await applicationBloc
+                                                        .savePlaceToFireStore(
+                                                            context);
+                                                setState(() {
+                                                  isPlaceArchived = success;
+                                                });
+                                              }
                                             },
                                             child: Container(
                                               width: 75,
                                               child: Column(
                                                 children: [
                                                   Icon(
-                                                    provider.isPlaceArchived
+                                                    isPlaceArchived!
                                                         ? Icons
                                                             .bookmark_added_outlined
                                                         : Icons
                                                             .bookmark_add_outlined,
-                                                    color:
-                                                        provider.isPlaceArchived
-                                                            ? Colors.grey
-                                                            : Colors.green[800],
+                                                    color: isPlaceArchived!
+                                                        ? Colors.grey
+                                                        : Colors.green[800],
                                                     size: 30,
                                                   ),
                                                   SizedBox(
                                                     height: 5,
                                                   ),
                                                   Text(
-                                                    provider.isPlaceArchived
+                                                    isPlaceArchived!
                                                         ? "บันทึกแล้ว"
                                                         : "บันทึก",
                                                     style: TextStyle(
                                                       fontSize: 17,
-                                                      color: provider
-                                                              .isPlaceArchived
+                                                      color: isPlaceArchived!
                                                           ? Colors.grey
                                                           : Colors.green[800],
                                                     ),
@@ -851,7 +883,10 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
                         children: <Widget>[
                           detailTab(widget.isSeved!),
                           // navigateTab(widget.isSeved!),
-                          ReviewsTab(isSaved: widget.isSeved!)
+                          ReviewsTab(
+                            isSaved: widget.isSeved!,
+                            placeID: detail.placeID,
+                          )
                         ]),
                   ),
                 ));

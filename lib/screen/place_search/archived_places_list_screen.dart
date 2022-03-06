@@ -145,7 +145,7 @@ class ArchivedPlaceListTile extends StatelessWidget {
                   style: TextStyle(fontSize: 18),
                 ),
                 Text(
-                  'บันทึกเมื่อ วันที่ ${savedTime!.day}/${savedTime!.month}/${savedTime!.year}  เวลา ${savedTime!.hour.toString().padLeft(2, '0')}.${savedTime!.minute.toString().padLeft(2, '0')} น.',
+                  'บันทึกเมื่อ วันที่ ${savedTime!.day}/${savedTime!.month}/${savedTime!.year + 543}  เวลา ${savedTime!.hour.toString().padLeft(2, '0')}.${savedTime!.minute.toString().padLeft(2, '0')} น.',
                   style: TextStyle(fontSize: 15, color: Colors.grey[700]),
                 )
               ],

@@ -22,6 +22,7 @@ Future checkAuth(BuildContext context) async {
           .collection("users")
           .doc(_auth.currentUser!.uid)
           .get();
+      print('snapShot.exists : ' + snapShot.exists.toString());
       if (snapShot.exists)
         FirebaseFirestore.instance
             .collection("users")
