@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hdse_application/screen/backdrop_menu/about_dialog.dart';
+import 'package:hdse_application/screen/backdrop_menu/setting.dart';
+import 'package:hdse_application/screen/backdrop_menu/user_account.dart';
 import 'package:hdse_application/screen/chatbot/archived_chat_list_screen.dart';
 import 'package:hdse_application/screen/home_screen.dart';
 import 'package:hdse_application/screen/place_search/archived_places_list_screen.dart';
@@ -38,224 +40,251 @@ Widget menu(BuildContext context) {
     builder: (BuildContext context, void Function(void Function()) setState) {
       return Container(
         padding: EdgeInsets.all(10),
-        child: Column(
-          children: [
-            Container(
-                padding: EdgeInsets.all(0),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(24.0),
-                    )),
-                child: menuTile('แก้ไขข้อมูลของคุณ',
-                    icon: Icons.account_circle_rounded,
-                    color: Colors.red,
-                    label: 'บัญชีผู้ใช้งาน',
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(24.0),
-                    ),
-                    onTap: () {})),
-            SizedBox(
-              height: 15,
-            ),
-            Container(
-                padding: EdgeInsets.all(0),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(24.0),
-                    )),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    menuTile('ดูการสนทนาที่บันทึกไว้',
-                        icon: Icons.chat_rounded,
-                        color: Colors.orange,
-                        label: 'ประวัติการสนทนากับแชทบอท',
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(24.0),
-                          topRight: Radius.circular(24.0),
-                        ), onTap: () {
-                      if (user != null)
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                              duration: const Duration(milliseconds: 250),
-                              reverseDuration:
-                                  const Duration(milliseconds: 250),
-                              type: PageTransitionType.rightToLeft,
-                              child: new ArchivedChatListScreen()),
-                        );
-                      else
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text("กรุณาลงชื่อเข้าใช้",
-                              style: GoogleFonts.sarabun(
-                                  textStyle: TextStyle(
-                                      color: Colors.white, fontSize: 18))),
-                          backgroundColor: Colors.red,
-                        ));
-                    }),
-                    Divider(
-                      height: 1,
-                    ),
-                    menuTile('ดูรายการสถานที่ที่บันทึกไว้',
-                        icon: Icons.bookmarks_rounded,
-                        color: Colors.green,
-                        label: 'สถานที่ที่บันทึกไว้',
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(25.0),
-                          bottomRight: Radius.circular(25.0),
-                        ), onTap: () {
-                      if (user != null)
-                        Navigator.push(
-                          context,
-                          PageTransition(
-                              duration: const Duration(milliseconds: 250),
-                              reverseDuration:
-                                  const Duration(milliseconds: 250),
-                              type: PageTransitionType.rightToLeft,
-                              child: new ArchivedPlacesListScreen()),
-                        );
-                      else
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text("กรุณาลงชื่อเข้าใช้",
-                              style: GoogleFonts.sarabun(
-                                  textStyle: TextStyle(
-                                      color: Colors.white, fontSize: 18))),
-                          backgroundColor: Colors.red,
-                        ));
-                    }),
-                  ],
-                )),
-            SizedBox(
-              height: 15,
-            ),
-            Container(
-                padding: EdgeInsets.all(0),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(24.0),
-                    )),
-                child: menuTile('',
-                    icon: Icons.settings_rounded,
-                    color: Colors.pink,
-                    label: 'ตั้งค่า',
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(24.0),
-                    ),
-                    onTap: () {})),
-            SizedBox(
-              height: 15,
-            ),
-            Container(
-                padding: EdgeInsets.all(0),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(24.0),
-                    )),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    menuTile('',
-                        icon: Icons.gpp_maybe_rounded,
-                        color: Colors.purple,
-                        label: 'ข้อกำหนดของบริการ',
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(24.0),
-                          topRight: Radius.circular(24.0),
-                        ), onTap: () {
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                  padding: EdgeInsets.all(0),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(24.0),
+                      )),
+                  child: menuTile('แก้ไขข้อมูลของคุณ',
+                      icon: Icons.account_circle_rounded,
+                      color: Colors.red,
+                      label: 'บัญชีผู้ใช้งาน',
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(24.0),
+                      ), onTap: () {
+                    if (user != null)
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WebViewService(
-                                  title: 'ข้อกำหนดของบริการ',
-                                  link:
-                                      'https://www.freeprivacypolicy.com/live/40994482-a2c3-4c7b-a3a0-bafaf4b0d8f9')));
-                    }),
-                    Divider(
-                      height: 1,
-                    ),
-                    menuTile('',
-                        icon: Icons.assignment_late_rounded,
-                        color: Colors.blue,
-                        label: 'นโยบายความเป็นส่วนตัว',
-                        borderRadius: BorderRadius.zero, onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WebViewService(
-                                    title: 'นโยบายความเป็นส่วนตัว',
-                                    link:
-                                        'https://www.termsandconditionsgenerator.com/live.php?token=sC5eDsc8lvxVb18OwwiEib4K80dlIoNe',
-                                  )));
-                    }),
-                    Divider(
-                      height: 1,
-                    ),
-                    menuTile('ข้อมูลเกี่ยวกับแอปพลิเคชันและผู้พัฒนา',
-                        icon: Icons.help_rounded,
-                        color: Colors.grey,
-                        label: 'เกี่ยวกับ',
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(25.0),
-                          bottomRight: Radius.circular(25.0),
-                        ), onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (_) {
-                            return aboutDialog(context);
-                          });
-                    }),
-                  ],
-                )),
-            SizedBox(
-              height: 15,
-            ),
-            Center(
-              child: user != null
-                  ? ElevatedButton(
-                      style: ElevatedButton.styleFrom(primary: Colors.white),
-                      onPressed: () {
-                        signOut(context);
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.exit_to_app,
-                            color: Colors.green[400],
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            "ออกจากระบบ",
-                            style: TextStyle(
-                                fontSize: 17,
-                                color: Colors.green[400],
-                                fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ))
-                  : ElevatedButton(
-                      style: ElevatedButton.styleFrom(primary: Colors.white),
-                      onPressed: () {
+                        context,
+                        PageTransition(
+                            duration: const Duration(milliseconds: 250),
+                            reverseDuration: const Duration(milliseconds: 250),
+                            type: PageTransitionType.rightToLeft,
+                            child: new UserAccount()),
+                      );
+                    else
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("กรุณาลงชื่อเข้าใช้",
+                            style: GoogleFonts.sarabun(
+                                textStyle: TextStyle(
+                                    color: Colors.white, fontSize: 18))),
+                        backgroundColor: Colors.red,
+                      ));
+                  })),
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                  padding: EdgeInsets.all(0),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(24.0),
+                      )),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      menuTile('ดูการสนทนาที่บันทึกไว้',
+                          icon: Icons.chat_rounded,
+                          color: Colors.orange,
+                          label: 'ประวัติการสนทนากับแชทบอท',
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(24.0),
+                            topRight: Radius.circular(24.0),
+                          ), onTap: () {
+                        if (user != null)
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                                duration: const Duration(milliseconds: 250),
+                                reverseDuration:
+                                    const Duration(milliseconds: 250),
+                                type: PageTransitionType.rightToLeft,
+                                child: new ArchivedChatListScreen()),
+                          );
+                        else
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("กรุณาลงชื่อเข้าใช้",
+                                style: GoogleFonts.sarabun(
+                                    textStyle: TextStyle(
+                                        color: Colors.white, fontSize: 18))),
+                            backgroundColor: Colors.red,
+                          ));
+                      }),
+                      Divider(
+                        height: 1,
+                      ),
+                      menuTile('ดูรายการสถานที่ที่บันทึกไว้',
+                          icon: Icons.bookmarks_rounded,
+                          color: Colors.green,
+                          label: 'สถานที่ที่บันทึกไว้',
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(25.0),
+                            bottomRight: Radius.circular(25.0),
+                          ), onTap: () {
+                        if (user != null)
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                                duration: const Duration(milliseconds: 250),
+                                reverseDuration:
+                                    const Duration(milliseconds: 250),
+                                type: PageTransitionType.rightToLeft,
+                                child: new ArchivedPlacesListScreen()),
+                          );
+                        else
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text("กรุณาลงชื่อเข้าใช้",
+                                style: GoogleFonts.sarabun(
+                                    textStyle: TextStyle(
+                                        color: Colors.white, fontSize: 18))),
+                            backgroundColor: Colors.red,
+                          ));
+                      }),
+                    ],
+                  )),
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                  padding: EdgeInsets.all(0),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(24.0),
+                      )),
+                  child: menuTile('',
+                      icon: Icons.settings_rounded,
+                      color: Colors.pink,
+                      label: 'ตั้งค่า',
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(24.0),
+                      ), onTap: () {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                          duration: const Duration(milliseconds: 250),
+                          reverseDuration: const Duration(milliseconds: 250),
+                          type: PageTransitionType.rightToLeft,
+                          child: new Setting()),
+                    );
+                  })),
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                  padding: EdgeInsets.all(0),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(24.0),
+                      )),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      menuTile('',
+                          icon: Icons.gpp_maybe_rounded,
+                          color: Colors.purple,
+                          label: 'ข้อกำหนดของบริการ',
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(24.0),
+                            topRight: Radius.circular(24.0),
+                          ), onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => LoginScreen()));
-                      },
-                      child: Text(
-                        " เข้าสู่ระบบ ",
-                        style: TextStyle(
-                            fontSize: 17,
-                            color: Colors.green[400],
-                            fontWeight: FontWeight.bold),
-                      )),
-            ),
-          ],
+                                builder: (context) => WebViewService(
+                                    title: 'ข้อกำหนดของบริการ',
+                                    link:
+                                        'https://www.freeprivacypolicy.com/live/40994482-a2c3-4c7b-a3a0-bafaf4b0d8f9')));
+                      }),
+                      Divider(
+                        height: 1,
+                      ),
+                      menuTile('',
+                          icon: Icons.assignment_late_rounded,
+                          color: Colors.blue,
+                          label: 'นโยบายความเป็นส่วนตัว',
+                          borderRadius: BorderRadius.zero, onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WebViewService(
+                                      title: 'นโยบายความเป็นส่วนตัว',
+                                      link:
+                                          'https://www.termsandconditionsgenerator.com/live.php?token=sC5eDsc8lvxVb18OwwiEib4K80dlIoNe',
+                                    )));
+                      }),
+                      Divider(
+                        height: 1,
+                      ),
+                      menuTile('ข้อมูลเกี่ยวกับแอปพลิเคชันและผู้พัฒนา',
+                          icon: Icons.help_rounded,
+                          color: Colors.grey,
+                          label: 'เกี่ยวกับ',
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(25.0),
+                            bottomRight: Radius.circular(25.0),
+                          ), onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (_) {
+                              return aboutDialog(context);
+                            });
+                      }),
+                    ],
+                  )),
+              SizedBox(
+                height: 15,
+              ),
+              Center(
+                child: user != null
+                    ? ElevatedButton(
+                        style: ElevatedButton.styleFrom(primary: Colors.white),
+                        onPressed: () {
+                          signOut(context);
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.exit_to_app,
+                              color: Colors.green[400],
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              "ออกจากระบบ",
+                              style: TextStyle(
+                                  fontSize: 17,
+                                  color: Colors.green[400],
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ))
+                    : ElevatedButton(
+                        style: ElevatedButton.styleFrom(primary: Colors.white),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginScreen()));
+                        },
+                        child: Text(
+                          " เข้าสู่ระบบ ",
+                          style: TextStyle(
+                              fontSize: 17,
+                              color: Colors.green[400],
+                              fontWeight: FontWeight.bold),
+                        )),
+              ),
+            ],
+          ),
         ),
       );
     },

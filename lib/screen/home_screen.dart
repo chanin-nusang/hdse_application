@@ -365,33 +365,35 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.white,
                           child: Padding(
                             padding: const EdgeInsets.all(15.0),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                buildImageCard(context,
-                                    handler: () => Navigator.push(
-                                        context,
-                                        new MaterialPageRoute(
-                                            builder: (context) =>
-                                                new ChatbotScreen())),
-                                    imageURL:
-                                        'https://firebasestorage.googleapis.com/v0/b/hdse-application.appspot.com/o/cdc-UrcuFgKfSS4-unsplash.jpg?alt=media&token=c106982f-fc65-47c3-b5cf-6d1746f6a413',
-                                    title: 'ปรึกษาปัญหาสุขภาพ',
-                                    subTitle:
-                                        "ปรึกษาปัญหาสุขภาพ ด้วยระบบแชทบอท"),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                buildImageCard(context,
-                                    handler: () => checkLocationPermission(),
-                                    imageURL:
-                                        "https://firebasestorage.googleapis.com/v0/b/hdse-application.appspot.com/o/vlad-sargu-ItphH2lGzuI-unsplash.jpg?alt=media&token=66023587-af61-4d74-889e-72b409672c33",
-                                    title: 'สถานที่ให้บริการด้านสุขภาพ',
-                                    subTitle:
-                                        'ค้นหา สถานที่ให้บริการด้านสุขภาพ'),
-                              ],
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  buildImageCard(context,
+                                      handler: () => Navigator.push(
+                                          context,
+                                          new MaterialPageRoute(
+                                              builder: (context) =>
+                                                  new ChatbotScreen())),
+                                      imageURL:
+                                          'https://firebasestorage.googleapis.com/v0/b/hdse-application.appspot.com/o/cdc-UrcuFgKfSS4-unsplash.jpg?alt=media&token=c106982f-fc65-47c3-b5cf-6d1746f6a413',
+                                      title: 'ปรึกษาปัญหาสุขภาพ',
+                                      subTitle:
+                                          "ปรึกษาปัญหาสุขภาพ ด้วยระบบแชทบอท"),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  buildImageCard(context,
+                                      handler: () => checkLocationPermission(),
+                                      imageURL:
+                                          "https://firebasestorage.googleapis.com/v0/b/hdse-application.appspot.com/o/vlad-sargu-ItphH2lGzuI-unsplash.jpg?alt=media&token=66023587-af61-4d74-889e-72b409672c33",
+                                      title: 'สถานที่ให้บริการด้านสุขภาพ',
+                                      subTitle:
+                                          'ค้นหา สถานที่ให้บริการด้านสุขภาพ'),
+                                ],
+                              ),
                             ),
                           )),
                     )

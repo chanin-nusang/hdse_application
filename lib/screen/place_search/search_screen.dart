@@ -333,7 +333,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                   .clearPlaceBoundsAndPlaceType();
                                               typeSelected = 'ร้านขายยา';
                                               applicationBloc.togglePlaceType(
-                                                  'drugstore', val);
+                                                  context, 'drugstore', val);
                                               applicationBloc
                                                   .setIsTogglePlaceTypeToTrue();
                                             } else
@@ -352,7 +352,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                     .clearPlaceBoundsAndPlaceType();
                                                 typeSelected = 'โรงพยาบาล';
                                                 applicationBloc.togglePlaceType(
-                                                    'hospital', val);
+                                                    context, 'hospital', val);
                                                 applicationBloc
                                                     .setIsTogglePlaceTypeToTrue();
                                               } else
@@ -371,7 +371,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                     .clearPlaceBoundsAndPlaceType();
                                                 typeSelected = 'เภสัชกรรม';
                                                 applicationBloc.togglePlaceType(
-                                                    'pharmacy', val);
+                                                    context, 'pharmacy', val);
                                                 applicationBloc
                                                     .setIsTogglePlaceTypeToTrue();
                                               } else
@@ -391,7 +391,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                                 typeSelected =
                                                     'ตัวแทนประกันภัย';
                                                 applicationBloc.togglePlaceType(
-                                                    'insurance_agency', val);
+                                                    context,
+                                                    'insurance_agency',
+                                                    val);
                                                 applicationBloc
                                                     .setIsTogglePlaceTypeToTrue();
                                               } else
@@ -410,7 +412,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                                     .clearPlaceBoundsAndPlaceType();
                                                 typeSelected = 'กายภาพบำบัด';
                                                 applicationBloc.togglePlaceType(
-                                                    'physiotherapist', val);
+                                                    context,
+                                                    'physiotherapist',
+                                                    val);
                                                 applicationBloc
                                                     .setIsTogglePlaceTypeToTrue();
                                               } else
@@ -429,7 +433,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                     .clearPlaceBoundsAndPlaceType();
                                                 typeSelected = 'สวนสาธารณะ';
                                                 applicationBloc.togglePlaceType(
-                                                    'park', val);
+                                                    context, 'park', val);
                                                 applicationBloc
                                                     .setIsTogglePlaceTypeToTrue();
                                               } else

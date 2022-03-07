@@ -1,5 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hdse_application/models/place.dart';
+import 'package:hdse_application/screen/place_detail/place_detail_screen.dart';
+import 'package:page_transition/page_transition.dart';
 
 class MarkerService {
   LatLngBounds bounds(Set<Marker> markers) {
@@ -22,7 +25,7 @@ class MarkerService {
         northeast: LatLng(northeastLat, northeastLon));
   }
 
-  Marker createMarkerFromPlace(Place place, bool center) {
+  Marker createMarkerFromPlace(BuildContext context, Place place, bool center) {
     var markerId = place.name;
     if (center) markerId = 'center';
 
@@ -30,7 +33,26 @@ class MarkerService {
         markerId: MarkerId(markerId!),
         draggable: false,
         visible: (center) ? false : true,
-        infoWindow: InfoWindow(title: place.name, snippet: place.vicinity),
+        infoWindow: InfoWindow(
+          title: place.name,
+          snippet: place.vicinity,
+          onTap: () {
+            Navigator.push(
+              context,
+              PageTransition(
+                  duration: const Duration(milliseconds: 250),
+                  reverseDuration: const Duration(milliseconds: 250),
+                  type: PageTransitionType.rightToLeft,
+                  child: new PlaceDetailScreen(
+                      placeID: place.placeID, isSeved: false)),
+              // new MaterialPageRoute(
+              //     builder: (context) => new PlaceDetailScreen(
+              //           placeID: provider
+              //               .placeResults[index].placeID,
+              //         ))
+            );
+          },
+        ),
         position: LatLng(
             place.geometry!.location!.lat!, place.geometry!.location!.lng!));
   }

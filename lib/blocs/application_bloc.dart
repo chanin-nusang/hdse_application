@@ -149,7 +149,7 @@ class ApplicationBloc with ChangeNotifier {
     notifyListeners();
   }
 
-  togglePlaceType(String value, bool selected) async {
+  togglePlaceType(BuildContext context, String value, bool selected) async {
     // isTogglePlaceType = true;
     print('isTogglePlaceType = true;');
     if (selected) {
@@ -168,14 +168,15 @@ class ApplicationBloc with ChangeNotifier {
         print("places.length > 0");
         placeResults.forEach((e) {
           print("places.map");
-          var newMarker = markerService.createMarkerFromPlace(e, false);
+          var newMarker =
+              markerService.createMarkerFromPlace(context, e, false);
           markers.add(newMarker);
           print("place add to markers");
         });
       }
 
-      var locationMarker =
-          markerService.createMarkerFromPlace(selectedLocationStatic!, true);
+      var locationMarker = markerService.createMarkerFromPlace(
+          context, selectedLocationStatic!, true);
 
       markers.add(locationMarker);
 

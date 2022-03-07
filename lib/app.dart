@@ -6,6 +6,7 @@ import 'package:hdse_application/screen/loading_screen.dart';
 import 'package:hdse_application/screen/signin/login_screen.dart';
 import 'package:hdse_application/blocs/speech_to_text.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 final Map<int, Color> _green200Map = {
   50: Colors.green[50]!,
@@ -29,6 +30,12 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [const Locale('th')],
       title: 'HDSE',
       theme: ThemeData(
           textTheme: GoogleFonts.sarabunTextTheme(Theme.of(context).textTheme),
