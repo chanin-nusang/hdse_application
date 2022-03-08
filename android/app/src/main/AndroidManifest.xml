@@ -17,7 +17,7 @@
       </intent>
     </queries>
    <application
-        android:label="HDSE"
+        android:label="บริการข้อมูลสุขภาพสำหรับผู้สูงอายุ"
         android:icon="@mipmap/launcher_icon">
 
         <!-- Google Maps -->

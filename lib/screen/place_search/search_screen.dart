@@ -17,7 +17,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  // Completer<GoogleMapController> _mapController = Completer();
+  Completer<GoogleMapController> mapController = Completer();
   StreamSubscription? locationSubscription;
   StreamSubscription? boundsSubscription;
   final _locationController = TextEditingController();
@@ -44,8 +44,7 @@ class _SearchScreenState extends State<SearchScreen> {
     });
 
     boundsSubscription = applicationBloc.bounds.stream.listen((bounds) async {
-      final GoogleMapController controller =
-          await applicationBloc.mapController.future;
+      final GoogleMapController controller = await mapController.future;
       controller.animateCamera(CameraUpdate.newLatLngBounds(bounds, 50));
     });
     print("bounds.hasListener after init: " +
@@ -162,10 +161,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                   zoom: 14,
                                 ),
                                 onMapCreated: (GoogleMapController controller) {
-                                  if (!applicationBloc
-                                      .mapController.isCompleted)
-                                    applicationBloc.mapController
-                                        .complete(controller);
+                                  if (!mapController.isCompleted)
+                                    mapController.complete(controller);
                                 },
                                 markers:
                                     Set<Marker>.of(applicationBloc.markers),
@@ -206,7 +203,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                                 'ตำแหน่งปัจจุบันของคุณ';
                                             applicationBloc
                                                 .clearPlaceBoundsAndPlaceType();
-                                            applicationBloc.goToMyLocation();
+                                            applicationBloc
+                                                .goToMyLocation(mapController);
                                           },
                                           child: Row(
                                             mainAxisAlignment:
@@ -272,7 +270,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                           applicationBloc.setSelectedLocation(
                                               applicationBloc
                                                   .searchResults![index]
-                                                  .placeId!);
+                                                  .placeId!,
+                                              mapController);
                                         },
                                       );
                                     }),
@@ -516,8 +515,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<void> _goToPlace(Place place) async {
-    final GoogleMapController controller =
-        await applicationBloc.mapController.future;
+    final GoogleMapController controller = await mapController.future;
     controller.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(

@@ -66,7 +66,7 @@ class PlaceDetail {
             ? photosJson.map((e) => e['photo_reference'].toString()).toList()
             : null,
         placeID: json['place_id'],
-        rating: json['rating'],
+        rating: json['rating'] != null ? json['rating'].toInt() : null,
         reviews: reviewsJson != null
             ? reviewsJson.map((e) => Review.fromJson(e)).toList()
             : null,

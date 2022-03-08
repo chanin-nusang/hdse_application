@@ -28,7 +28,7 @@ class ApplicationBloc with ChangeNotifier {
   final markerService = MarkerService();
 
   //Variables
-  Completer<GoogleMapController> mapController = Completer();
+  // Completer<GoogleMapController> mapController = Completer();
   Position? currentLocation;
   List<PlaceSearch>? searchResults;
   StreamController<Place> selectedLocation =
@@ -101,7 +101,7 @@ class ApplicationBloc with ChangeNotifier {
     notifyListeners();
   }
 
-  goToMyLocation() async {
+  goToMyLocation(Completer<GoogleMapController> mapController) async {
     setCurrentLocation();
     final GoogleMapController controller = await mapController.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(
@@ -118,7 +118,8 @@ class ApplicationBloc with ChangeNotifier {
     notifyListeners();
   }
 
-  setSelectedLocation(String placeId) async {
+  setSelectedLocation(
+      String placeId, Completer<GoogleMapController> mapController) async {
     searchResults = null;
     notifyListeners();
     var sLocation = await placesService.getPlace(placeId);
@@ -167,11 +168,9 @@ class ApplicationBloc with ChangeNotifier {
       if (placeResults.length > 0) {
         print("places.length > 0");
         placeResults.forEach((e) {
-          print("places.map");
           var newMarker =
               markerService.createMarkerFromPlace(context, e, false);
           markers.add(newMarker);
-          print("place add to markers");
         });
       }
 
