@@ -29,6 +29,13 @@ class _SignupScreenState extends State<SignupScreen> {
             context,
             MaterialPageRoute(builder: (context) => LoginScreen()),
             ModalRoute.withName('/'));
+        FocusManager.instance.primaryFocus?.unfocus();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("ลงทะเบียนเรียบร้อยแล้ว",
+              style: GoogleFonts.sarabun(
+                  textStyle: TextStyle(color: Colors.white, fontSize: 18))),
+          backgroundColor: Colors.green,
+        ));
       }).catchError((error) {
         print(error.message);
       });

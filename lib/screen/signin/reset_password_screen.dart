@@ -74,6 +74,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 textStyle: TextStyle(color: Colors.white, fontSize: 18))),
         backgroundColor: Colors.green[300],
       ));
+      FocusManager.instance.primaryFocus?.unfocus();
+      emailController.clear();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(e.toString(),

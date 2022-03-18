@@ -12,5 +12,5 @@ void main() async {
     ChangeNotifierProvider(create: (context) => ApplicationBloc()),
     ChangeNotifierProvider<SpeechToTextService>(
         create: (context) => SpeechToTextService())
-  ], child: MaterialApp(home: App())));
+  ], child: MaterialApp(debugShowCheckedModeBanner: false, home: App())));
 }

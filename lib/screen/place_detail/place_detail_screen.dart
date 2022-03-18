@@ -419,9 +419,9 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen>
           .doc(_auth.currentUser!.uid)
           .get();
       var result = placeList.data()!;
-      var pl = result['places'] as List;
+      var pl = result['places'] != null ? result['places'] as List : null;
 
-      if (result['places'] != null && pl.length > 0) {
+      if (result['places'] != null && pl != null) {
         var pll = pl.map((e) {
           return e['placeID'].toString();
         }).toList();

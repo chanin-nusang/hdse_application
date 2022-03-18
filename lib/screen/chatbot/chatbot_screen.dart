@@ -112,7 +112,7 @@ class _ChatbotScreenState extends State<ChatbotScreen>
   checkMicrophonePermission() async {
     var microphoneStatus = await Permission.microphone.status;
     if (microphoneStatus.isDenied) {
-      await Permission.location.request();
+      await Permission.microphone.request();
       microphoneStatus = await Permission.microphone.status;
       if (microphoneStatus.isDenied) {
         animateController!.animateToStart();
@@ -716,8 +716,8 @@ class _ChatbotScreenState extends State<ChatbotScreen>
                                 ? Colors.green
                                 : Colors.white,
                             child: AnimateIcons(
-                              startIcon: Icons.mic_off,
-                              endIcon: Icons.mic,
+                              startIcon: Icons.mic,
+                              endIcon: Icons.mic_off,
 
                               controller: animateController!,
                               // add this tooltip for the start icon

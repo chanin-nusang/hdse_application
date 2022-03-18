@@ -67,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
       };
     _privacyPolicyRecognizer = TapGestureRecognizer()
       ..onTap = () {
+        Navigator.of(context, rootNavigator: true).pop();
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -77,6 +78,8 @@ class _HomeScreenState extends State<HomeScreen> {
       };
     _termsAndConditionsRecognizer = TapGestureRecognizer()
       ..onTap = () {
+        Navigator.of(context, rootNavigator: true).pop();
+
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -89,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
-  checkLocationPermission() async {
+  checkLocationPermission(BuildContext context) async {
     // var manageExternalStorageStatus =
     //     await Permission.manageExternalStorage.status;
     var locationStatus = await Permission.location.status;
@@ -106,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
       await Permission.location.request();
       locationStatus = await Permission.location.status;
       if (locationStatus.isDenied)
-        _showLocationPermissionDeniedDialog();
+        _showLocationPermissionDeniedDialog(context);
       // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       //   content: Text('ไม่ได้รับสิทธิ์ให้เข้าถึงตำแหน่งปัจจุบันของคุณ',
       //       style: GoogleFonts.sarabun(
@@ -203,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.of(context, rootNavigator: true).pop();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -219,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
         });
   }
 
-  _showLocationPermissionDeniedDialog() {
+  _showLocationPermissionDeniedDialog(BuildContext context) {
     showDialog(
         context: context,
         builder: (_) {
@@ -386,7 +389,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     height: 10,
                                   ),
                                   buildImageCard(context,
-                                      handler: () => checkLocationPermission(),
+                                      handler: () =>
+                                          checkLocationPermission(context),
                                       imageURL:
                                           "https://firebasestorage.googleapis.com/v0/b/hdse-application.appspot.com/o/vlad-sargu-ItphH2lGzuI-unsplash.jpg?alt=media&token=66023587-af61-4d74-889e-72b409672c33",
                                       title: 'สถานที่ให้บริการด้านสุขภาพ',

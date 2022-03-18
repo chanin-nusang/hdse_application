@@ -20,7 +20,7 @@ class _UserAccountState extends State<UserAccount> {
   DateTime? selectedDate;
   DocumentSnapshot? snapShot;
   String? phoneNumber;
-
+  String? displayName;
   @override
   void initState() {
     syncUserData();
@@ -40,6 +40,13 @@ class _UserAccountState extends State<UserAccount> {
         .collection("users")
         .doc(_auth.currentUser!.uid)
         .get();
+    if (snap.data()!['name'] != null) {
+      setState(() {
+        displayName = snap.data()!['name'].toString();
+      });
+    } else {
+      displayName = null;
+    }
     if (snap.data()!['birthday'] != null) {
       setState(() {
         birthday = snap.data()!['birthday'].toDate();
@@ -137,6 +144,9 @@ class _UserAccountState extends State<UserAccount> {
                                           .then((value) {
                                         print(
                                             "Name has been changed successfully");
+                                        setState(() {
+                                          displayName = textController.text;
+                                        });
                                       }).catchError((e) {
                                         print(
                                             "There was an error updating profile : $e");
@@ -161,6 +171,7 @@ class _UserAccountState extends State<UserAccount> {
                                                   fontSize: 18))),
                                       backgroundColor: Colors.green,
                                     ));
+
                                     Navigator.of(context, rootNavigator: true)
                                         .pop();
                                   } catch (e) {
@@ -241,7 +252,7 @@ class _UserAccountState extends State<UserAccount> {
                             alignment: Alignment.centerLeft,
                             height: 60,
                             child: Text(
-                              user!.displayName ?? '(ยังไม่มีชื่อ)',
+                              displayName ?? '(ยังไม่มีชื่อ)',
                               style: TextStyle(fontSize: 18),
                             ),
                           ),
@@ -327,6 +338,7 @@ class _UserAccountState extends State<UserAccount> {
                             type: PageTransitionType.fade,
                             child: new SelectDateDialog(
                               selectedDate: selectedDate,
+                              callback: () => syncUserData(),
                             )),
                       );
                     },
@@ -422,8 +434,10 @@ class _UserAccountState extends State<UserAccount> {
 }
 
 class SelectDateDialog extends StatefulWidget {
-  const SelectDateDialog({Key? key, this.selectedDate}) : super(key: key);
+  const SelectDateDialog({Key? key, this.selectedDate, this.callback})
+      : super(key: key);
   final DateTime? selectedDate;
+  final VoidCallback? callback;
   @override
   State<SelectDateDialog> createState() => _SelectDateDialogState();
 }
@@ -446,7 +460,8 @@ class _SelectDateDialogState extends State<SelectDateDialog> {
     final DateTime? picked = await showDatePicker(
       context: context,
       locale: const Locale("th", "TH"),
-      initialDate: selectedDate!, // Refer step 1
+      initialDate:
+          selectedDate != null ? selectedDate! : DateTime.now(), // Refer step 1
       firstDate: DateTime(1900),
       lastDate: DateTime(2025),
     );
@@ -548,7 +563,11 @@ class _SelectDateDialogState extends State<SelectDateDialog> {
                                     FirebaseFirestore.instance
                                         .collection("users")
                                         .doc(user!.uid)
-                                        .update({"birthday": selectedDate});
+                                        .update({
+                                      "birthday": selectedDate
+                                    }).then((value) {
+                                      widget.callback!.call();
+                                    });
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(
                                       content: Text("แก้ไขวันเกิดเรียบร้อยแล้ว",
@@ -558,6 +577,9 @@ class _SelectDateDialogState extends State<SelectDateDialog> {
                                                   fontSize: 18))),
                                       backgroundColor: Colors.green,
                                     ));
+
+                                    Navigator.of(context, rootNavigator: false)
+                                        .pop();
                                   } catch (e) {
                                     print(e);
                                     ScaffoldMessenger.of(context)
@@ -571,8 +593,6 @@ class _SelectDateDialogState extends State<SelectDateDialog> {
                                       backgroundColor: Colors.red,
                                     ));
                                   }
-                                  Navigator.of(context, rootNavigator: true)
-                                      .pop();
                                 },
                                 child: Text(
                                   "แก้ไข",
